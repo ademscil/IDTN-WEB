@@ -4,9 +4,10 @@ import { Button } from '../common/Button';
 
 interface HeaderProps {
   onOpenMobileMenu: () => void;
+  onNavigate?: (href: string) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
+export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu, onNavigate }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -29,6 +30,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
     { label: 'Galeri', href: '#gallery' },
   ];
 
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (onNavigate) {
+      e.preventDefault();
+      onNavigate(href);
+    }
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
@@ -40,7 +48,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Brand Logo */}
-          <a href="#hero" className="flex items-center gap-2 group cursor-pointer focus-visible:outline-sky-600">
+          <a
+            href="#hero"
+            onClick={(e) => handleLinkClick(e, '#hero')}
+            className="flex items-center gap-2 group cursor-pointer focus-visible:outline-sky-600"
+          >
             <img
               src="/assets/brand/idtn-logo.jpg"
               alt="PT Infinix Delapan Teknologi Nusantara (IDTN) Logo"
@@ -54,6 +66,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
               <a
                 key={link.href}
                 href={link.href}
+                onClick={(e) => handleLinkClick(e, link.href)}
                 className="text-xs xl:text-sm font-semibold text-slate-700 hover:text-[#0284c7] transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#0284c7] hover:after:w-full after:transition-all"
               >
                 {link.label}
@@ -63,7 +76,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
 
           {/* CTA & Mobile Hamburger */}
           <div className="flex items-center gap-3">
-            <a href="#contact" className="hidden sm:inline-flex">
+            <a
+              href="#contact"
+              onClick={(e) => handleLinkClick(e, '#contact')}
+              className="hidden sm:inline-flex"
+            >
               <Button size="sm" variant="primary" className="gap-2">
                 <PhoneCall className="w-4 h-4" />
                 <span>Konsultasi Proyek</span>

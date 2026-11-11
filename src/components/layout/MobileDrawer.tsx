@@ -5,9 +5,10 @@ import { Button } from '../common/Button';
 interface MobileDrawerProps {
   isOpen: boolean;
   onClose: () => void;
+  onNavigate?: (href: string) => void;
 }
 
-export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) => {
+export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onNavigate }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,6 +39,14 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
     { label: 'Klien & Mitra', href: '#clients' },
     { label: 'Kontak & Konsultasi', href: '#contact' },
   ];
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    onClose();
+    if (onNavigate) {
+      e.preventDefault();
+      onNavigate(href);
+    }
+  };
 
   return (
     <div
@@ -75,7 +84,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
               <a
                 key={link.href}
                 href={link.href}
-                onClick={onClose}
+                onClick={(e) => handleLinkClick(e, link.href)}
                 className="px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:text-sky-700 transition-colors"
               >
                 {link.label}
@@ -86,7 +95,11 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
 
         {/* Footer CTA */}
         <div className="pt-6 border-t border-slate-100">
-          <a href="#contact" onClick={onClose} className="block w-full">
+          <a
+            href="#contact"
+            onClick={(e) => handleLinkClick(e, '#contact')}
+            className="block w-full"
+          >
             <Button variant="primary" className="w-full gap-2 py-3">
               <PhoneCall className="w-4 h-4" />
               <span>Hubungi IDTN</span>
