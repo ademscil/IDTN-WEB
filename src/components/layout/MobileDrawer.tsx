@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import { X, PhoneCall } from 'lucide-react';
 import { Button } from '../common/Button';
 
 interface MobileDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  onNavigate?: (href: string) => void;
 }
 
-export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onNavigate }) => {
+export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,25 +28,14 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onN
   if (!isOpen) return null;
 
   const navLinks = [
-    { label: 'Beranda', href: '#hero' },
-    { label: 'Tentang Kami', href: '#about' },
-    { label: 'Solusi Jaringan Optik', href: '#solutions' },
-    { label: 'Teknologi DWDM Explorer', href: '#dwdm' },
-    { label: 'Perangkat T8', href: '#equipment' },
-    { label: 'Legalitas & Laporan Audit', href: '#compliance' },
-    { label: 'Portofolio Proyek', href: '#projects' },
-    { label: 'Galeri Lapangan', href: '#gallery' },
-    { label: 'Klien & Mitra', href: '#clients' },
-    { label: 'Kontak & Konsultasi', href: '#contact' },
+    { label: 'Beranda', to: '/' },
+    { label: 'Tentang Kami', to: '/about' },
+    { label: 'Solusi Jaringan Optik', to: '/solutions' },
+    { label: 'Teknologi DWDM & Perangkat T8', to: '/technology' },
+    { label: 'Legalitas & Laporan Audit', to: '/compliance' },
+    { label: 'Portofolio Proyek & Galeri', to: '/projects' },
+    { label: 'Kontak & Pengajuan RFP', to: '/contact' },
   ];
-
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    onClose();
-    if (onNavigate) {
-      e.preventDefault();
-      onNavigate(href);
-    }
-  };
 
   return (
     <div
@@ -64,11 +53,13 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onN
         <div>
           {/* Header */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-            <img
-              src="/assets/brand/idtn-logo.jpg"
-              alt="IDTN Logo"
-              className="h-8 w-auto object-contain"
-            />
+            <Link to="/" onClick={onClose}>
+              <img
+                src="/assets/brand/idtn-logo.jpg"
+                alt="IDTN Logo"
+                className="h-8 w-auto object-contain"
+              />
+            </Link>
             <button
               onClick={onClose}
               className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 cursor-pointer"
@@ -79,32 +70,34 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, onN
           </div>
 
           {/* Links */}
-          <nav className="mt-6 flex flex-col gap-3">
+          <nav className="mt-6 flex flex-col gap-2">
             {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => handleLinkClick(e, link.href)}
-                className="px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:text-sky-700 transition-colors"
+              <NavLink
+                key={link.to}
+                to={link.to}
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                    isActive
+                      ? 'bg-sky-50 text-[#0284c7] font-bold'
+                      : 'text-slate-800 hover:bg-slate-50 hover:text-sky-700'
+                  }`
+                }
               >
                 {link.label}
-              </a>
+              </NavLink>
             ))}
           </nav>
         </div>
 
         {/* Footer CTA */}
         <div className="pt-6 border-t border-slate-100">
-          <a
-            href="#contact"
-            onClick={(e) => handleLinkClick(e, '#contact')}
-            className="block w-full"
-          >
+          <Link to="/contact" onClick={onClose} className="block w-full">
             <Button variant="primary" className="w-full gap-2 py-3">
               <PhoneCall className="w-4 h-4" />
               <span>Hubungi IDTN</span>
             </Button>
-          </a>
+          </Link>
           <p className="mt-4 text-center text-xs text-slate-400">
             PT Infinix Delapan Teknologi Nusantara
           </p>

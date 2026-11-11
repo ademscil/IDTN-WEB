@@ -1,125 +1,59 @@
 import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { SkipLink } from './components/common/SkipLink';
 import { PagePreloader } from './components/common/PagePreloader';
-import { PageTransitionVeil } from './components/common/PageTransitionVeil';
 import { Header } from './components/layout/Header';
 import { MobileDrawer } from './components/layout/MobileDrawer';
 import { Footer } from './components/layout/Footer';
-import { HeroSection } from './components/sections/HeroSection';
-import { TrustStripSection } from './components/sections/TrustStripSection';
-import { AboutUsSection } from './components/sections/AboutUsSection';
-import { SolutionsSection } from './components/sections/SolutionsSection';
-import { DwdmExplorerSection } from './components/sections/DwdmExplorerSection';
-import { EquipmentSection } from './components/sections/EquipmentSection';
-import { ComplianceSection } from './components/sections/ComplianceSection';
-import { ProjectsSection } from './components/sections/ProjectsSection';
-import { GallerySection } from './components/sections/GallerySection';
-import { ClientsSection } from './components/sections/ClientsSection';
-import { InquiryFormSection } from './components/sections/InquiryFormSection';
-import { useScrollReveal } from './lib/useScrollReveal';
+import { RouteTransition } from './components/layout/RouteTransition';
+
+// Multi-Page Routes
+import { HomePage } from './pages/HomePage';
+import { AboutPage } from './pages/AboutPage';
+import { SolutionsPage } from './pages/SolutionsPage';
+import { TechnologyPage } from './pages/TechnologyPage';
+import { CompliancePage } from './pages/CompliancePage';
+import { ProjectsPage } from './pages/ProjectsPage';
+import { ContactPage } from './pages/ContactPage';
 
 export const App: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
-  // Activate smooth scroll-reveal on viewport entry (inspired by t8.ru)
-  useScrollReveal();
-
-  const handleSmoothNavigate = (href: string) => {
-    // 1. Trigger transition veil (fade-out current view)
-    setIsTransitioning(true);
-
-    setTimeout(() => {
-      // 2. Perform smooth scroll to target
-      if (href.startsWith('#')) {
-        const targetId = href.substring(1);
-        const element = document.getElementById(targetId);
-        if (element) {
-          const headerOffset = 70;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth',
-          });
-        }
-      }
-
-      // 3. Fade-in new view by removing veil
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 350);
-    }, 200);
-  };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-sky-100 selection:text-sky-900">
-      {/* 1. Initial Page Preloader (inspired by t8.ru preloader) */}
-      <PagePreloader />
+    <BrowserRouter>
+      <div className="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-sky-100 selection:text-sky-900">
+        {/* Initial First-Load Preloader (t8.ru style) */}
+        <PagePreloader />
 
-      {/* 2. Page Navigation Transition Veil (fade-in / fade-out curtain) */}
-      <PageTransitionVeil isTransitioning={isTransitioning} />
-
-      <SkipLink />
-      
-      <Header
-        onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
-        onNavigate={handleSmoothNavigate}
-      />
-      
-      <MobileDrawer
-        isOpen={isMobileMenuOpen}
-        onClose={() => setIsMobileMenuOpen(false)}
-        onNavigate={handleSmoothNavigate}
-      />
-
-      <main id="main-content" className="flex-1">
-        <HeroSection />
+        <SkipLink />
         
-        <div className="reveal-on-scroll">
-          <TrustStripSection />
-        </div>
+        <Header onOpenMobileMenu={() => setIsMobileMenuOpen(true)} />
+        
+        <MobileDrawer
+          isOpen={isMobileMenuOpen}
+          onClose={() => setIsMobileMenuOpen(false)}
+        />
 
-        <div className="reveal-on-scroll">
-          <AboutUsSection />
-        </div>
+        {/* Multi-Page Route Transitions (Barba.js / T8 style fade transitions) */}
+        <main id="main-content" className="flex-1">
+          <RouteTransition>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/solutions" element={<SolutionsPage />} />
+              <Route path="/technology" element={<TechnologyPage />} />
+              <Route path="/compliance" element={<CompliancePage />} />
+              <Route path="/projects" element={<ProjectsPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              {/* Fallback to Home */}
+              <Route path="*" element={<HomePage />} />
+            </Routes>
+          </RouteTransition>
+        </main>
 
-        <div className="reveal-on-scroll">
-          <SolutionsSection />
-        </div>
-
-        <div className="reveal-on-scroll">
-          <DwdmExplorerSection />
-        </div>
-
-        <div className="reveal-on-scroll">
-          <EquipmentSection />
-        </div>
-
-        <div className="reveal-on-scroll">
-          <ComplianceSection />
-        </div>
-
-        <div className="reveal-on-scroll">
-          <ProjectsSection />
-        </div>
-
-        <div className="reveal-on-scroll">
-          <GallerySection />
-        </div>
-
-        <div className="reveal-on-scroll">
-          <ClientsSection />
-        </div>
-
-        <div className="reveal-on-scroll">
-          <InquiryFormSection />
-        </div>
-      </main>
-
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </BrowserRouter>
   );
 };
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, ShieldCheck } from 'lucide-react';
 import companyData from '../../data/company.json';
 
@@ -9,13 +10,13 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
           {/* Col 1: Brand & Philosophy */}
           <div className="space-y-4">
-            <div className="bg-white p-2 rounded-lg inline-block">
+            <Link to="/" className="bg-white p-2 rounded-lg inline-block">
               <img
                 src="/assets/brand/idtn-logo.jpg"
                 alt="IDTN Logo"
                 className="h-9 w-auto object-contain"
               />
-            </div>
+            </Link>
             <p className="text-sm text-slate-300 leading-relaxed">
               {companyData.shortDescription}
             </p>
@@ -37,29 +38,29 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
-                <a href="#dwdm" className="hover:text-sky-400 transition-colors">
+                <Link to="/technology" className="hover:text-sky-400 transition-colors">
                   DWDM Optical Transport (Volga I)
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#solutions" className="hover:text-sky-400 transition-colors">
+                <Link to="/solutions" className="hover:text-sky-400 transition-colors">
                   Data Center Interconnect (DCI)
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#equipment" className="hover:text-sky-400 transition-colors">
+                <Link to="/technology" className="hover:text-sky-400 transition-colors">
                   OTDR Monitoring System (Ramenka)
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#equipment" className="hover:text-sky-400 transition-colors">
+                <Link to="/technology" className="hover:text-sky-400 transition-colors">
                   Network Management (NMS Titan)
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#solutions" className="hover:text-sky-400 transition-colors">
+                <Link to="/solutions" className="hover:text-sky-400 transition-colors">
                   Turnkey Fiber Infrastructure OSP
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -71,29 +72,29 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
-                <a href="#compliance" className="hover:text-sky-400 transition-colors">
+                <Link to="/compliance" className="hover:text-sky-400 transition-colors">
                   Sertifikasi ISO 9001:2015
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#compliance" className="hover:text-sky-400 transition-colors">
+                <Link to="/compliance" className="hover:text-sky-400 transition-colors">
                   Sertifikasi ISO 27001:2022
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#compliance" className="hover:text-sky-400 transition-colors">
+                <Link to="/compliance" className="hover:text-sky-400 transition-colors">
                   Standar SDPPI Kominfo RI
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#compliance" className="hover:text-sky-400 transition-colors">
+                <Link to="/compliance" className="hover:text-sky-400 transition-colors">
                   NIB OSS & KBLI 61100
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#compliance" className="hover:text-sky-400 transition-colors">
+                <Link to="/compliance" className="hover:text-sky-400 transition-colors">
                   Laporan Audit Keuangan (WTP)
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -136,12 +137,12 @@ export const Footer: React.FC = () => {
             © {companyData.foundedYear} {companyData.legalName}. Hak cipta dilindungi undang-undang.
           </p>
           <div className="flex items-center gap-6">
-            <a href="#compliance" className="hover:text-slate-300 transition-colors">
+            <Link to="/compliance" className="hover:text-slate-300 transition-colors">
               Legalitas Resmi
-            </a>
-            <a href="#contact" className="hover:text-slate-300 transition-colors">
+            </Link>
+            <Link to="/contact" className="hover:text-slate-300 transition-colors">
               Kebijakan Privasi
-            </a>
+            </Link>
             <span className="text-slate-700">|</span>
             <span className="text-slate-400">Partner Resmi T8 DWDM Systems</span>
           </div>
