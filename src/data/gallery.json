@@ -1,0 +1,30 @@
+[
+  {
+    "id": "gal-fusion-splicing",
+    "title": "Penyambungan Serat Optik Inti Presisi (Core Fusion Splicing)",
+    "category": "Pekerjaan Lapangan",
+    "desc": "Proses fusi kabel serat optik menggunakan mesin splicer presisi tinggi dengan rata-rata redaman terukur di bawah 0.02 dB.",
+    "aspectRatio": "16/9"
+  },
+  {
+    "id": "gal-otdr-testing",
+    "title": "Pengujian Karakterisasi Link Optik & Uji Redaman OTDR",
+    "category": "Quality Assurance",
+    "desc": "Pengujian verifikasi redaman total span, dispersi kromatik (CD), dan dispersi mode polarisasi (PMD) sebelum proses commissioning link DWDM.",
+    "aspectRatio": "16/9"
+  },
+  {
+    "id": "gal-chassis-installation",
+    "title": "Pemasangan Sub-Rack & Chassis DWDM Volga di Data Center",
+    "category": "Data Center Installation",
+    "desc": "Penataan chassis perangkat DWDM 19 inci dengan manajemen patchcord serat optik terlindung dan catu daya ganda redundan.",
+    "aspectRatio": "16/9"
+  },
+  {
+    "id": "gal-odf-cabling",
+    "title": "Manajemen Kabel & Terminasi Optical Distribution Frame (ODF)",
+    "category": "Infrastruktur Pasif",
+    "desc": "Pengaturan jalur kabel serat optik berdensitas tinggi di ruang transmisi utama dengan penomoran port yang terstandarisasi rapi.",
+    "aspectRatio": "16/9"
+  }
+]

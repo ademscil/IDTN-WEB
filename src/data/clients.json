@@ -1,0 +1,30 @@
+[
+  {
+    "id": "partner-t8",
+    "name": "T8 LLC",
+    "category": "Global Technology Principal",
+    "role": "Prinsipal Manufaktur & Riset Perangkat DWDM",
+    "description": "Pengembang teknologi sistem transmisi optik DWDM Volga dan pemantauan kabel OTDR Ramenka kelas dunia."
+  },
+  {
+    "id": "sector-telco",
+    "name": "National Telecom Operators",
+    "category": "Target Clients",
+    "role": "Operator Jaringan Telekomunikasi & Seluler",
+    "description": "Penyediaan perangkat DWDM backbone dan peningkatan kapasitas link transmisi antar-kota di Indonesia."
+  },
+  {
+    "id": "sector-dci",
+    "name": "Hyperscale Cloud & Data Centers",
+    "category": "Target Clients",
+    "role": "Penyedia Fasilitas Pusat Data & Cloud",
+    "description": "Interkoneksi antar-data center (DCI) berkecepatan tinggi dengan latensi deterministik terendah."
+  },
+  {
+    "id": "sector-transport",
+    "name": "National Transportation Authorities",
+    "category": "Target Clients",
+    "role": "Otoritas Transportasi Udara, Kereta Api & Pelabuhan",
+    "description": "Infrastruktur komunikasi optik berkeandalan 99.999% untuk mendukung sistem persinyalan dan operasional vital."
+  }
+]

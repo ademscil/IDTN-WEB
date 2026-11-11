@@ -1,0 +1,82 @@
+[
+  {
+    "id": "solution-dwdm",
+    "order": "01",
+    "title": "High-Capacity DWDM Optical Transport",
+    "category": "Optical Systems",
+    "shortDesc": "Solusi transmisi DWDM multi-terabit untuk jaringan backbone dan loop regional dengan efisiensi spektrum optik tertinggi.",
+    "overview": "Menggabungkan puluhan kanal panjang gelombang optik berkecepatan 100G s.d. 800G per wavelength ke dalam serat optik tunggal tanpa perlu menggelar kabel baru, dilengkapi penguat optik terintegrasi (EDFA/Raman).",
+    "features": [
+      "Throughput masif hingga 38.4 Tbps per pasang fiber optik",
+      "Transmisi jarak jauh (Long-Haul > 1.500 km) tanpa regenerator elektrik",
+      "Teknologi ROADM CDC-F untuk routing spektrum optik fleksibel",
+      "Proteksi jalur optik otomatis (Optical Line Protection) sub-50ms"
+    ],
+    "specs": [
+      { "label": "Per-Channel Speed", "value": "100G / 400G / 800G" },
+      { "label": "Channel Spacing", "value": "50 GHz / 100 GHz FlexGrid" },
+      { "label": "Protection", "value": "1+1 Optical / OTN Protection" }
+    ],
+    "icon": "Layers"
+  },
+  {
+    "id": "solution-dci",
+    "order": "02",
+    "title": "Data Center Interconnect (DCI)",
+    "category": "Cloud & Hyperscale",
+    "shortDesc": "Interkoneksi point-to-point dan mesh antar-fasilitas data center berlatensi ultra-rendah dan berdensitas tinggi.",
+    "overview": "Dirancang khusus untuk operator cloud dan hyperscale data center dengan form factor ringkas 1U/2U, konsumsi daya hemat, dan dukungan antarmuka ethernet berkecepatan tinggi.",
+    "features": [
+      "Performa latensi deterministik terendah untuk sinkronisasi database real-time",
+      "Kepadatan tinggi (hingga 6.4 Tbps per modul 1U) menghemat ruang rak server",
+      "Pemasangan plug-and-play dan integrasi otomatis dengan SDN controller",
+      "Enkripsi lapisan fisik (Layer 1 AES-256) untuk keamanan transmisi data"
+    ],
+    "specs": [
+      { "label": "Chassis Form Factor", "value": "1U / 2U High-Density" },
+      { "label": "Latency", "value": "< 5 µs per km fiber" },
+      { "label": "Security", "value": "Hardware Wire-Speed Encryption" }
+    ],
+    "icon": "Database"
+  },
+  {
+    "id": "solution-fiber-infra",
+    "order": "03",
+    "title": "Fiber Optic Infrastructure & Turnkey OSP",
+    "category": "Infrastructure Services",
+    "shortDesc": "Penyediaan, instalasi rute kabel optik, terminasi ODF, dan penggelaran infrastruktur pasif serat optik nasional.",
+    "overview": "Layanan rekayasa menyeluruh mulai dari survei jalur geospasial, perizinan right-of-way, penarikan kabel bawah tanah (duct/trenching) dan kabel udara (aerial), hingga penyambungan fusion splicing berstandar presisi tinggi.",
+    "features": [
+      "Survei rute kabel optik dengan pemetaan GIS dan audit redaman jalur",
+      "Penyambungan kabel optik (core fusion splicing) dengan insertion loss < 0.02 dB",
+      "Pemasangan rak ODF (Optical Distribution Frame) terstruktur dan berlabel rapi",
+      "Pembersihan dan inspeksi konektor optik berbasis mikroskop digital"
+    ],
+    "specs": [
+      { "label": "Splicing Loss", "value": "< 0.02 dB per splice" },
+      { "label": "Cable Types", "value": "Single-Mode G.652D / G.655 / G.657" },
+      { "label": "Standards", "value": "ITU-T & Telcordia Standards" }
+    ],
+    "icon": "Network"
+  },
+  {
+    "id": "solution-nms-otdr",
+    "order": "04",
+    "title": "Network Orchestration & OTDR Monitoring",
+    "category": "Software & Automation",
+    "shortDesc": "Platform perangkat lunak manajemen jaringan terpusat dan pemantauan kesehatan kabel optik otomatis 24/7.",
+    "overview": "Mengintegrasikan sistem NMS Titan dengan sensor OTDR Ramenka untuk memantau kualitas fisik seluruh jaringan serat optik secara real-time dan memberikan peringatan dini terhadap potensi gangguan link.",
+    "features": [
+      "Pemantauan kabel optik otomatis 24/7 tanpa mengganggu aliran traffic data",
+      "Deteksi titik tekukan atau putus kabel dengan akurasi lokasi tepat dalam hitungan meter",
+      "Antarmuka web grafis interaktif dengan visualisasi peta topologi jalur optik",
+      "Dukungan API integrasi RESTCONF, NETCONF/YANG, dan notifikasi webhook"
+    ],
+    "specs": [
+      { "label": "Fault Location", "value": "± 1 meter resolution" },
+      { "label": "Monitoring Mode", "value": "In-Service (1625 nm / 1650 nm)" },
+      { "label": "Integration", "value": "SNMP, RESTCONF, Webhook" }
+    ],
+    "icon": "Activity"
+  }
+]

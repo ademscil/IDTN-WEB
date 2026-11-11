@@ -1,0 +1,58 @@
+[
+  {
+    "id": "proj-dci-metro",
+    "title": "Interkoneksi Metro DWDM Antar-Data Center Hyperscale",
+    "sector": "Data Center Interconnect",
+    "location": "Kawasan Jabodetabek",
+    "year": 2026,
+    "scope": "Penggelaran sistem Volga I DCI V2 berkapasitas 3.2 Tbps menghubungkan 3 fasilitas data center tier-3/tier-4 dengan rute optik redundan.",
+    "metrics": [
+      { "label": "Total Throughput", "value": "3.2 Tbps" },
+      { "label": "Latency RTT", "value": "< 1.2 ms" },
+      { "label": "Switching Protection", "value": "< 30 ms" }
+    ],
+    "status": "approved"
+  },
+  {
+    "id": "proj-railway-backbone",
+    "title": "Backbone Transmisi Optik Koridor Transportasi Kereta Cepat",
+    "sector": "Railways",
+    "location": "Jalur Lintas Jawa",
+    "year": 2026,
+    "scope": "Integrasi sistem DWDM Volga I Telecom di sepanjang koridor rel kereta api untuk mendukung transmisi data persinyalan terpadu dan telekomunikasi operasional.",
+    "metrics": [
+      { "label": "Panjang Rute Link", "value": "180 km" },
+      { "label": "Keandalan Link", "value": "99.999%" },
+      { "label": "Channels", "value": "40 x 100G" }
+    ],
+    "status": "approved"
+  },
+  {
+    "id": "proj-air-transport",
+    "title": "Tautan Komunikasi Redundan Radar & Navigasi Bandara",
+    "sector": "Air Transport",
+    "location": "Kawasan Bandara Internasional",
+    "year": 2026,
+    "scope": "Penyediaan link serat optik berkapasitas tinggi dengan pemantauan kabel optik otomatis OTDR Ramenka 24/7 untuk keselamatan lalu lintas udara.",
+    "metrics": [
+      { "label": "Fault Detection", "value": "< 3 detik" },
+      { "label": "Akurasi Lokasi", "value": "± 1 meter" },
+      { "label": "Uptime", "value": "100%" }
+    ],
+    "status": "approved"
+  },
+  {
+    "id": "proj-maritime-port",
+    "title": "Infrastruktur Jaringan Optik Terminal Pelabuhan Peti Kemas",
+    "sector": "Maritime Logistics",
+    "location": "Kawasan Pelabuhan Utama",
+    "year": 2026,
+    "scope": "Pembangunan jaringan optik lingkar terlindung (ring topology) untuk automasi crane dermaga, sistem TOS (Terminal Operating System), dan CCTV pengawasan.",
+    "metrics": [
+      { "label": "Kabel Terpasang", "value": "45 km" },
+      { "label": "Termination Cores", "value": "1.440 Cores" },
+      { "label": "Redundansi", "value": "Dual Ring Protected" }
+    ],
+    "status": "approved"
+  }
+]

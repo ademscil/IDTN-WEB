@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Custom Brand Colors for IDTN */
+  --color-brand-graphite: #18191b;
+  --color-brand-coral: #9f1b32;
+  --color-brand-coral-hover: #831528;
+  --color-brand-cyan: #0284c7;
+  --color-brand-cyan-hover: #0369a1;
+  --color-brand-ice: #f0f9ff;
+  --color-brand-surface: #ffffff;
+  --color-brand-subtle: #f8fafc;
+  --color-brand-muted: #64748b;
+  --color-brand-border: #e2e8f0;
+}
+
+:root {
+  --surface-base: #ffffff;
+  --surface-subtle: #f8fafc;
+  --surface-ice: #f0f9ff;
+  --brand-graphite: #18191b;
+  --brand-coral: #9f1b32;
+  --brand-cyan: #0284c7;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

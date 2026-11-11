@@ -1,0 +1,124 @@
+{
+  "techSummary": {
+    "title": "Teknologi DWDM: Multiplikasi Kapasitas Tanpa Menggelar Kabel Baru",
+    "description": "Dense Wavelength Division Multiplexing (DWDM) mentransmisikan puluhan panjang gelombang cahaya (wavelengths) secara simultan melalui satu helai serat optik tunggal, melipatgandakan kapasitas throughput jaringan hingga puluhan terabit per detik.",
+    "keyMetrics": [
+      { "label": "Max Single-Fiber Capacity", "value": "Up to 38.4 Tbps" },
+      { "label": "Per-Wavelength Speed", "value": "100G / 400G / 800G" },
+      { "label": "Spectral Bands", "value": "C-Band + L-Band" },
+      { "label": "Long-Haul Reach", "value": "> 1,500 km Unregenerated" }
+    ]
+  },
+  "interactiveSlides": [
+    {
+      "stepCode": "01 / 04",
+      "stepNumber": "01",
+      "title": "Transponder & Multiplexing (MUX)",
+      "subtitle": "Agregasi Sinyal Multi-Kanal Berkecepatan Tinggi",
+      "description": "Berbagai sinyal klien (Ethernet, OTN, SDH) diterima oleh modul transponder dan dikonversikan ke panjang gelombang cahaya spektral presisi standar ITU-T Grid (1550 nm window). Optical Multiplexer kemudian menyatukan seluruh kanal cahaya tersebut ke dalam satu serat optik tunggal.",
+      "specs": [
+        { "name": "Kanal Aktif", "val": "Hingga 96 Channel (Grid 50 GHz / 100 GHz)" },
+        { "name": "Tipe Antarmuka Klien", "val": "100GE, 400GE, OTU4, STM-64" },
+        { "name": "Modulasi Optik", "val": "DP-QPSK, DP-16QAM Coherent" }
+      ],
+      "stageType": "mux"
+    },
+    {
+      "stepCode": "02 / 04",
+      "stepNumber": "02",
+      "title": "Optical Amplification & Single-Fiber Link",
+      "subtitle": "Transmisi Jarak Jauh Tanpa Konversi Elektrik",
+      "description": "Sinyal multi-spektrum dilewatkan melalui penguat optik berbasis EDFA (Erbium-Doped Fiber Amplifier) dan Raman Amplifier di sepanjang kabel serat optik. Sinyal diperkuat secara murni di domain cahaya tanpa perlu regenerator optik-ke-elektrik, meminimalkan latensi dan konsumsi daya.",
+      "specs": [
+        { "name": "Teknologi Penguat", "val": "Hybrid EDFA + Distributed Raman" },
+        { "name": "Jarak Span Maksimal", "val": "Hingga 120 km per span tanpa penguat aktif" },
+        { "name": "Redaman Latensi", "val": "Latency deterministik < 5 µs per km optik" }
+      ],
+      "stageType": "amplifier"
+    },
+    {
+      "stepCode": "03 / 04",
+      "stepNumber": "03",
+      "title": "ROADM & Demultiplexing (DEMUX)",
+      "subtitle": "Routing Optik Fleksibel & Penguraian Spektrum",
+      "description": "Di stasiun persinggahan atau titik tujuan akhir, perangkat Reconfigurable Optical Add-Drop Multiplexer (ROADM) dapat menambahkan atau memisahkan panjang gelombang tertentu secara dinamis melalui software, sementara Optical Demultiplexer menguraikan berkas multi-kanal ke panjang gelombang individual.",
+      "specs": [
+        { "name": "Tipe ROADM", "val": "CDC-F (Colorless, Directionless, Contentionless, FlexGrid)" },
+        { "name": "WSS Switching", "val": "Wavelength Selective Switch berbasis Liquid Crystal" },
+        { "name": "Pemisahan Spektrum", "val": "Isolasi antar-kanal > 30 dB" }
+      ],
+      "stageType": "demux"
+    },
+    {
+      "stepCode": "04 / 04",
+      "stepNumber": "04",
+      "title": "Client Handover & Protection Switching",
+      "subtitle": "Penyerahan Layanan Terjamin & Redundansi 1+1",
+      "description": "Sinyal cahaya yang telah diurai diteruskan ke perangkat penerima klien (switch core, router, atau server cloud). Sistem proteksi optik 1+1 (Optical Line Protection / OLP) menjamin perpindahan jalur darurat secara otomatis dalam waktu kurang dari 50 milidetik bila terjadi putus kabel fisik.",
+      "specs": [
+        { "name": "Waktu Proteksi Beralih", "val": "< 50 milidetik (sub-50ms switching)" },
+        { "name": "Ketersediaan Layanan (SLA)", "val": "Komitmen keandalan 99.999% (Five Nines)" },
+        { "name": "Standar Handover", "val": "IEEE 802.3ba / 802.3bs Compliant" }
+      ],
+      "stageType": "handover"
+    }
+  ],
+  "equipmentCatalog": [
+    {
+      "id": "volga-telecom",
+      "name": "DWDM System Volga I Telecom",
+      "category": "Backbone & Regional Transport",
+      "formFactor": "1U / 3U / 6U / 10U Chassis Modular",
+      "capacity": "38.4 Tbps (C+L Band)",
+      "summary": "Platform transmisi DWDM modular berperforma tinggi untuk jaringan backbone telekomunikasi jarak jauh nasional, regional loop, dan interkoneksi metro skala besar.",
+      "features": [
+        "Mendukung kecepatan channel 100G, 200G, 400G, dan 800G",
+        "Modul hot-swappable linecards, amplifiers, dan power supplies redundan",
+        "Jangkauan tanpa regenerator listrik hingga lebih dari 1.500 km",
+        "Sistem proteksi jalur optik dan optikal cross-connect 1+1"
+      ]
+    },
+    {
+      "id": "volga-dci",
+      "name": "DWDM System Volga I DCI / DCI V2",
+      "category": "Data Center Interconnect",
+      "formFactor": "1U / 2U Ultra-Dense Appliance",
+      "capacity": "1.6 Tbps s.d. 6.4 Tbps per Unit",
+      "summary": "Perangkat DWDM khusus interkoneksi antar-data center (DCI) berdensitas tinggi, konsumsi daya rendah, dan konfigurasi otomatis untuk hyperscale data center.",
+      "features": [
+        "Desain pizza-box 1U/2U ringkas dan ramah rak server standar 19 inci",
+        "Konsumsi daya rendah per gigabit transmisi",
+        "Dukungan FlexGrid dan antarmuka QSFP-DD / CFP2-DCO",
+        "Integrasi API RESTCONF dan NETCONF untuk otomasi Software-Defined Network (SDN)"
+      ]
+    },
+    {
+      "id": "otdr-ramenka",
+      "name": "OTDR Monitoring System Ramenka",
+      "category": "Fiber Health & Automatic Monitoring",
+      "formFactor": "1U Rackmount Unit",
+      "capacity": "Pemantauan 24/7 Multi-Fiber Core",
+      "summary": "Sistem pemantauan integritas kabel serat optik otomatis 24 jam nonstop. Mendeteksi degradasi sinyal, tekukan kabel (*bending*), dan lokasi putus fisik dengan presisi tinggi.",
+      "features": [
+        "Deteksi lokasi putus serat optik secara instan dengan presisi meter",
+        "Pengujian tanpa mengganggu traffic data aktif (*in-service monitoring*)",
+        "Pemberitahuan alarm otomatis melalui NMS, email, dan integrasi webhook",
+        "Penyimpanan rekam jejak historis degradasi kualitas kabel optik"
+      ]
+    },
+    {
+      "id": "nms-titan",
+      "name": "NMS Titan & Fractal Management System",
+      "category": "Centralized Network Orchestration",
+      "formFactor": "Cloud & On-Premise Software Platform",
+      "capacity": "Skalabilitas Hingga Ribuan Node Optik",
+      "summary": "Perangkat lunak manajemen dan pengawasan jaringan terpusat (Element Management & Network Management) dengan antarmuka grafis intuitif dan analitik performa link optik.",
+      "features": [
+        "Peta topologi jaringan interaktif real-time dengan status link optik",
+        "Provisioning jalur koneksi end-to-end secara terotomasi",
+        "Manajemen alarm komprehensif dan diagnostik performa BER/OSNR",
+        "Kepatuhan arsitektur keamanan kontrol akses berbasis peran (RBAC)"
+      ]
+    }
+  ]
+}

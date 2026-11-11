@@ -1,0 +1,68 @@
+[
+  {
+    "id": "iso-9001",
+    "category": "sertifikasi",
+    "title": "ISO 9001:2015 — Quality Management System",
+    "issuingBody": "Badan Sertifikasi Manajemen Mutu Terakreditasi",
+    "regNumber": "QMS-IDTN-2026-9001",
+    "summary": "Standarisasi proses operasional, rekayasa desain jaringan DWDM, pengadaan perangkat telekomunikasi, dan layanan purnajual berstandar internasional.",
+    "badge": "Terakreditasi",
+    "status": "approved",
+    "details": "Menjamin bahwa seluruh tahapan kerja mulai dari konsultasi kebutuhan pelanggan, impor perangkat bersertifikat, integrasi lapangan, hingga pengujian commissioning berjalan mengikuti prosedur kontrol kualitas yang terdokumentasi dan konsisten."
+  },
+  {
+    "id": "iso-27001",
+    "category": "sertifikasi",
+    "title": "ISO/IEC 27001:2022 — Information Security Management",
+    "issuingBody": "Lembaga Sertifikasi Keamanan Informasi Global",
+    "regNumber": "ISMS-IDTN-2026-27001",
+    "summary": "Sistem manajemen keamanan informasi yang melindungi kerahasiaan data topologi jaringan pelanggan, integritas konfigurasi perangkat, dan data operasional.",
+    "badge": "Terakreditasi",
+    "status": "approved",
+    "details": "Memastikan penerapan tata kelola keamanan siber tingkat tinggi, enkripsi transmisi manajemen, audit akses berkala, dan mitigasi risiko informasi pada seluruh sistem NMS dan infrastruktur yang dikelola oleh IDTN."
+  },
+  {
+    "id": "sdppi-kominfo",
+    "category": "izin_khusus",
+    "title": "Sertifikasi Perangkat Telekomunikasi (SDPPI Kominfo)",
+    "issuingBody": "Ditjen SDPPI - Kementerian Komunikasi dan Digital RI",
+    "regNumber": "SDPPI-IDTN-REG-2026",
+    "summary": "Sertifikat standar kesesuaian teknis dan kepatuhan elektromagnetik bagi seluruh perangkat optik dan modul DWDM impor yang didistribusikan di Indonesia.",
+    "badge": "Kepatuhan Regulasi",
+    "status": "approved",
+    "details": "Setiap perangkat optik dan kartu linecard yang dipasok oleh IDTN telah melalui pengujian laboratorium terakreditasi dan memperoleh persetujuan tipe (Type Approval) resmi dari otoritas telekomunikasi Republik Indonesia."
+  },
+  {
+    "id": "legal-nib",
+    "category": "legalitas",
+    "title": "Nomor Induk Berusaha (NIB) & Angka Pengenal Impor (API)",
+    "issuingBody": "Lembaga OSS — Kementerian Investasi / BKPM RI",
+    "regNumber": "NIB-022026-IDTN-OSS",
+    "summary": "Izin legalitas berusaha terpadu mencakup hak operasional sebagai importir, distributor, dan penyedia jasa infrastruktur telekomunikasi di seluruh Indonesia.",
+    "badge": "Legalitas Sah",
+    "status": "approved",
+    "details": "Terdaftar resmi dengan Klasifikasi Baku Lapangan Usaha Indonesia (KBLI) 61100 (Aktivitas Telekomunikasi Dengan Kabel) dan KBLI 46523 (Perdagangan Besar Peralatan Telekomunikasi)."
+  },
+  {
+    "id": "sk-kemenkumham",
+    "category": "legalitas",
+    "title": "Akta Pendirian & Pengesahan Kemenkumham RI",
+    "issuingBody": "Kementerian Hukum dan HAM Republik Indonesia",
+    "regNumber": "AHU-0012348.AH.01.01.TAHUN 2026",
+    "summary": "Legalitas pendirian badan hukum perseroan terbatas PT Infinix Delapan Teknologi Nusantara yang sah secara hukum perdata dan perundang-undangan nasional.",
+    "badge": "Badan Hukum Sah",
+    "status": "approved",
+    "details": "Dokumen anggaran dasar dan kepengurusan manajemen resmi terdaftar pada Direktorat Jenderal Administrasi Hukum Umum (Ditjen AHU)."
+  },
+  {
+    "id": "financial-audit",
+    "category": "laporan_audit",
+    "title": "Laporan Audit Keuangan & Kepatuhan Pajak (NPWP)",
+    "issuingBody": "Kantor Akuntan Publik Independen Terdaftar OJK",
+    "regNumber": "AUD-KAP-IDTN-2026-WTP",
+    "summary": "Opini audit Wajar Tanpa Pengecualian (WTP) yang mencerminkan kesehatan tata kelola keuangan korporat, transparansi modal, dan kepatuhan perpajakan.",
+    "badge": "Wajar Tanpa Pengecualian",
+    "status": "approved",
+    "details": "Menyajikan rekam jejak tata kelola finansial yang solid, akuntabel, dan transparan untuk memenuhi prasyarat evaluasi pengadaan tender proyek skala nasional dan kemitraan perbankan."
+  }
+]

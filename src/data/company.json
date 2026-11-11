@@ -1,0 +1,139 @@
+{
+  "legalName": "PT Infinix Delapan Teknologi Nusantara",
+  "brandName": "IDTN",
+  "tagline": "A telecommunications technology bridge from Indonesia to the world",
+  "shortDescription": "DWDM Developer & Infrastructure Service Provider terkemuka di Indonesia.",
+  "aboutText": "PT Infinix Delapan Teknologi Nusantara (IDTN) adalah perusahaan teknologi telekomunikasi Indonesia yang berperan sebagai pengembang (developer) dan penyedia layanan infrastruktur perangkat DWDM. Kami mengimpor, mendistribusikan, memasok, serta mengadaptasi perangkat telekomunikasi untuk pasar Indonesia, sekaligus bertindak sebagai mitra teknologi jangka panjang yang menghadirkan inovasi transmisi optik mutakhir bagi pelanggan kami.",
+  "foundedYear": 2026,
+  "industry": "Telecommunications & Optical Infrastructure",
+  "focus": "DWDM Infrastructure & Optical Networking",
+  "marketPath": "Indonesia → Asia → Global Markets",
+  "philosophy": {
+    "headline": "Like rivers that meet in the sea, IDTN connects data and information to the whole world.",
+    "subheadline": "Sebagaimana sungai-sungai yang bermuara di lautan, IDTN menghubungkan aliran data dan informasi ke seluruh penjuru dunia.",
+    "pillars": [
+      {
+        "title": "Bridge",
+        "desc": "Menjembatani keunggulan teknologi optik global dengan kebutuhan riil infrastruktur Indonesia."
+      },
+      {
+        "title": "Intermediary",
+        "desc": "Menghubungkan prinsipal teknologi, mitra integrator, dan pelanggan secara transparan dan terpercaya."
+      },
+      {
+        "title": "Pathway",
+        "desc": "Membuka akses pita lebar agar data dan informasi strategis dapat mengalir bebas tanpa hambatan kapasitas."
+      },
+      {
+        "title": "Connector",
+        "desc": "Menyatukan simpul jaringan dari pusat kota metropolitan hingga wilayah kepulauan terluar menuju panggung global."
+      }
+    ]
+  },
+  "nameEtymology": [
+    {
+      "word": "Infinix",
+      "meaning": "Terinspirasi dari 'infinity': semangat tanpa batas untuk terus berinovasi dan melayani ekosistem digital nasional."
+    },
+    {
+      "word": "Delapan",
+      "meaning": "Angka 8 yang merefleksikan simbol tak terhingga (∞), melambangkan kesinambungan dan ketangguhan yang tiada henti."
+    },
+    {
+      "word": "Teknologi",
+      "meaning": "Teknologi transmisi telekomunikasi kelas dunia yang dikembangkan dan diadaptasi khusus untuk Indonesia."
+    },
+    {
+      "word": "Nusantara",
+      "meaning": "Berakar kuat di kepulauan Indonesia, menjadi jangkar kebanggaan yang menghubungkan tanah air ke pasar global."
+    }
+  ],
+  "vision": "Menjadi arus utama yang menyatukan Nusantara dengan dunia, menghubungkan setiap data, informasi, dan peluang demi masa depan digital tanpa batas.",
+  "mission": [
+    "Membangun jalur transmisi data dan informasi berkapasitas tinggi bagi infrastruktur vital nasional (transportasi dan data center).",
+    "Mengembangkan dan mengadaptasi teknologi DWDM bersama talenta terbaik Indonesia demi kemandirian teknologi bangsa.",
+    "Melakukan alih teknologi dan pengetahuan rekayasa telekomunikasi secara berkelanjutan kepada mitra dan generasi penerus."
+  ],
+  "coreValues": [
+    {
+      "code": "FLOW",
+      "title": "Flow (Mengalir)",
+      "desc": "Layaknya air yang senantiasa menemukan jalannya, kami beradaptasi dengan tangkas dan pantang berhenti melangkah maju."
+    },
+    {
+      "code": "UNITE",
+      "title": "Unite (Menyatukan)",
+      "desc": "Kekuatan sejati lahir dari sinergi: pelanggan, mitra global, dan talenta lokal bergerak selaras menuju visi yang sama."
+    },
+    {
+      "code": "CLARITY",
+      "title": "Clarity (Keterbukaan)",
+      "desc": "Kami menjunjung tinggi integritas dan transparansi penuh pada setiap spesifikasi perangkat dan proses rekayasa."
+    },
+    {
+      "code": "NOURISH",
+      "title": "Nourish (Menumbuhkan)",
+      "desc": "Bagaikan sungai yang menyuburkan tanah di sekitarnya, kami memperkaya kapasitas keahlian talenta telekomunikasi Indonesia."
+    },
+    {
+      "code": "OCEAN",
+      "title": "Toward the Ocean (Menuju Samudra)",
+      "desc": "Kami selalu memandang jauh ke cakrawala masa depan: berakar dari Nusantara, meluas ke Asia, dan merambah panggung global."
+    }
+  ],
+  "twoPillars": [
+    {
+      "title": "DWDM Equipment Developer",
+      "desc": "Mengembangkan dan mengadaptasi perangkat DWDM agar memenuhi regulasi nasional, kondisi geografis Indonesia, dan kebutuhan ekspansi operator.",
+      "points": [
+        "Adaptasi perangkat sesuai standar SDPPI Kominfo",
+        "R&D terintegrasi bersama talenta rekayasa Indonesia",
+        "Alih teknologi nyata ke mitra dan operator lokal"
+      ]
+    },
+    {
+      "title": "DWDM Infrastructure Service Provider",
+      "desc": "Merancang, menggelar, menguji, dan memelihara infrastruktur jaringan transmisi optik untuk koridor transportasi dan interkoneksi data center.",
+      "points": [
+        "Perencanaan & survei link serat optik jarak jauh",
+        "Instalasi, integrasi, dan commissioning end-to-end",
+        "Pemantauan performa dan pemeliharaan preventif 24/7"
+      ]
+    }
+  ],
+  "applicationSectors": [
+    {
+      "title": "Air Transport",
+      "desc": "Tautan komunikasi berkapasitas tinggi dan redundan antara bandara internasional dengan radar dan pusat kendali lalu lintas udara.",
+      "badge": "Aviation"
+    },
+    {
+      "title": "Railways",
+      "desc": "Backbone komunikasi transmisi optik berkeandalan tinggi di sepanjang rel kereta api dan antar-stasiun persinyalan.",
+      "badge": "Railway"
+    },
+    {
+      "title": "Maritime",
+      "desc": "Konektivitas pelabuhan logistik dan jaringan interkoneksi maritim berdaya tahan tinggi antar-pulau di Nusantara.",
+      "badge": "Maritime"
+    },
+    {
+      "title": "Data Centers",
+      "desc": "Interkoneksi antar-data center (DCI) berkapasitas multi-terabit dengan latensi ultra-rendah dan perlindungan switching otomatis.",
+      "badge": "Hyperscale"
+    }
+  ],
+  "headquarters": {
+    "address": "Jalan Cikini Raya No. 79",
+    "city": "Jakarta Pusat",
+    "province": "DKI Jakarta",
+    "postalCode": "10330",
+    "country": "Indonesia"
+  },
+  "contact": {
+    "officialEmail": "info@idtn.co.id",
+    "phoneOffice": "+62 21 3192 8888",
+    "whatsappHotline": "+62 811 8888 8888",
+    "workingHours": "Senin - Jumat: 08:30 - 17:30 WIB"
+  }
+}
