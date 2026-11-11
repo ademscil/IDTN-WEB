@@ -4,10 +4,15 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/IDTN-WEB/',
   plugins: [
     react(),
     tailwindcss(),
   ],
+  build: {
+    outDir: 'docs',
+    emptyOutDir: true,
+  },
   server: {
     port: 3000,
     open: false,

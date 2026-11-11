@@ -55,7 +55,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
           <div className="flex items-center justify-between pb-4 border-b border-slate-100">
             <Link to="/" onClick={onClose}>
               <img
-                src="/assets/brand/idtn-logo.jpg"
+                src={`${import.meta.env.BASE_URL}assets/brand/idtn-logo.jpg`}
                 alt="IDTN Logo"
                 className="h-8 w-auto object-contain"
               />

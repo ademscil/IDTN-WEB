@@ -41,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
           {/* Brand Logo */}
           <Link to="/" className="flex items-center gap-2 group cursor-pointer focus-visible:outline-sky-600">
             <img
-              src="/assets/brand/idtn-logo.jpg"
+              src={`${import.meta.env.BASE_URL}assets/brand/idtn-logo.jpg`}
               alt="PT Infinix Delapan Teknologi Nusantara (IDTN) Logo"
               className="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-102"
             />

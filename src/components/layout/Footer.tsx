@@ -12,7 +12,7 @@ export const Footer: React.FC = () => {
           <div className="space-y-4">
             <Link to="/" className="bg-white p-2 rounded-lg inline-block">
               <img
-                src="/assets/brand/idtn-logo.jpg"
+                src={`${import.meta.env.BASE_URL}assets/brand/idtn-logo.jpg`}
                 alt="IDTN Logo"
                 className="h-9 w-auto object-contain"
               />

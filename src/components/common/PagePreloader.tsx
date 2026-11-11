@@ -44,7 +44,7 @@ export const PagePreloader: React.FC = () => {
         {/* Logo Container with gentle pulse */}
         <div className="relative p-4 rounded-2xl bg-white shadow-xs mb-6">
           <img
-            src="/assets/brand/idtn-logo.jpg"
+            src={`${import.meta.env.BASE_URL}assets/brand/idtn-logo.jpg`}
             alt="IDTN Logo"
             className="h-12 sm:h-14 w-auto object-contain animate-pulse"
           />

@@ -18,9 +18,10 @@ import { ContactPage } from './pages/ContactPage';
 
 export const App: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const basename = import.meta.env.BASE_URL || '/';
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <div className="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-sky-100 selection:text-sky-900">
         {/* Initial First-Load Preloader (t8.ru style) */}
         <PagePreloader />
