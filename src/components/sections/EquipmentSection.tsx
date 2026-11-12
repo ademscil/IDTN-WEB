@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Server, Activity, ShieldCheck, Cpu, ArrowRight } from 'lucide-react';
+import { Server, Activity, ShieldCheck, Cpu, ArrowRight, Download } from 'lucide-react';
 import dwdmData from '../../data/dwdm-tech.json';
 import { Badge } from '../common/Badge';
 import { useLanguage } from '../../context';
@@ -162,13 +162,21 @@ export const EquipmentSection: React.FC = () => {
               </ul>
             </div>
 
-            <div className="pt-2">
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <a
+                href={`${import.meta.env.BASE_URL}assets/docs/IDTN-T8-Volga-I-Technical-Datasheet.pdf`}
+                download="IDTN-T8-Volga-I-Technical-Datasheet.pdf"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-sky-50 text-[#0284c7] hover:bg-sky-100 font-bold text-xs border border-sky-200 transition-colors shadow-2xs"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>{isEn ? 'Download Datasheet (PDF)' : 'Unduh Datasheet Teknis (PDF)'}</span>
+              </a>
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 text-sm font-bold text-[#0284c7] hover:text-[#0369a1] transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-[#0284c7] transition-colors py-2 px-1"
               >
                 <span>{t('eq.requestBrochure')}</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>

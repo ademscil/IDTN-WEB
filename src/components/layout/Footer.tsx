@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, ShieldCheck, ArrowUpRight, MessageSquare } from 'lucide-react';
+import { Mail, Phone, MapPin, ShieldCheck, ArrowUpRight, MessageSquare, Download } from 'lucide-react';
 import companyData from '../../data/company.json';
 import { useLanguage } from '../../context';
 import { Modal } from '../common/Modal';
@@ -29,11 +29,21 @@ export const Footer: React.FC = () => {
             <p className="text-xs text-sky-400 font-medium italic">
               "{companyData.philosophy.headline}"
             </p>
-            <div className="flex items-center gap-2 pt-2">
+            <div className="flex flex-wrap items-center gap-2 pt-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-slate-800 text-emerald-400 border border-slate-700">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>SDPPI & OSS Compliant</span>
               </span>
+              <a
+                href="https://www.linkedin.com/company/pt-infinix-delapan-teknologi-nusantara"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-sky-400 border border-slate-700 hover:bg-slate-700 transition-colors"
+                title="IDTN on LinkedIn"
+              >
+                <span>LinkedIn</span>
+                <ArrowUpRight className="w-3 h-3" />
+              </a>
             </div>
           </div>
 
@@ -101,6 +111,26 @@ export const Footer: React.FC = () => {
                 >
                   <span>T8 Systems (Russia)</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+              </li>
+              <li className="pt-2 border-t border-slate-800">
+                <a
+                  href={`${import.meta.env.BASE_URL}assets/docs/IDTN-Company-Profile-2026.pdf`}
+                  download="IDTN-Company-Profile-2026.pdf"
+                  className="hover:text-sky-400 transition-colors inline-flex items-center gap-1.5 text-xs text-slate-300 font-semibold"
+                >
+                  <Download className="w-3.5 h-3.5 text-sky-400" />
+                  <span>{isEn ? 'Company Profile (PDF)' : 'Profil Perusahaan (PDF)'}</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`${import.meta.env.BASE_URL}assets/docs/IDTN-T8-Volga-I-Technical-Datasheet.pdf`}
+                  download="IDTN-T8-Volga-I-Technical-Datasheet.pdf"
+                  className="hover:text-sky-400 transition-colors inline-flex items-center gap-1.5 text-xs text-slate-300 font-semibold"
+                >
+                  <Download className="w-3.5 h-3.5 text-sky-400" />
+                  <span>{isEn ? 'Volga I Datasheet (PDF)' : 'Datasheet Volga I (PDF)'}</span>
                 </a>
               </li>
             </ul>
