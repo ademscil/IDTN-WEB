@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, ShieldCheck, ArrowUpRight } from 'lucide-react';
+import { Mail, Phone, MapPin, ShieldCheck, ArrowUpRight, MessageSquare } from 'lucide-react';
 import companyData from '../../data/company.json';
 import { useLanguage } from '../../context';
+import { Modal } from '../common/Modal';
 
 export const Footer: React.FC = () => {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+  const isEn = lang === 'en';
 
   return (
     <footer className="bg-slate-900 text-white border-t border-slate-800 pt-16 pb-12">
@@ -138,6 +141,17 @@ export const Footer: React.FC = () => {
                 {companyData.contact.phoneOffice}
               </a>
             </div>
+            <div className="flex items-center gap-3 text-sm text-slate-300">
+              <MessageSquare className="w-4 h-4 text-emerald-400 shrink-0" />
+              <a
+                href={`https://wa.me/${companyData.contact.whatsappHotline.replace(/[^0-9]/g, '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs hover:text-emerald-400 transition-colors font-mono"
+              >
+                {companyData.contact.whatsappHotline} (WhatsApp)
+              </a>
+            </div>
           </div>
         </div>
 
@@ -146,13 +160,59 @@ export const Footer: React.FC = () => {
           <p>
             &copy; {new Date().getFullYear()} {companyData.legalName}. {t('footer.rights')}
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+            <button
+              onClick={() => setIsPrivacyOpen(true)}
+              className="text-slate-400 hover:text-sky-400 transition-colors cursor-pointer underline underline-offset-2"
+            >
+              {isEn ? 'Privacy Notice & Data Protection' : 'Kebijakan Privasi & PDP'}
+            </button>
+            <span className="w-1 h-1 rounded-full bg-slate-700"></span>
             <span>{companyData.headquarters.city}, {companyData.headquarters.country}</span>
             <span className="w-1 h-1 rounded-full bg-slate-700"></span>
             <span>Partner Resmi T8 Systems</span>
           </div>
         </div>
       </div>
+
+      {/* Privacy Notice Modal */}
+      <Modal
+        isOpen={isPrivacyOpen}
+        onClose={() => setIsPrivacyOpen(false)}
+        title={isEn ? 'Privacy Notice & Data Protection' : 'Kebijakan Privasi & Perlindungan Data'}
+      >
+        <div className="space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed max-h-[60vh] overflow-y-auto pr-1">
+          <p>
+            {isEn
+              ? 'PT Infinix Delapan Teknologi Nusantara (IDTN) is committed to protecting your corporate and personal data in full compliance with Indonesian Law No. 27 of 2022 concerning Personal Data Protection (UU PDP).'
+              : 'PT Infinix Delapan Teknologi Nusantara (IDTN) berkomitmen penuh melindungi kerahasiaan data korporat dan informasi kontak Anda sesuai dengan Undang-Undang No. 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP).'}
+          </p>
+          <h5 className="font-bold text-slate-900 pt-1">
+            {isEn ? '1. Collection of Business Inquiry Information' : '1. Pengumpulan Informasi RFP & Konsultasi'}
+          </h5>
+          <p>
+            {isEn
+              ? 'Information provided via the Project Inquiry Form (including company name, professional email, phone number, and network requirements) is strictly utilized for technical optical transmission assessment, link design, and commercial RFP response.'
+              : 'Informasi yang Anda sampaikan melalui formulir pengajuan RFP (nama, email perusahaan, nomor telepon, dan kebutuhan jaringan) semata-mata digunakan untuk evaluasi teknis arsitektur transmisi optik, perhitungan kapasitas, dan komunikasi resmi IDTN.'}
+          </p>
+          <h5 className="font-bold text-slate-900 pt-1">
+            {isEn ? '2. Confidentiality & Third-Party Disclosure' : '2. Kerahasiaan & Non-Disclosure'}
+          </h5>
+          <p>
+            {isEn
+              ? 'IDTN does not sell, rent, or lease corporate inquiry data to third parties. Data is only shared with certified engineering personnel and principal equipment partners (T8 Systems) solely for link budgeting and equipment compatibility purposes.'
+              : 'IDTN tidak menjual atau membagikan data pengajuan kepada pihak ketiga. Informasi teknis hanya diakses oleh tim insinyur tersertifikasi IDTN dan prinsipal T8 Systems demi keperluan kalkulasi kompatibilitas link dan pengadaan perangkat.'}
+          </p>
+          <div className="pt-3 border-t border-slate-100 flex justify-end">
+            <button
+              onClick={() => setIsPrivacyOpen(false)}
+              className="px-4 py-2 rounded-lg bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 cursor-pointer"
+            >
+              {isEn ? 'Understood' : 'Saya Mengerti'}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </footer>
   );
 };

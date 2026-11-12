@@ -24,6 +24,14 @@ export const InquiryFormSection: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedInquiryId, setSubmittedInquiryId] = useState<string | null>(null);
+  const [submissionPayload, setSubmissionPayload] = useState<{
+    fullName: string;
+    companyName: string;
+    corporateEmail: string;
+    phoneNumber: string;
+    solutionTopic: string;
+    message: string;
+  } | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -39,7 +47,7 @@ export const InquiryFormSection: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Check honeypot (silent drop for bots)
@@ -61,24 +69,39 @@ export const InquiryFormSection: React.FC = () => {
       return;
     }
 
-    // Simulate submission with double-click lock
     setIsSubmitting(true);
-    setTimeout(() => {
-      const generatedId = `IDTN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
-      setSubmittedInquiryId(generatedId);
-      setIsSubmitting(false);
+    const generatedId = `IDTN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
-      // Reset form
-      setFormData({
-        fullName: '',
-        companyName: '',
-        corporateEmail: '',
-        phoneNumber: '',
-        solutionTopic: 'dwdm_optical_systems',
-        message: '',
-        _gotcha: '',
-      });
-    }, 1200);
+    const endpoint = import.meta.env.VITE_INQUIRY_ENDPOINT;
+    if (endpoint) {
+      try {
+        await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ ...formData, referenceId: generatedId }),
+        });
+      } catch (err) {
+        console.warn('Backend endpoint unavailable, falling back to local ticket:', err);
+      }
+    } else {
+      // Simulate network latency if no endpoint provided
+      await new Promise((res) => setTimeout(res, 800));
+    }
+
+    setSubmissionPayload({ ...formData });
+    setSubmittedInquiryId(generatedId);
+    setIsSubmitting(false);
+
+    // Reset form
+    setFormData({
+      fullName: '',
+      companyName: '',
+      corporateEmail: '',
+      phoneNumber: '',
+      solutionTopic: 'dwdm_optical_systems',
+      message: '',
+      _gotcha: '',
+    });
   };
 
   return (
@@ -404,12 +427,47 @@ export const InquiryFormSection: React.FC = () => {
           <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 font-mono text-xs text-slate-700">
             {isEn ? 'Inquiry Reference Ticket' : 'Nomor Tiket Referensi'}: <span className="font-bold text-sky-700">{submittedInquiryId}</span>
           </div>
+
+          {submissionPayload && (
+            <div className="pt-2 flex flex-col sm:flex-row gap-2">
+              <a
+                href={`mailto:${companyData.contact.officialEmail}?subject=${encodeURIComponent(
+                  `[RFP Inquiry ${submittedInquiryId}] ${submissionPayload.companyName}`
+                )}&body=${encodeURIComponent(
+                  `Halo Tim IDTN,\n\nBerikut rincian permohonan konsultasi teknis / RFP kami:\n\n` +
+                  `Nama: ${submissionPayload.fullName}\n` +
+                  `Perusahaan: ${submissionPayload.companyName}\n` +
+                  `Email: ${submissionPayload.corporateEmail}\n` +
+                  `Telepon: ${submissionPayload.phoneNumber}\n` +
+                  `Kebutuhan: ${submissionPayload.solutionTopic}\n\n` +
+                  `Spesifikasi Link / Kebutuhan:\n${submissionPayload.message}\n\n` +
+                  `Tiket Referensi: ${submittedInquiryId}\n\nTerima kasih.`
+                )}`}
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#0369a1] text-white font-semibold text-xs hover:bg-[#075985] transition-colors shadow-sm"
+              >
+                <Mail className="w-4 h-4" />
+                <span>{isEn ? 'Send via Email App' : 'Kirim via Email Resmi'}</span>
+              </a>
+              <a
+                href={`https://wa.me/${companyData.contact.whatsappHotline.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                  `Halo Tim Teknis IDTN, saya ingin konsultasi RFP (Tiket: ${submittedInquiryId}) atas nama ${submissionPayload.fullName} dari ${submissionPayload.companyName}.`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold text-xs hover:bg-emerald-700 transition-colors shadow-sm"
+              >
+                <Phone className="w-4 h-4" />
+                <span>{isEn ? 'Chat WhatsApp' : 'Kirim via WhatsApp'}</span>
+              </a>
+            </div>
+          )}
+
           <div className="pt-2">
             <Button
               variant="outline"
               size="md"
               onClick={() => setSubmittedInquiryId(null)}
-              className="w-full"
+              className="w-full cursor-pointer"
             >
               {isEn ? 'Close Window' : 'Tutup'}
             </Button>
