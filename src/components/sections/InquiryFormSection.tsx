@@ -5,8 +5,12 @@ import { InquiryRequestSchema } from '../../schemas/inquiry.schema';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { Modal } from '../common/Modal';
+import { useLanguage } from '../../context';
 
 export const InquiryFormSection: React.FC = () => {
+  const { lang, t } = useLanguage();
+  const isEn = lang === 'en';
+
   const [formData, setFormData] = useState({
     fullName: '',
     companyName: '',
@@ -59,12 +63,11 @@ export const InquiryFormSection: React.FC = () => {
 
     // Simulate submission with double-click lock
     setIsSubmitting(true);
-    setErrors({});
-
     setTimeout(() => {
-      setIsSubmitting(false);
-      const generatedId = `IDTN-INQ-${Math.floor(100000 + Math.random() * 900000)}`;
+      const generatedId = `IDTN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
       setSubmittedInquiryId(generatedId);
+      setIsSubmitting(false);
+
       // Reset form
       setFormData({
         fullName: '',
@@ -75,33 +78,35 @@ export const InquiryFormSection: React.FC = () => {
         message: '',
         _gotcha: '',
       });
-    }, 800);
+    }, 1200);
   };
 
   return (
     <section id="contact" className="py-20 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
-        {/* Header */}
+        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <Badge variant="cyan">Jalur Konsultasi Resmi</Badge>
+          <Badge variant="cyan">{t('contact.badge')}</Badge>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Konsultasikan Kebutuhan Infrastruktur Jaringan Anda
+            {t('contact.title')}
           </h2>
           <p className="text-base sm:text-lg text-slate-600">
-            Tim rekayasa DWDM dan perencana jaringan IDTN siap membantu penyusunan spesifikasi teknis, estimasi kapasitas optik, dan penawaran proyek korporat Anda.
+            {t('contact.desc')}
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* Contact Details (5 Cols) */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="bg-slate-50 border border-slate-200/80 rounded-3xl p-8 space-y-6">
+          {/* Left Column: Direct Contacts & Headquarters (5 Cols) */}
+          <div className="lg:col-span-5 space-y-8 bg-slate-50/80 p-8 sm:p-10 rounded-3xl border border-slate-200/80">
+            <div className="space-y-4">
               <h3 className="text-xl font-bold text-slate-900">
-                Informasi Kantor & Kontak
+                {isEn ? 'Direct Contact & Office' : 'Informasi Kantor & Kontak'}
               </h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Kunjungi kantor operasional kami atau hubungi tim representatif resmi IDTN untuk koordinasi teknis dan pertemuan bisnis langsung.
+                {isEn
+                  ? 'Reach out directly to IDTN engineering representatives for technical coordination, RFPs, and consultation.'
+                  : 'Kunjungi kantor operasional kami atau hubungi tim representatif resmi IDTN untuk koordinasi teknis dan pertemuan bisnis langsung.'}
               </p>
 
               <div className="space-y-4 pt-2">
@@ -110,7 +115,7 @@ export const InquiryFormSection: React.FC = () => {
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400 font-medium">Kantor Pusat</p>
+                    <p className="text-xs text-slate-400 font-medium">{isEn ? 'Headquarters' : 'Kantor Pusat'}</p>
                     <p className="text-sm font-bold text-slate-900 mt-0.5">
                       {companyData.headquarters.address}
                     </p>
@@ -125,10 +130,10 @@ export const InquiryFormSection: React.FC = () => {
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400 font-medium">Email Resmi</p>
+                    <p className="text-xs text-slate-400 font-medium">{isEn ? 'Official Email' : 'Email Resmi'}</p>
                     <a
                       href={`mailto:${companyData.contact.officialEmail}`}
-                      className="text-sm font-bold text-sky-600 hover:underline mt-0.5 block"
+                      className="text-sm font-bold text-sky-600 hover:underline mt-0.5 block font-mono"
                     >
                       {companyData.contact.officialEmail}
                     </a>
@@ -140,10 +145,10 @@ export const InquiryFormSection: React.FC = () => {
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400 font-medium">Telepon Kantor / Hotline</p>
+                    <p className="text-xs text-slate-400 font-medium">{isEn ? 'Office Telephone' : 'Telepon Kantor'}</p>
                     <a
                       href={`tel:${companyData.contact.phoneOffice.replace(/\s+/g, '')}`}
-                      className="text-sm font-bold text-slate-900 hover:text-sky-600 mt-0.5 block"
+                      className="text-sm font-bold text-slate-900 hover:text-sky-600 mt-0.5 block font-mono"
                     >
                       {companyData.contact.phoneOffice}
                     </a>
@@ -155,50 +160,51 @@ export const InquiryFormSection: React.FC = () => {
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400 font-medium">Jam Pelayanan</p>
+                    <p className="text-xs text-slate-400 font-medium">{isEn ? 'Service Hours' : 'Jam Pelayanan'}</p>
                     <p className="text-xs font-semibold text-slate-700 mt-0.5">
-                      {companyData.contact.workingHours}
+                      {isEn ? 'Monday - Friday: 08:30 - 17:30 WIB' : companyData.contact.workingHours}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Quick Note */}
-            <div className="p-6 rounded-2xl bg-sky-50 border border-sky-100 flex items-start gap-3 text-xs text-sky-900 leading-relaxed">
-              <CheckCircle2 className="w-5 h-5 text-sky-600 shrink-0 mt-0.5" />
-              <span>
-                Seluruh data dan dokumen penawaran teknis dilindungi oleh perjanjian kerahasiaan (*Non-Disclosure Agreement / NDA*) serta kepatuhan perlindungan data pribadi (UU PDP).
-              </span>
+            {/* Quick Consultation Guarantee */}
+            <div className="p-5 rounded-2xl bg-white border border-sky-100 shadow-xs space-y-2">
+              <div className="flex items-center gap-2 text-sky-700 font-bold text-xs uppercase tracking-wider">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>{isEn ? 'Technical SLA Guarantee' : 'Jaminan Respons Teknis'}</span>
+              </div>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                {isEn
+                  ? 'All RFP submissions receive initial engineering feedback and preliminary link architecture feasibility assessments within 24 business hours.'
+                  : 'Setiap pengajuan RFP ditindaklanjuti oleh insinyur optik senior dengan asesmen kelayakan arsitektur awal dalam waktu 1x24 jam kerja.'}
+              </p>
             </div>
           </div>
 
-          {/* Form (7 Cols) */}
-          <div className="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-100">
-            <h3 className="text-xl font-bold text-slate-900 mb-2">
-              Formulir Permintaan Penawaran Proyek (RFP)
-            </h3>
-            <p className="text-xs text-slate-500 mb-6">
-              Silakan lengkapi data di bawah ini. Tim teknis IDTN akan menghubungi Anda dalam 1x24 jam kerja.
-            </p>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Honeypot field (hidden from view) */}
-              <input
-                type="text"
-                name="_gotcha"
-                value={formData._gotcha}
-                onChange={handleChange}
-                className="hidden"
-                tabIndex={-1}
-                autoComplete="off"
-              />
+          {/* Right Column: Inquiry Form (7 Cols) */}
+          <div className="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200/80 shadow-lg">
+            <form onSubmit={handleSubmit} noValidate className="space-y-6">
+              {/* Honeypot field (hidden from real users) */}
+              <div className="hidden" aria-hidden="true">
+                <label htmlFor="_gotcha">Do not fill this field</label>
+                <input
+                  type="text"
+                  id="_gotcha"
+                  name="_gotcha"
+                  value={formData._gotcha}
+                  onChange={handleChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
 
               {/* Full Name & Company */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="fullName" className="block text-xs font-bold text-slate-700 mb-1">
-                    Nama Lengkap <span className="text-rose-500">*</span>
+                    {t('contact.form.name')}
                   </label>
                   <input
                     id="fullName"
@@ -206,7 +212,7 @@ export const InquiryFormSection: React.FC = () => {
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
-                    placeholder="Contoh: Budi Pratama"
+                    placeholder={isEn ? 'e.g. John Doe' : 'Contoh: Budi Santoso'}
                     className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none focus:ring-2 ${
                       errors.fullName
                         ? 'border-rose-400 focus:ring-rose-200 bg-rose-50/20'
@@ -220,7 +226,7 @@ export const InquiryFormSection: React.FC = () => {
 
                 <div>
                   <label htmlFor="companyName" className="block text-xs font-bold text-slate-700 mb-1">
-                    Nama Perusahaan / Instansi <span className="text-rose-500">*</span>
+                    {t('contact.form.org')}
                   </label>
                   <input
                     id="companyName"
@@ -228,7 +234,7 @@ export const InquiryFormSection: React.FC = () => {
                     name="companyName"
                     value={formData.companyName}
                     onChange={handleChange}
-                    placeholder="Contoh: PT Telekomunikasi Nusantara"
+                    placeholder={isEn ? 'e.g. National Telco Corp' : 'Contoh: PT Telekomunikasi Nusantara'}
                     className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none focus:ring-2 ${
                       errors.companyName
                         ? 'border-rose-400 focus:ring-rose-200 bg-rose-50/20'
@@ -245,7 +251,7 @@ export const InquiryFormSection: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="corporateEmail" className="block text-xs font-bold text-slate-700 mb-1">
-                    Email Korporat <span className="text-rose-500">*</span>
+                    {t('contact.form.email')}
                   </label>
                   <input
                     id="corporateEmail"
@@ -253,7 +259,7 @@ export const InquiryFormSection: React.FC = () => {
                     name="corporateEmail"
                     value={formData.corporateEmail}
                     onChange={handleChange}
-                    placeholder="nama@perusahaan.co.id"
+                    placeholder={isEn ? 'name@company.com' : 'nama@perusahaan.co.id'}
                     className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none focus:ring-2 ${
                       errors.corporateEmail
                         ? 'border-rose-400 focus:ring-rose-200 bg-rose-50/20'
@@ -267,7 +273,7 @@ export const InquiryFormSection: React.FC = () => {
 
                 <div>
                   <label htmlFor="phoneNumber" className="block text-xs font-bold text-slate-700 mb-1">
-                    Nomor Telepon / WhatsApp <span className="text-rose-500">*</span>
+                    {t('contact.form.phone')}
                   </label>
                   <input
                     id="phoneNumber"
@@ -291,7 +297,7 @@ export const InquiryFormSection: React.FC = () => {
               {/* Solution Topic */}
               <div>
                 <label htmlFor="solutionTopic" className="block text-xs font-bold text-slate-700 mb-1">
-                  Kategori Solusi yang Dibutuhkan <span className="text-rose-500">*</span>
+                  {t('contact.form.type')}
                 </label>
                 <select
                   id="solutionTopic"
@@ -300,19 +306,31 @@ export const InquiryFormSection: React.FC = () => {
                   onChange={handleChange}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 bg-white"
                 >
-                  <option value="dwdm_optical_systems">Sistem DWDM & Transmisi Backbone Optik (Volga I)</option>
-                  <option value="datacenter_interconnect">Data Center Interconnect (DCI High Density)</option>
-                  <option value="fiber_infrastructure">Infrastruktur Kabel Serat Optik & Turnkey OSP</option>
-                  <option value="nms_otdr_monitoring">Pemantauan OTDR Ramenka & NMS Titan</option>
-                  <option value="partnership_compliance">Kemitraan Distribusi & Verifikasi Legalitas</option>
-                  <option value="other">Kebutuhan Lainnya</option>
+                  <option value="dwdm_optical_systems">
+                    {isEn ? 'DWDM Systems & Optical Backbone (Volga I)' : 'Sistem DWDM & Transmisi Backbone Optik (Volga I)'}
+                  </option>
+                  <option value="datacenter_interconnect">
+                    {isEn ? 'Data Center Interconnect (DCI High Density)' : 'Data Center Interconnect (DCI High Density)'}
+                  </option>
+                  <option value="fiber_infrastructure">
+                    {isEn ? 'Fiber Optic Cable Infrastructure & Turnkey OSP' : 'Infrastruktur Kabel Serat Optik & Turnkey OSP'}
+                  </option>
+                  <option value="nms_otdr_monitoring">
+                    {isEn ? 'OTDR Ramenka Monitoring & NMS Titan' : 'Pemantauan OTDR Ramenka & NMS Titan'}
+                  </option>
+                  <option value="partnership_compliance">
+                    {isEn ? 'Distribution Partnership & Procurement RFP' : 'Kemitraan Distribusi & Pengadaan Tender'}
+                  </option>
+                  <option value="other">
+                    {isEn ? 'Other Requirements' : 'Kebutuhan Lainnya'}
+                  </option>
                 </select>
               </div>
 
               {/* Message */}
               <div>
                 <label htmlFor="message" className="block text-xs font-bold text-slate-700 mb-1">
-                  Rincian Kebutuhan Proyek / Pesan <span className="text-rose-500">*</span>
+                  {t('contact.form.msg')}
                 </label>
                 <textarea
                   id="message"
@@ -320,8 +338,8 @@ export const InquiryFormSection: React.FC = () => {
                   rows={4}
                   value={formData.message}
                   onChange={handleChange}
-                  placeholder="Deskripsikan estimasi rute jarak, kebutuhan bandwidth, atau jadwal pelaksanaan tender Anda..."
-                  className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none focus:ring-2 ${
+                  placeholder={isEn ? 'Please detail your transmission link distance, capacity targets (e.g., 100G/400G), or equipment needs...' : 'Jelaskan perkiraan jarak link, kapasitas (misal 100G/400G), titik terminasi, atau kebutuhan perangkat...'}
+                  className={`w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none focus:ring-2 resize-none ${
                     errors.message
                       ? 'border-rose-400 focus:ring-rose-200 bg-rose-50/20'
                       : 'border-slate-300 focus:border-sky-500 focus:ring-sky-100'
@@ -333,61 +351,62 @@ export const InquiryFormSection: React.FC = () => {
               </div>
 
               {/* Submit Button */}
-              <div className="pt-2">
-                <Button
-                  type="submit"
-                  size="lg"
-                  variant="primary"
-                  disabled={isSubmitting}
-                  className="w-full gap-2 text-base font-bold py-3.5 shadow-md shadow-sky-600/20"
-                >
-                  {isSubmitting ? (
-                    <span>Mengirimkan Permintaan...</span>
-                  ) : (
-                    <>
-                      <span>Kirim Permintaan Konsultasi</span>
-                      <Send className="w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              </div>
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                disabled={isSubmitting}
+                className="w-full gap-2 py-3.5 text-base shadow-md cursor-pointer"
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    <span>{t('contact.form.submitting')}</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>{t('contact.form.submit')}</span>
+                  </>
+                )}
+              </Button>
             </form>
           </div>
         </div>
 
-        {/* Success Modal */}
-        {submittedInquiryId && (
-          <Modal
-            isOpen={!!submittedInquiryId}
-            onClose={() => setSubmittedInquiryId(null)}
-            title="Permintaan Konsultasi Diterima"
-          >
-            <div className="text-center py-4 space-y-4">
-              <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto border border-emerald-200">
-                <CheckCircle2 className="w-8 h-8" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900">
-                Terima Kasih atas Minat Anda
-              </h4>
-              <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-                Permintaan penawaran proyek Anda telah tercatat dengan nomor referensi resmi:
-              </p>
-              <div className="bg-slate-50 py-2.5 px-4 rounded-xl border border-slate-200 inline-block font-mono font-bold text-sky-700 text-sm">
-                {submittedInquiryId}
-              </div>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                Senior Technical Account Manager IDTN akan menghubungi Anda via email atau WhatsApp resmi dalam waktu maksimal 1x24 jam kerja.
-              </p>
-              <div className="pt-4">
-                <Button variant="primary" onClick={() => setSubmittedInquiryId(null)} className="px-8">
-                  Selesai
-                </Button>
-              </div>
-            </div>
-          </Modal>
-        )}
-
       </div>
+
+      {/* Success Modal */}
+      <Modal
+        isOpen={!!submittedInquiryId}
+        onClose={() => setSubmittedInquiryId(null)}
+        title={isEn ? 'Inquiry Successfully Submitted' : 'Permintaan Konsultasi Diterima'}
+      >
+        <div className="space-y-4 text-center py-4">
+          <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+            <CheckCircle2 className="w-10 h-10" />
+          </div>
+          <h4 className="text-lg font-bold text-slate-900">
+            {isEn ? 'Thank you for consulting with IDTN' : 'Terima Kasih atas Pengajuan Anda'}
+          </h4>
+          <p className="text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
+            {t('contact.form.success')}
+          </p>
+          <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 font-mono text-xs text-slate-700">
+            {isEn ? 'Inquiry Reference Ticket' : 'Nomor Tiket Referensi'}: <span className="font-bold text-sky-700">{submittedInquiryId}</span>
+          </div>
+          <div className="pt-2">
+            <Button
+              variant="outline"
+              size="md"
+              onClick={() => setSubmittedInquiryId(null)}
+              className="w-full"
+            >
+              {isEn ? 'Close Window' : 'Tutup'}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </section>
   );
 };

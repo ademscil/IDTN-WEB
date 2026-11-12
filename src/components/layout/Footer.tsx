@@ -1,24 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, ShieldCheck } from 'lucide-react';
+import { Mail, Phone, MapPin, ShieldCheck, ArrowUpRight } from 'lucide-react';
 import companyData from '../../data/company.json';
+import { useLanguage } from '../../context';
 
 export const Footer: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <footer className="bg-slate-900 text-white border-t border-slate-800 pt-16 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
           {/* Col 1: Brand & Philosophy */}
           <div className="space-y-4">
-            <Link to="/" className="bg-white p-2 rounded-lg inline-block">
+            <a href="#hero" className="bg-white p-2 rounded-lg inline-block">
               <img
                 src={`${import.meta.env.BASE_URL}assets/brand/idtn-logo.jpg`}
                 alt="IDTN Logo"
                 className="h-9 w-auto object-contain"
               />
-            </Link>
+            </a>
             <p className="text-sm text-slate-300 leading-relaxed">
-              {companyData.shortDescription}
+              {t('footer.desc')}
             </p>
             <p className="text-xs text-sky-400 font-medium italic">
               "{companyData.philosophy.headline}"
@@ -31,120 +33,116 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Col 2: Solutions & Technology */}
+          {/* Col 2: Products & Systems */}
           <div>
             <h4 className="text-sm font-bold tracking-wider text-slate-200 uppercase mb-4">
-              Solusi & Teknologi
+              {t('footer.products')}
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
-                <Link to="/technology" className="hover:text-sky-400 transition-colors">
-                  DWDM Optical Transport (Volga I)
-                </Link>
+                <a href="#equipment" className="hover:text-sky-400 transition-colors">
+                  DWDM System Volga I Telecom
+                </a>
               </li>
               <li>
-                <Link to="/solutions" className="hover:text-sky-400 transition-colors">
-                  Data Center Interconnect (DCI)
-                </Link>
+                <a href="#equipment" className="hover:text-sky-400 transition-colors">
+                  DWDM System Volga I DCI
+                </a>
               </li>
               <li>
-                <Link to="/technology" className="hover:text-sky-400 transition-colors">
-                  OTDR Monitoring System (Ramenka)
-                </Link>
+                <a href="#equipment" className="hover:text-sky-400 transition-colors">
+                  DWDM System DCI V2 (6.4 Tbps)
+                </a>
               </li>
               <li>
-                <Link to="/technology" className="hover:text-sky-400 transition-colors">
-                  Network Management (NMS Titan)
-                </Link>
+                <a href="#equipment" className="hover:text-sky-400 transition-colors">
+                  OTDR Monitoring System Ramenka
+                </a>
               </li>
               <li>
-                <Link to="/solutions" className="hover:text-sky-400 transition-colors">
-                  Turnkey Fiber Infrastructure OSP
-                </Link>
+                <a href="#equipment" className="hover:text-sky-400 transition-colors">
+                  NMS Titan & Fractal Management
+                </a>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Kredibilitas & Tata Kelola */}
+          {/* Col 3: Company & Ecosystem */}
           <div>
             <h4 className="text-sm font-bold tracking-wider text-slate-200 uppercase mb-4">
-              Kredibilitas & Tata Kelola
+              {t('footer.company')}
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
-                <Link to="/compliance" className="hover:text-sky-400 transition-colors">
-                  Sertifikasi ISO 9001:2015
-                </Link>
+                <a href="#about" className="hover:text-sky-400 transition-colors">
+                  {t('nav.about')}
+                </a>
               </li>
               <li>
-                <Link to="/compliance" className="hover:text-sky-400 transition-colors">
-                  Sertifikasi ISO 27001:2022
-                </Link>
+                <a href="#about" className="hover:text-sky-400 transition-colors">
+                  {t('about.focus.title')}
+                </a>
               </li>
               <li>
-                <Link to="/compliance" className="hover:text-sky-400 transition-colors">
-                  Standar SDPPI Kominfo RI
-                </Link>
+                <a href="#clients" className="hover:text-sky-400 transition-colors">
+                  {t('nav.clients')}
+                </a>
               </li>
               <li>
-                <Link to="/compliance" className="hover:text-sky-400 transition-colors">
-                  NIB OSS & KBLI 61100
-                </Link>
-              </li>
-              <li>
-                <Link to="/compliance" className="hover:text-sky-400 transition-colors">
-                  Laporan Audit Keuangan (WTP)
-                </Link>
+                <a
+                  href="https://t8.ru/en/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-sky-400 transition-colors inline-flex items-center gap-1 text-sky-400"
+                >
+                  <span>T8 Systems (Russia)</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
               </li>
             </ul>
           </div>
 
-          {/* Col 4: Kantor & Kontak Resmi */}
-          <div>
+          {/* Col 4: Contact & Office */}
+          <div className="space-y-3">
             <h4 className="text-sm font-bold tracking-wider text-slate-200 uppercase mb-4">
-              Kantor Pusat & Kontak
+              {t('footer.contact')}
             </h4>
-            <div className="space-y-3 text-sm text-slate-400">
-              <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-sky-400 shrink-0 mt-1" />
-                <span>
-                  {companyData.headquarters.address}, {companyData.headquarters.city},{' '}
-                  {companyData.headquarters.province} {companyData.headquarters.postalCode}
-                </span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-sky-400 shrink-0" />
-                <a href={`mailto:${companyData.contact.officialEmail}`} className="hover:text-white transition-colors">
-                  {companyData.contact.officialEmail}
-                </a>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-sky-400 shrink-0" />
-                <a href={`tel:${companyData.contact.phoneOffice.replace(/\s+/g, '')}`} className="hover:text-white transition-colors">
-                  {companyData.contact.phoneOffice}
-                </a>
-              </div>
-              <p className="text-xs text-slate-500 pt-1">
-                Jam Operasional: {companyData.contact.workingHours}
+            <div className="flex items-start gap-3 text-sm text-slate-300">
+              <MapPin className="w-4 h-4 text-sky-400 shrink-0 mt-1" />
+              <p className="text-xs leading-relaxed">
+                {companyData.headquarters.address}, {companyData.headquarters.city} {companyData.headquarters.postalCode}, {companyData.headquarters.country}
               </p>
+            </div>
+            <div className="flex items-center gap-3 text-sm text-slate-300 pt-1">
+              <Mail className="w-4 h-4 text-sky-400 shrink-0" />
+              <a
+                href={`mailto:${companyData.contact.officialEmail}`}
+                className="text-xs hover:text-sky-400 transition-colors font-mono"
+              >
+                {companyData.contact.officialEmail}
+              </a>
+            </div>
+            <div className="flex items-center gap-3 text-sm text-slate-300">
+              <Phone className="w-4 h-4 text-sky-400 shrink-0" />
+              <a
+                href={`tel:${companyData.contact.phoneOffice.replace(/[^0-9+]/g, '')}`}
+                className="text-xs hover:text-sky-400 transition-colors font-mono"
+              >
+                {companyData.contact.phoneOffice}
+              </a>
             </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
+        {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>
-            © {companyData.foundedYear} {companyData.legalName}. Hak cipta dilindungi undang-undang.
+            &copy; {new Date().getFullYear()} {companyData.legalName}. {t('footer.rights')}
           </p>
           <div className="flex items-center gap-6">
-            <Link to="/compliance" className="hover:text-slate-300 transition-colors">
-              Legalitas Resmi
-            </Link>
-            <Link to="/contact" className="hover:text-slate-300 transition-colors">
-              Kebijakan Privasi
-            </Link>
-            <span className="text-slate-700">|</span>
-            <span className="text-slate-400">Partner Resmi T8 DWDM Systems</span>
+            <span>{companyData.headquarters.city}, {companyData.headquarters.country}</span>
+            <span className="w-1 h-1 rounded-full bg-slate-700"></span>
+            <span>Partner Resmi T8 Systems</span>
           </div>
         </div>
       </div>
