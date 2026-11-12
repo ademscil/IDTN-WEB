@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { Menu, PhoneCall } from 'lucide-react';
 import { Button } from '../common/Button';
 import { useLanguage } from '../../context';
@@ -22,11 +22,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
   }, []);
 
   const navLinks = [
-    { label: t('nav.home'), href: '#hero' },
-    { label: t('nav.about'), href: '#about' },
-    { label: t('nav.equipment'), href: '#equipment' },
-    { label: t('nav.clients'), href: '#clients' },
-    { label: t('nav.contact'), href: '#contact' },
+    { label: t('nav.home'), to: '/' },
+    { label: t('nav.about'), to: '/about' },
+    { label: t('nav.equipment'), to: '/equipment' },
+    { label: t('nav.clients'), to: '/clients' },
+    { label: t('nav.contact'), to: '/contact' },
   ];
 
   return (
@@ -48,35 +48,30 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
             />
           </Link>
 
-          {/* Desktop Navigation Links */}
+          {/* Desktop Navigation Links (Multi-Page with active indicator) */}
           <nav className="hidden lg:flex items-center gap-6 xl:gap-8" aria-label="Navigasi Utama">
             {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-xs xl:text-sm font-semibold text-slate-700 hover:text-[#0284c7] transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#0284c7] after:w-0 hover:after:w-full after:transition-all"
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.to === '/'}
+                className={({ isActive }) =>
+                  `text-xs xl:text-sm font-semibold transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#0284c7] after:transition-all ${
+                    isActive
+                      ? 'text-[#0284c7] font-bold after:w-full'
+                      : 'text-slate-700 hover:text-[#0284c7] after:w-0 hover:after:w-full'
+                  }`
+                }
               >
                 {link.label}
-              </a>
+              </NavLink>
             ))}
           </nav>
 
           {/* CTA & Language Switcher & Mobile Hamburger */}
           <div className="flex items-center gap-3 sm:gap-4">
-            {/* Language Switcher (ID | EN) */}
-            <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs font-bold" title="Pilih Bahasa / Select Language">
-              <button
-                type="button"
-                onClick={() => setLang('id')}
-                className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
-                  lang === 'id'
-                    ? 'bg-white text-[#0284c7] shadow-xs font-bold'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-                aria-label="Bahasa Indonesia"
-              >
-                ID
-              </button>
+            {/* Language Switcher (EN | ID) */}
+            <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs font-bold" title="Select Language / Pilih Bahasa">
               <button
                 type="button"
                 onClick={() => setLang('en')}
@@ -89,14 +84,26 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
               >
                 EN
               </button>
+              <button
+                type="button"
+                onClick={() => setLang('id')}
+                className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                  lang === 'id'
+                    ? 'bg-white text-[#0284c7] shadow-xs font-bold'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+                aria-label="Bahasa Indonesia"
+              >
+                ID
+              </button>
             </div>
 
-            <a href="#contact" className="hidden sm:inline-flex">
+            <Link to="/contact" className="hidden sm:inline-flex">
               <Button size="sm" variant="primary" className="gap-2">
                 <PhoneCall className="w-4 h-4" />
                 <span>{t('nav.consultation')}</span>
               </Button>
-            </a>
+            </Link>
 
             <button
               onClick={onOpenMobileMenu}

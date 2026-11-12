@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, ShieldCheck, ArrowUpRight } from 'lucide-react';
 import companyData from '../../data/company.json';
 import { useLanguage } from '../../context';
@@ -12,13 +13,13 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
           {/* Col 1: Brand & Philosophy */}
           <div className="space-y-4">
-            <a href="#hero" className="bg-white p-2 rounded-lg inline-block">
+            <Link to="/" className="bg-white p-2 rounded-lg inline-block">
               <img
                 src={`${import.meta.env.BASE_URL}assets/brand/idtn-logo.jpg`}
                 alt="IDTN Logo"
                 className="h-9 w-auto object-contain"
               />
-            </a>
+            </Link>
             <p className="text-sm text-slate-300 leading-relaxed">
               {t('footer.desc')}
             </p>
@@ -40,29 +41,29 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
-                <a href="#equipment" className="hover:text-sky-400 transition-colors">
+                <Link to="/equipment" className="hover:text-sky-400 transition-colors">
                   DWDM System Volga I Telecom
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#equipment" className="hover:text-sky-400 transition-colors">
+                <Link to="/equipment" className="hover:text-sky-400 transition-colors">
                   DWDM System Volga I DCI
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#equipment" className="hover:text-sky-400 transition-colors">
+                <Link to="/equipment" className="hover:text-sky-400 transition-colors">
                   DWDM System DCI V2 (6.4 Tbps)
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#equipment" className="hover:text-sky-400 transition-colors">
+                <Link to="/equipment" className="hover:text-sky-400 transition-colors">
                   OTDR Monitoring System Ramenka
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#equipment" className="hover:text-sky-400 transition-colors">
+                <Link to="/equipment" className="hover:text-sky-400 transition-colors">
                   NMS Titan & Fractal Management
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -74,19 +75,19 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
-                <a href="#about" className="hover:text-sky-400 transition-colors">
+                <Link to="/about" className="hover:text-sky-400 transition-colors">
                   {t('nav.about')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#about" className="hover:text-sky-400 transition-colors">
+                <Link to="/about" className="hover:text-sky-400 transition-colors">
                   {t('about.focus.title')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#clients" className="hover:text-sky-400 transition-colors">
+                <Link to="/clients" className="hover:text-sky-400 transition-colors">
                   {t('nav.clients')}
-                </a>
+                </Link>
               </li>
               <li>
                 <a

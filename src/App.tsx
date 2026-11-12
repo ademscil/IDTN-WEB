@@ -6,11 +6,13 @@ import { Header } from './components/layout/Header';
 import { MobileDrawer } from './components/layout/MobileDrawer';
 import { Footer } from './components/layout/Footer';
 import { RouteTransition } from './components/layout/RouteTransition';
-import { LanguageProvider } from './context/LanguageContext';
+import { LanguageProvider } from './context';
 
-// Multi-Page Routes
+// Dedicated Multi-Page Views
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
+import { EquipmentPage } from './pages/EquipmentPage';
+import { ClientsPage } from './pages/ClientsPage';
 import { ContactPage } from './pages/ContactPage';
 
 export const App: React.FC = () => {
@@ -39,6 +41,8 @@ export const App: React.FC = () => {
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/about" element={<AboutPage />} />
+                <Route path="/equipment" element={<EquipmentPage />} />
+                <Route path="/clients" element={<ClientsPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 {/* Fallback to Home */}
                 <Route path="*" element={<HomePage />} />

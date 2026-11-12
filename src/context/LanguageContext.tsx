@@ -7,7 +7,7 @@ export type { Language };
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [lang, setLangState] = useState<Language>(() => {
     const saved = localStorage.getItem('idtn_lang');
-    return (saved === 'en' || saved === 'id') ? saved : 'id';
+    return (saved === 'en' || saved === 'id') ? saved : 'en'; // Default is English (EN)
   });
 
   const setLang = (newLang: Language) => {
@@ -16,7 +16,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const t = (key: string): string => {
-    return translations[lang]?.[key] || translations['id']?.[key] || key;
+    return translations[lang]?.[key] || translations['en']?.[key] || key;
   };
 
   return (

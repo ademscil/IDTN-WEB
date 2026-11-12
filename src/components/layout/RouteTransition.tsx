@@ -20,6 +20,8 @@ export const RouteTransition: React.FC<RouteTransitionProps> = ({ children }) =>
       behavior: 'smooth',
     });
 
+    let observer: IntersectionObserver | null = null;
+
     // 3. Reveal elements on the newly mounted page
     const timer = setTimeout(() => {
       setIsTransitioning(false);
@@ -27,26 +29,31 @@ export const RouteTransition: React.FC<RouteTransitionProps> = ({ children }) =>
       // Trigger scroll reveal observer for new page elements
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (!prefersReducedMotion) {
-        const observerCallback: IntersectionObserverCallback = (entries, observer) => {
+        const observerCallback: IntersectionObserverCallback = (entries, obs) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               entry.target.classList.add('reveal-active');
-              observer.unobserve(entry.target);
+              obs.unobserve(entry.target);
             }
           });
         };
 
-        const observer = new IntersectionObserver(observerCallback, {
+        observer = new IntersectionObserver(observerCallback, {
           root: null,
           rootMargin: '0px 0px -40px 0px',
           threshold: 0.1,
         });
 
-        document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
+        document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer?.observe(el));
       }
     }, 280);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      if (observer) {
+        observer.disconnect();
+      }
+    };
   }, [location.pathname]);
 
   return (

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Server, Activity, ShieldCheck, Cpu, ArrowRight } from 'lucide-react';
 import dwdmData from '../../data/dwdm-tech.json';
 import { Badge } from '../common/Badge';
@@ -162,13 +163,13 @@ export const EquipmentSection: React.FC = () => {
             </div>
 
             <div className="pt-2">
-              <a
-                href="#contact"
+              <Link
+                to="/contact"
                 className="inline-flex items-center gap-2 text-sm font-bold text-[#0284c7] hover:text-[#0369a1] transition-colors"
               >
                 <span>{t('eq.requestBrochure')}</span>
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
             </div>
           </div>
 

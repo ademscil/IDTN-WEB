@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
@@ -40,12 +41,12 @@ export const HeroSection: React.FC = () => {
 
             {/* Single High-Priority Action CTA (Secondary button & stats strip deleted as requested) */}
             <div className="pt-2">
-              <a href="#contact">
+              <Link to="/contact">
                 <Button size="lg" variant="primary" className="gap-2.5 text-base px-8 py-3.5 shadow-lg shadow-sky-600/20 hover:shadow-sky-600/30">
                   <span>{t('hero.cta.rfp')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </Button>
-              </a>
+              </Link>
             </div>
           </div>
 

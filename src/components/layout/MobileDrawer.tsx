@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import { X, PhoneCall } from 'lucide-react';
 import { Button } from '../common/Button';
 import { useLanguage } from '../../context';
@@ -29,11 +30,11 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
   if (!isOpen) return null;
 
   const navLinks = [
-    { label: t('nav.home'), href: '#hero' },
-    { label: t('nav.about'), href: '#about' },
-    { label: t('nav.equipment'), href: '#equipment' },
-    { label: t('nav.clients'), href: '#clients' },
-    { label: t('nav.contact'), href: '#contact' },
+    { label: t('nav.home'), to: '/' },
+    { label: t('nav.about'), to: '/about' },
+    { label: t('nav.equipment'), to: '/equipment' },
+    { label: t('nav.clients'), to: '/clients' },
+    { label: t('nav.contact'), to: '/contact' },
   ];
 
   return (
@@ -52,13 +53,13 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
         <div>
           {/* Header */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-            <a href="#hero" onClick={onClose}>
+            <Link to="/" onClick={onClose}>
               <img
                 src={`${import.meta.env.BASE_URL}assets/brand/idtn-logo.jpg`}
                 alt="IDTN Logo"
                 className="h-8 w-auto object-contain"
               />
-            </a>
+            </Link>
             <button
               onClick={onClose}
               className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 cursor-pointer"
@@ -74,17 +75,6 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
             <div className="flex items-center bg-white p-0.5 rounded-lg border border-slate-200 text-xs font-bold shadow-2xs">
               <button
                 type="button"
-                onClick={() => setLang('id')}
-                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
-                  lang === 'id'
-                    ? 'bg-sky-600 text-white font-bold'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                ID
-              </button>
-              <button
-                type="button"
                 onClick={() => setLang('en')}
                 className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
                   lang === 'en'
@@ -94,32 +84,50 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
               >
                 EN
               </button>
+              <button
+                type="button"
+                onClick={() => setLang('id')}
+                className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                  lang === 'id'
+                    ? 'bg-sky-600 text-white font-bold'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                ID
+              </button>
             </div>
           </div>
 
           {/* Links */}
           <nav className="mt-6 flex flex-col gap-2">
             {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.to === '/'}
                 onClick={onClose}
-                className="px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-800 hover:bg-slate-50 hover:text-sky-700 transition-colors"
+                className={({ isActive }) =>
+                  `px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                    isActive
+                      ? 'bg-sky-50 text-[#0284c7] font-bold'
+                      : 'text-slate-800 hover:bg-slate-50 hover:text-sky-700'
+                  }`
+                }
               >
                 {link.label}
-              </a>
+              </NavLink>
             ))}
           </nav>
         </div>
 
         {/* Footer CTA */}
         <div className="pt-6 border-t border-slate-100">
-          <a href="#contact" onClick={onClose} className="block w-full">
+          <Link to="/contact" onClick={onClose} className="block w-full">
             <Button variant="primary" className="w-full gap-2 py-3">
               <PhoneCall className="w-4 h-4" />
               <span>{t('nav.consultation')}</span>
             </Button>
-          </a>
+          </Link>
           <p className="text-[11px] text-slate-400 text-center mt-3 font-mono">
             PT Infinix Delapan Teknologi Nusantara
           </p>
