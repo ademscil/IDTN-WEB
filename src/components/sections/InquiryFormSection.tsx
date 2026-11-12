@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle2, Clock } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, ExternalLink } from 'lucide-react';
 import companyData from '../../data/company.json';
 import { InquiryRequestSchema } from '../../schemas/inquiry.schema';
 import { Button } from '../common/Button';
@@ -122,6 +122,15 @@ export const InquiryFormSection: React.FC = () => {
                     <p className="text-xs text-slate-600">
                       {companyData.headquarters.city}, {companyData.headquarters.province} {companyData.headquarters.postalCode}
                     </p>
+                    <a
+                      href="https://maps.google.com/?q=Fatmawati+City+Center+Ruko+Soho+Botany+Garden+Crystal+Jakarta+Selatan"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-sky-600 hover:text-sky-700 hover:underline mt-1.5"
+                    >
+                      <span>{isEn ? 'View on Google Maps' : 'Buka di Google Maps'}</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
                   </div>
                 </div>
 

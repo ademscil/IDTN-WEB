@@ -110,9 +110,15 @@ export const Footer: React.FC = () => {
             </h4>
             <div className="flex items-start gap-3 text-sm text-slate-300">
               <MapPin className="w-4 h-4 text-sky-400 shrink-0 mt-1" />
-              <p className="text-xs leading-relaxed">
+              <a
+                href="https://maps.google.com/?q=Fatmawati+City+Center+Ruko+Soho+Botany+Garden+Crystal+Jakarta+Selatan"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs leading-relaxed hover:text-sky-400 transition-colors"
+                title="Buka lokasi di Google Maps"
+              >
                 {companyData.headquarters.address}, {companyData.headquarters.city} {companyData.headquarters.postalCode}, {companyData.headquarters.country}
-              </p>
+              </a>
             </div>
             <div className="flex items-center gap-3 text-sm text-slate-300 pt-1">
               <Mail className="w-4 h-4 text-sky-400 shrink-0" />

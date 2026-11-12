@@ -113,7 +113,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.form.submitting': 'Mengirimkan Permintaan...',
     'contact.form.success': 'Permintaan Anda telah kami terima! Tim teknis IDTN akan segera menghubungi Anda.',
     'contact.office.title': 'Kantor Operasional',
-    'contact.office.address': 'Jalan Cikini Raya No. 79, Menteng, Jakarta Pusat 10330, Indonesia',
+    'contact.office.address': 'Fatmawati City Center, Ruko Soho Botany Garden Crystal No. 18, Jl. Fatmawati Raya, Cilandak Barat, Jakarta Selatan 12430, Indonesia',
 
     // Footer
     'footer.desc': 'Penyedia infrastruktur telekomunikasi transmisi optik DWDM berkapasitas tinggi di Indonesia.',
@@ -234,7 +234,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.form.submitting': 'Sending Request...',
     'contact.form.success': 'Your request has been received! An IDTN optical engineer will contact you shortly.',
     'contact.office.title': 'Operations Office',
-    'contact.office.address': 'Jalan Cikini Raya No. 79, Menteng, Central Jakarta 10330, Indonesia',
+    'contact.office.address': 'Fatmawati City Center, Ruko Soho Botany Garden Crystal No. 18, Jl. Fatmawati Raya, West Cilandak, South Jakarta 12430, Indonesia',
 
     // Footer
     'footer.desc': 'High-capacity DWDM optical transmission telecommunications infrastructure provider in Indonesia.',
