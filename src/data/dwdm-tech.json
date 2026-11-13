@@ -80,16 +80,30 @@
     },
     {
       "id": "volga-dci",
-      "name": "DWDM System Volga I DCI / DCI V2",
+      "name": "DWDM System Volga I DCI",
       "category": "Data Center Interconnect",
-      "formFactor": "1U / 2U Ultra-Dense Appliance",
-      "capacity": "1.6 Tbps s.d. 6.4 Tbps per Unit",
-      "summary": "Perangkat DWDM khusus interkoneksi antar-data center (DCI) berdensitas tinggi, konsumsi daya rendah, dan konfigurasi otomatis untuk hyperscale data center.",
+      "formFactor": "1U / 2U Modular Appliance",
+      "capacity": "1.6 Tbps s.d. 3.2 Tbps per Unit",
+      "summary": "Perangkat DWDM khusus interkoneksi antar-data center (DCI) berdensitas tinggi, konsumsi daya ultra-efisien, dan konfigurasi otomatis untuk hyperscale data center.",
       "features": [
         "Desain pizza-box 1U/2U ringkas dan ramah rak server standar 19 inci",
         "Konsumsi daya rendah per gigabit transmisi",
         "Dukungan FlexGrid dan antarmuka QSFP-DD / CFP2-DCO",
         "Integrasi API RESTCONF dan NETCONF untuk otomasi Software-Defined Network (SDN)"
+      ]
+    },
+    {
+      "id": "dci-v2",
+      "name": "DWDM System DCI V2",
+      "category": "Next-Gen Ultra-Dense DCI",
+      "formFactor": "2U High-Density Appliance",
+      "capacity": "Hingga 6.4 Tbps per Unit",
+      "summary": "Platform modular generasi baru berkapasitas ultra-tinggi untuk DCI hyperscale, mendukung throughput teragregasi 6.4 Tbps per sasis 2U dengan enkripsi fisik Layer 1.",
+      "features": [
+        "Throughput ultra-tinggi hingga 6.4 Tbps dalam sasis kompak 2U",
+        "Enkripsi perangkat keras wire-speed AES-256 Layer 1",
+        "Optimalisasi pendinginan front-to-back untuk lingkungan server cloud",
+        "Orkestrasi otomatis terintegrasi dengan SDN controller"
       ]
     },
     {

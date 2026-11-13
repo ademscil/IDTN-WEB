@@ -6,6 +6,7 @@ import { Header } from './components/layout/Header';
 import { MobileDrawer } from './components/layout/MobileDrawer';
 import { Footer } from './components/layout/Footer';
 import { RouteTransition } from './components/layout/RouteTransition';
+import { SEOUpdater } from './components/common/SEOUpdater';
 import { LanguageProvider } from './context';
 
 // Dedicated Multi-Page Views
@@ -22,6 +23,7 @@ export const App: React.FC = () => {
   return (
     <LanguageProvider>
       <BrowserRouter basename={basename}>
+        <SEOUpdater />
         <div className="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-sky-100 selection:text-sky-900">
           {/* Initial First-Load Preloader (t8.ru style) */}
           <PagePreloader />

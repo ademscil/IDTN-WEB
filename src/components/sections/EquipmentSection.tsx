@@ -12,9 +12,68 @@ export const EquipmentSection: React.FC = () => {
 
   const isEn = lang === 'en';
 
+  const eqEnData: Record<string, { category: string; summary: string; formFactor: string; features: string[] }> = {
+    'volga-telecom': {
+      category: 'Backbone & Regional Transport',
+      summary: 'High-performance modular DWDM optical transport platform engineered for national long-haul backbones, regional loops, and large-scale metro interconnection.',
+      formFactor: '1U / 3U / 6U / 10U Modular Chassis',
+      features: [
+        'Supports 100G, 200G, 400G, and 800G optical wavelength channel speeds',
+        'Hot-swappable linecards, optical amplifiers, and redundant power supplies',
+        'Unregenerated ultra long-haul reach exceeding 1,500 km',
+        '1+1 optical line protection and dynamic cross-connect switching',
+      ],
+    },
+    'volga-dci': {
+      category: 'Data Center Interconnect',
+      summary: 'High-density, energy-efficient 1U/2U modular DWDM appliance purpose-built for hyperscale data center interconnections and cloud transport.',
+      formFactor: '1U / 2U Modular Appliance',
+      features: [
+        'Compact 1U/2U pizza-box form factor standard 19-inch rack compatible',
+        'Ultra-low power consumption per transmitted gigabit',
+        'Full FlexGrid support with QSFP-DD / CFP2-DCO pluggable optical modules',
+        'RESTCONF and NETCONF API integration for Software-Defined Networking (SDN)',
+      ],
+    },
+    'dci-v2': {
+      category: 'Next-Gen Ultra-Dense DCI',
+      summary: 'Next-generation ultra-dense modular transport platform for hyperscale DCI, delivering up to 6.4 Tbps aggregated throughput per 2U with hardware Layer 1 encryption.',
+      formFactor: '2U High-Density Appliance',
+      features: [
+        'Ultra-high 6.4 Tbps throughput in a compact 2U form factor',
+        'Wire-speed Layer 1 AES-256 hardware encryption',
+        'Optimized front-to-back airflow engineered for cloud server rooms',
+        'Automated SDN orchestration and telemetry streaming',
+      ],
+    },
+    'otdr-ramenka': {
+      category: 'Fiber Health & Automatic Monitoring',
+      summary: 'Continuous 24/7 automated fiber health monitoring system. Detects optical degradation, micro-bends, and fiber cuts in real-time with +/- 1 meter precision.',
+      formFactor: '1U Rackmount Unit',
+      features: [
+        'Instant fiber cut fault location with meter-level diagnostic accuracy',
+        'In-service monitoring without disrupting live payload traffic (1625nm)',
+        'Automated alerts via NMS, email, and webhook integrations',
+        'Historical optical health tracking and predictive degradation analytics',
+      ],
+    },
+    'nms-titan': {
+      category: 'Centralized Network Orchestration',
+      summary: 'Unified central network management suite (EMS/NMS) featuring intuitive topology mapping, automated service provisioning, and real-time optical link analytics.',
+      formFactor: 'Cloud & On-Premise Software Platform',
+      features: [
+        'Real-time graphical topology mapping and visual route tracing',
+        'Multi-vendor RESTCONF, NETCONF/YANG, and SNMP interface support',
+        'End-to-end optical signal-to-noise ratio (OSNR) and BER performance tracking',
+        'Automated failover triggering and root-cause alarm correlation',
+      ],
+    },
+  };
+
   const eqIcons: Record<string, React.ReactNode> = {
     'volga-telecom': <Server className="w-5 h-5 text-sky-600" />,
     'volga-dci': <Cpu className="w-5 h-5 text-sky-600" />,
+    'dci-v2': <Cpu className="w-5 h-5 text-sky-600" />,
     'otdr-ramenka': <Activity className="w-5 h-5 text-sky-600" />,
     'nms-titan': <ShieldCheck className="w-5 h-5 text-sky-600" />,
   };
@@ -29,6 +88,11 @@ export const EquipmentSection: React.FC = () => {
       cardImg: `${import.meta.env.BASE_URL}assets/t8/volga_dci_card.jpg`,
       coverImg: `${import.meta.env.BASE_URL}assets/t8/volga_dci_cover.jpg`,
       tag: '[ Data Center Interconnect / Metro ]',
+    },
+    'dci-v2': {
+      cardImg: `${import.meta.env.BASE_URL}assets/t8/volga_dci_v2_card.png`,
+      coverImg: `${import.meta.env.BASE_URL}assets/t8/dci_v2_cover.jpg`,
+      tag: '[ Next-Gen DCI / 6.4 Tbps ]',
     },
     'otdr-ramenka': {
       cardImg: `${import.meta.env.BASE_URL}assets/t8/otdr_ramenka_card.png`,
@@ -121,7 +185,7 @@ export const EquipmentSection: React.FC = () => {
             <div>
               <div className="inline-flex items-center gap-2">
                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2.5 py-1 rounded-md border border-sky-100">
-                  {activeEq.category}
+                  {isEn && eqEnData[activeEq.id] ? eqEnData[activeEq.id].category : activeEq.category}
                 </span>
                 <span className="text-xs font-mono text-slate-500 font-semibold">
                   {eqImages[activeEq.id]?.tag}
@@ -131,7 +195,7 @@ export const EquipmentSection: React.FC = () => {
                 {activeEq.name}
               </h3>
               <p className="text-sm sm:text-base text-slate-600 mt-2 leading-relaxed">
-                {isEn ? activeEq.summary.replace('Sistem', 'High-performance optical system').replace('berkinerja tinggi', 'designed for high-reliability transport') : activeEq.summary}
+                {isEn && eqEnData[activeEq.id] ? eqEnData[activeEq.id].summary : activeEq.summary}
               </p>
             </div>
 
@@ -139,7 +203,9 @@ export const EquipmentSection: React.FC = () => {
             <div className="grid grid-cols-2 gap-4 py-4 border-y border-slate-100">
               <div>
                 <p className="text-xs text-slate-400 font-medium">{t('eq.formFactor')}</p>
-                <p className="text-sm font-bold text-slate-900 mt-0.5">{activeEq.formFactor}</p>
+                <p className="text-sm font-bold text-slate-900 mt-0.5">
+                  {isEn && eqEnData[activeEq.id] ? eqEnData[activeEq.id].formFactor : activeEq.formFactor}
+                </p>
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-medium">{t('eq.capacity')}</p>
@@ -153,7 +219,7 @@ export const EquipmentSection: React.FC = () => {
                 {t('eq.specs.title')}
               </p>
               <ul className="space-y-2">
-                {activeEq.features.map((feat, fIdx) => (
+                {(isEn && eqEnData[activeEq.id] ? eqEnData[activeEq.id].features : activeEq.features).map((feat, fIdx) => (
                   <li key={fIdx} className="text-xs sm:text-sm text-slate-700 flex items-start gap-2.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#0284c7] shrink-0 mt-2"></span>
                     <span>{feat}</span>
@@ -216,12 +282,9 @@ export const EquipmentSection: React.FC = () => {
             {allProducts.map((prod) => (
               <div
                 key={prod.id}
-                onClick={() => {
-                  const targetId = prod.id === 'dci-v2' ? 'volga-dci' : prod.id;
-                  setSelectedEqId(targetId);
-                }}
+                onClick={() => setSelectedEqId(prod.id)}
                 className={`bg-white rounded-2xl border p-5 flex flex-col justify-between shadow-xs hover:shadow-lg transition-all cursor-pointer ${
-                  selectedEqId === prod.id || (prod.id === 'dci-v2' && selectedEqId === 'volga-dci')
+                  selectedEqId === prod.id
                     ? 'border-sky-500 ring-2 ring-sky-500/20'
                     : 'border-slate-200 hover:border-slate-300'
                 }`}
