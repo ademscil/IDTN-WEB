@@ -1,0 +1,33 @@
+# PT Infinix Delapan Teknologi Nusantara (IDTN)
+
+> PT Infinix Delapan Teknologi Nusantara (IDTN) is an integrated telecommunications solutions provider specializing in Dense Wavelength Division Multiplexing (DWDM) optical transmission technology and carrier-grade transport infrastructure in Indonesia. Official technology partner of T8 Systems (https://t8.ru/en/).
+
+## Official Website & Contacts
+- Website: https://idtn.co.id/
+- Location: Fatmawati City Center, Ruko Soho Botany Garden Crystal No. 18, Jl. Fatmawati Raya, Cilandak Barat, Jakarta Selatan 12430, Indonesia
+- Email: info@idtn.co.id
+- Phone: +62 21 3192 8888
+- WhatsApp: +62 811 8888 8888
+
+## Key Optical Transport Metrics
+- Geographic Footprint: 8,514.22 km spanning from Sabang to Merauke across the Indonesian archipelago.
+- Maximum Speed per Wavelength (Lambda): 800 Gbps per optical channel.
+- Maximum Chassis Transmission Capacity: Up to 38.4 Tbps per fiber pair across C+L spectral bands.
+- Long-Haul Reach: Over 1,500 km unrepeatered transmission without electrical regeneration.
+- Protection Switching: 1+1 Optical Line Protection (OLP) with sub-50ms automatic failover.
+
+## Core Hardware Portfolio (T8 Volga I Platform)
+1. DWDM System Volga I Telecom (1U, 3U, 6U, 10U Modular Chassis):
+   Engineered for national long-haul backbone networks and regional metro rings. Supports 100G, 200G, 400G, and 800G linecards, Raman/EDFA amplifiers, and CDC-F ROADM.
+2. DWDM System Volga I DCI (1U / 2U Compact Modular):
+   Purpose-built for hyperscale data center interconnection with minimal latency, low power consumption, and front-to-back server rack airflow.
+3. DWDM System DCI V2 (6.4 Tbps per 2U):
+   Next-generation ultra-dense appliance providing 6.4 Tbps bidirectional throughput per 2U unit with wire-speed Layer 1 AES-256 physical encryption.
+4. OTDR Monitoring System Ramenka:
+   Automatic 24/7 in-service optical line monitoring operating at 1625nm with +/- 1 meter fault diagnostic accuracy without disrupting live traffic.
+5. NMS Titan & Fractal Management:
+   Centralized network management and SDN orchestration suite with RESTCONF, NETCONF/YANG, and SNMP integration.
+
+## Two Core Business Pillars
+1. DWDM Equipment Developer: Adapting world-class optical transport hardware to meet Indonesian SDPPI Kominfo regulatory standards and archipelagic topology.
+2. DWDM Infrastructure Service Provider: Turnkey optical route survey, link design, carrier-grade hardware supply, installation, commissioning, 24/7 preventive maintenance, and engineering training.

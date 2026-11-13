@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Cpu, Network, Building2, PhoneCall } from 'lucide-react';
 import { HeroSection } from '../components/sections/HeroSection';
 import { TrustStripSection } from '../components/sections/TrustStripSection';
+import { FAQSection } from '../components/sections/FAQSection';
 import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 import { useLanguage } from '../context';
@@ -111,7 +112,10 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. High-Impact Call to Action Banner */}
+      {/* 4. DWDM Knowledge Base & FAQ (Optimized for Direct Answer Search Engine Snippets) */}
+      <FAQSection />
+
+      {/* 5. High-Impact Call to Action Banner */}
       <section className="pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 px-8 py-14 sm:px-14 sm:py-16 text-white shadow-2xl">
