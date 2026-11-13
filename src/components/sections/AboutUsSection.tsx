@@ -65,6 +65,64 @@ export const AboutUsSection: React.FC = () => {
           </p>
         </div>
 
+        {/* T8-Style Distinctive Metrics Strip (Directly requested by Pak Andik) */}
+        <div className="space-y-10 pt-2">
+          <div className="max-w-4xl mx-auto text-center space-y-3">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-sky-600 bg-sky-50 px-3.5 py-1.5 rounded-full border border-sky-100">
+              {t('about.metrics.lead')}
+            </span>
+            <p className="text-base sm:text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto font-medium">
+              {t('about.metrics.desc')}
+            </p>
+          </div>
+
+          {/* Metric Columns (t8.ru style with clean divider borders and gradient large numbers) */}
+          <div className="border-y border-slate-200/90 py-8 md:py-10 bg-slate-50/50 rounded-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+              {/* Metric 1: Nusantara Geography (Sabang to Merauke 8.514,22 km) */}
+              <div className="py-6 md:py-2 px-4 sm:px-8 text-center md:text-left space-y-2">
+                <div className="flex items-baseline justify-center md:justify-start gap-1.5 font-extrabold tracking-tight text-[#4f3fc2]">
+                  <span className="text-4xl sm:text-5xl lg:text-6xl">{isEn ? '8,514.22' : '8.514,22'}</span>
+                  <span className="text-2xl sm:text-3xl font-semibold text-[#4f3fc2]/85">km</span>
+                </div>
+                <h4 className="text-base font-bold text-slate-900 pt-1">
+                  {t('about.metric1.title')}
+                </h4>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  {t('about.metric1.desc')}
+                </p>
+              </div>
+
+              {/* Metric 2: 800 Gbps per wavelength */}
+              <div className="py-6 md:py-2 px-4 sm:px-8 text-center md:text-left space-y-2">
+                <div className="flex items-baseline justify-center md:justify-start gap-1.5 font-extrabold tracking-tight text-[#4f3fc2]">
+                  <span className="text-4xl sm:text-5xl lg:text-6xl">800</span>
+                  <span className="text-2xl sm:text-3xl font-semibold text-[#4f3fc2]/85">Gbps</span>
+                </div>
+                <h4 className="text-base font-bold text-slate-900 pt-1">
+                  {t('about.metric2.title')}
+                </h4>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  {t('about.metric2.desc')}
+                </p>
+              </div>
+
+              {/* Metric 3: R&D & Pelatihan / Transfer of Technology (replacing 650 spesialis per Pak Andik's guidance) */}
+              <div className="py-6 md:py-2 px-4 sm:px-8 text-center md:text-left space-y-2">
+                <div className="flex items-baseline justify-center md:justify-start gap-1 font-extrabold tracking-tight text-[#be185d]">
+                  <span className="text-3xl sm:text-4xl lg:text-5xl leading-tight">{t('about.metric3.val')}</span>
+                </div>
+                <h4 className="text-base font-bold text-slate-900 pt-1">
+                  {t('about.metric3.title')}
+                </h4>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  {t('about.metric3.desc')}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Philosophy & Name Etymology */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Philosophy Banner (5 Cols) */}
