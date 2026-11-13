@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ademscil.github.io/IDTN-WEB/sitemap.xml
+Sitemap: https://idtn.co.id/sitemap.xml

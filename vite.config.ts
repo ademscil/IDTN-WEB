@@ -4,13 +4,13 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/IDTN-WEB/',
+  base: process.env.VITE_BASE_PATH || '/IDTN-WEB/',
   plugins: [
     react(),
     tailwindcss(),
   ],
   build: {
-    outDir: 'docs',
+    outDir: process.env.VITE_OUT_DIR || 'docs',
     emptyOutDir: true,
   },
   server: {
