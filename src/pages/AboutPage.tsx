@@ -1,7 +1,6 @@
 import React from 'react';
 import { Download } from 'lucide-react';
 import { AboutUsSection } from '../components/sections/AboutUsSection';
-import { TrustStripSection } from '../components/sections/TrustStripSection';
 import { Badge } from '../components/common/Badge';
 import { useLanguage } from '../context';
 
@@ -34,7 +33,6 @@ export const AboutPage: React.FC = () => {
         </div>
       </div>
 
-      <TrustStripSection />
       <AboutUsSection />
     </div>
   );

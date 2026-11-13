@@ -7,7 +7,11 @@ import { Badge } from '../common/Badge';
 import { Modal } from '../common/Modal';
 import { useLanguage } from '../../context';
 
-export const InquiryFormSection: React.FC = () => {
+interface InquiryFormSectionProps {
+  showHeader?: boolean;
+}
+
+export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHeader = false }) => {
   const { lang, t } = useLanguage();
   const isEn = lang === 'en';
 
@@ -105,19 +109,21 @@ export const InquiryFormSection: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-28 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <section id="contact" className={`${showHeader ? 'py-20 md:py-28' : 'py-12 md:py-16'} bg-white`}>
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${showHeader ? 'space-y-16' : ''}`}>
         
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          <Badge variant="cyan">{t('contact.badge')}</Badge>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            {t('contact.title')}
-          </h2>
-          <p className="text-base sm:text-lg text-slate-600">
-            {t('contact.desc')}
-          </p>
-        </div>
+        {/* Section Header (Optional, omitted on ContactPage to prevent duplicated header) */}
+        {showHeader && (
+          <div className="text-center max-w-3xl mx-auto space-y-4">
+            <Badge variant="cyan">{t('contact.badge')}</Badge>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              {t('contact.title')}
+            </h2>
+            <p className="text-base sm:text-lg text-slate-600">
+              {t('contact.desc')}
+            </p>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left Column: Direct Contacts & Headquarters (5 Cols) */}

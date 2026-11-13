@@ -1,6 +1,5 @@
 import React from 'react';
 import { EquipmentSection } from '../components/sections/EquipmentSection';
-import { TrustStripSection } from '../components/sections/TrustStripSection';
 import { Badge } from '../components/common/Badge';
 import { useLanguage } from '../context';
 
@@ -22,7 +21,6 @@ export const EquipmentPage: React.FC = () => {
         </div>
       </div>
 
-      <TrustStripSection />
       <EquipmentSection />
     </div>
   );

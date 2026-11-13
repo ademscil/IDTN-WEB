@@ -20,7 +20,7 @@ export const ContactPage: React.FC = () => {
         </div>
       </div>
 
-      <InquiryFormSection />
+      <InquiryFormSection showHeader={false} />
     </div>
   );
 };
