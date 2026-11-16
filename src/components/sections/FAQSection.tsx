@@ -53,42 +53,42 @@ export const FAQSection: React.FC = () => {
   ];
 
   return (
-    <section id="faq" className="py-20 md:py-24 bg-slate-50/70 border-t border-slate-100">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="text-center space-y-4">
+    <section id="faq" className="py-12 sm:py-20 md:py-24 bg-slate-50/70 border-t border-slate-100">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
+        <div className="text-center space-y-3 sm:space-y-4">
           <Badge variant="cyan" className="gap-1.5">
             <HelpCircle className="w-3.5 h-3.5 text-sky-600" />
             <span>{isEn ? 'DWDM Knowledge Base & FAQ' : 'Pusat Informasi & FAQ DWDM'}</span>
           </Badge>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
             {isEn ? 'Frequently Asked Questions about DWDM Solutions' : 'Pertanyaan Umum Seputar Solusi DWDM Indonesia'}
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-2xl mx-auto">
             {isEn
               ? 'Authoritative technical answers to key questions about Dense Wavelength Division Multiplexing, T8 Volga I platform, and IDTN services.'
               : 'Jawaban teknis resmi seputar teknologi Dense Wavelength Division Multiplexing, platform T8 Volga I, dan layanan infrastruktur optik PT IDTN.'}
           </p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {faqs.map((faq, idx) => {
             const isOpen = openIndex === idx;
             return (
               <div
                 key={idx}
-                className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden transition-all duration-200 hover:border-slate-300"
+                className="bg-white rounded-xl sm:rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden transition-all duration-200 hover:border-slate-300"
               >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
-                  className="w-full text-left p-6 sm:p-7 flex items-center justify-between gap-4 cursor-pointer focus:outline-none"
+                  className="w-full text-left p-4 sm:p-6 lg:p-7 flex items-center justify-between gap-3 sm:gap-4 cursor-pointer focus:outline-none"
                   aria-expanded={isOpen}
                 >
-                  <span className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                  <span className="text-sm sm:text-base lg:text-lg font-bold text-slate-900 leading-snug">
                     {faq.q}
                   </span>
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
                       isOpen ? 'bg-sky-50 text-sky-600 rotate-180' : 'bg-slate-100 text-slate-500'
                     }`}
                   >
@@ -97,7 +97,7 @@ export const FAQSection: React.FC = () => {
                 </button>
 
                 {isOpen && (
-                  <div className="px-6 pb-6 sm:px-7 sm:pb-7 pt-1 text-sm sm:text-base text-slate-600 leading-relaxed border-t border-slate-100">
+                  <div className="px-4 pb-4 sm:px-6 sm:pb-6 lg:px-7 lg:pb-7 pt-1 text-xs sm:text-sm lg:text-base text-slate-600 leading-relaxed border-t border-slate-100">
                     <p>{faq.a}</p>
                   </div>
                 )}

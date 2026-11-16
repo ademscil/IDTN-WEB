@@ -47,7 +47,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
     >
       <div
         ref={drawerRef}
-        className="w-4/5 max-w-sm h-full bg-white shadow-2xl p-6 flex flex-col justify-between overflow-y-auto"
+        className="w-[85%] max-w-sm h-full bg-white shadow-2xl p-4 sm:p-6 flex flex-col justify-between overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div>

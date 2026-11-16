@@ -125,20 +125,20 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12 items-start">
           {/* Left Column: Direct Contacts & Headquarters (5 Cols) */}
-          <div className="lg:col-span-5 space-y-8 bg-slate-50/80 p-8 sm:p-10 rounded-3xl border border-slate-200/80">
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold text-slate-900">
+          <div className="lg:col-span-5 space-y-6 sm:space-y-8 bg-slate-50/80 p-5 sm:p-8 lg:p-10 rounded-2xl sm:rounded-3xl border border-slate-200/80">
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-900">
                 {isEn ? 'Direct Contact & Office' : 'Informasi Kantor & Kontak'}
               </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 {isEn
                   ? 'Reach out directly to IDTN engineering representatives for technical coordination, RFPs, and consultation.'
                   : 'Kunjungi kantor operasional kami atau hubungi tim representatif resmi IDTN untuk koordinasi teknis dan pertemuan bisnis langsung.'}
               </p>
 
-              <div className="space-y-4 pt-2">
+              <div className="space-y-3 sm:space-y-4 pt-2">
                 <div className="flex items-start gap-3.5">
                   <div className="p-2.5 rounded-xl bg-white border border-slate-200/60 text-sky-600 shrink-0">
                     <MapPin className="w-5 h-5" />
@@ -222,7 +222,7 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
           </div>
 
           {/* Right Column: Inquiry Form (7 Cols) */}
-          <div className="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200/80 shadow-lg">
+          <div className="lg:col-span-7 bg-white p-5 sm:p-8 lg:p-10 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-lg">
             <form onSubmit={handleSubmit} noValidate className="space-y-6">
               {/* Honeypot field (hidden from real users) */}
               <div className="hidden" aria-hidden="true">

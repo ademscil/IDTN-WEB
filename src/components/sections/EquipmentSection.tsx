@@ -147,26 +147,26 @@ export const EquipmentSection: React.FC = () => {
 
   return (
     <section id="equipment" className="py-20 md:py-28 bg-slate-50/70 border-b border-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-16">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
+        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
           <Badge variant="coral">{t('eq.badge')}</Badge>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             {t('eq.title')}
           </h2>
-          <p className="text-base sm:text-lg text-slate-600">
+          <p className="text-sm sm:text-base lg:text-lg text-slate-600">
             {t('eq.desc')}
           </p>
         </div>
 
-        {/* Tab Buttons (Horizontal on Desktop) */}
-        <div className="flex flex-wrap items-center justify-center gap-3">
+        {/* Tab Buttons (Horizontal on Desktop, compact wrapping on Mobile) */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
           {dwdmData.equipmentCatalog.map((eq) => (
             <button
               key={eq.id}
               onClick={() => setSelectedEqId(eq.id)}
-              className={`flex items-center gap-2.5 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold border transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 sm:gap-2.5 px-3 py-2 sm:px-5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold border transition-all cursor-pointer ${
                 selectedEqId === eq.id
                   ? 'bg-white border-sky-500 text-sky-700 shadow-md scale-102'
                   : 'bg-white/80 border-slate-200 text-slate-700 hover:bg-white hover:border-slate-300'
@@ -179,82 +179,82 @@ export const EquipmentSection: React.FC = () => {
         </div>
 
         {/* Selected Equipment Showcase Card */}
-        <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/80 shadow-lg grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 lg:p-12 border border-slate-200/80 shadow-lg grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 items-center">
           {/* Details (6 Cols) */}
-          <div className="lg:col-span-6 space-y-6">
+          <div className="lg:col-span-6 space-y-4 sm:space-y-6">
             <div>
-              <div className="inline-flex items-center gap-2">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2.5 py-1 rounded-md border border-sky-100">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className="text-[11px] sm:text-xs font-mono font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md border border-sky-100">
                   {isEn && eqEnData[activeEq.id] ? eqEnData[activeEq.id].category : activeEq.category}
                 </span>
-                <span className="text-xs font-mono text-slate-500 font-semibold">
+                <span className="text-[11px] sm:text-xs font-mono text-slate-500 font-semibold">
                   {eqImages[activeEq.id]?.tag}
                 </span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 mt-2 sm:mt-3">
                 {activeEq.name}
               </h3>
-              <p className="text-sm sm:text-base text-slate-600 mt-2 leading-relaxed">
+              <p className="text-xs sm:text-sm lg:text-base text-slate-600 mt-2 leading-relaxed">
                 {isEn && eqEnData[activeEq.id] ? eqEnData[activeEq.id].summary : activeEq.summary}
               </p>
             </div>
 
             {/* Quick Specs */}
-            <div className="grid grid-cols-2 gap-4 py-4 border-y border-slate-100">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 py-3 sm:py-4 border-y border-slate-100">
               <div>
-                <p className="text-xs text-slate-400 font-medium">{t('eq.formFactor')}</p>
-                <p className="text-sm font-bold text-slate-900 mt-0.5">
+                <p className="text-[11px] sm:text-xs text-slate-400 font-medium">{t('eq.formFactor')}</p>
+                <p className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">
                   {isEn && eqEnData[activeEq.id] ? eqEnData[activeEq.id].formFactor : activeEq.formFactor}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-slate-400 font-medium">{t('eq.capacity')}</p>
-                <p className="text-sm font-bold text-sky-600 font-mono mt-0.5">{activeEq.capacity}</p>
+                <p className="text-[11px] sm:text-xs text-slate-400 font-medium">{t('eq.capacity')}</p>
+                <p className="text-xs sm:text-sm font-bold text-sky-600 font-mono mt-0.5">{activeEq.capacity}</p>
               </div>
             </div>
 
             {/* Features */}
-            <div className="space-y-2.5">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            <div className="space-y-2 sm:space-y-2.5">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">
                 {t('eq.specs.title')}
               </p>
-              <ul className="space-y-2">
+              <ul className="space-y-1.5 sm:space-y-2">
                 {(isEn && eqEnData[activeEq.id] ? eqEnData[activeEq.id].features : activeEq.features).map((feat, fIdx) => (
-                  <li key={fIdx} className="text-xs sm:text-sm text-slate-700 flex items-start gap-2.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#0284c7] shrink-0 mt-2"></span>
+                  <li key={fIdx} className="text-xs sm:text-sm text-slate-700 flex items-start gap-2 sm:gap-2.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#0284c7] shrink-0 mt-1.5 sm:mt-2"></span>
                     <span>{feat}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="pt-2 flex flex-wrap items-center gap-3">
+            <div className="pt-2">
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 text-white hover:bg-slate-800 font-bold text-xs sm:text-sm shadow-md transition-all hover:-translate-y-0.5 cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-900 text-white hover:bg-slate-800 font-bold text-[11px] sm:text-xs md:text-sm shadow-md transition-all hover:-translate-y-0.5 cursor-pointer text-center leading-snug"
               >
                 <span>{t('eq.requestBrochure')}</span>
-                <ArrowRight className="w-4 h-4 text-sky-400" />
+                <ArrowRight className="w-3.5 h-3.5 text-sky-400 shrink-0" />
               </Link>
             </div>
           </div>
 
           {/* Authentic T8 Product Image Card (6 Cols) */}
           <div className="lg:col-span-6 relative flex flex-col items-center">
-            <div className="w-full bg-gradient-to-b from-slate-50 to-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-inner flex flex-col items-center justify-center text-center">
-              <div className="relative w-full max-h-[340px] flex items-center justify-center overflow-hidden py-2">
+            <div className="w-full bg-gradient-to-b from-slate-50 to-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 border border-slate-200/80 shadow-inner flex flex-col items-center justify-center text-center">
+              <div className="relative w-full max-h-[300px] sm:max-h-[340px] flex items-center justify-center overflow-hidden py-2">
                 <img
                   src={eqImages[activeEq.id]?.cardImg || `${import.meta.env.BASE_URL}assets/t8/volga_telecom_card.jpg`}
                   alt={activeEq.name}
-                  className="max-h-[300px] w-auto max-w-full object-contain rounded-xl drop-shadow-md hover:scale-102 transition-transform duration-300"
+                  className="max-h-[220px] sm:max-h-[300px] w-auto max-w-full object-contain rounded-xl drop-shadow-md hover:scale-102 transition-transform duration-300"
                 />
               </div>
               
-              <div className="mt-4 pt-4 border-t border-slate-200/60 w-full flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-slate-700">
+              <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-slate-200/60 w-full flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between text-left sm:text-center">
+                <span className="text-[11px] sm:text-xs font-mono font-bold text-slate-700">
                   {t('eq.officialHardware')}
                 </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-mono font-bold">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] sm:text-xs font-mono font-bold">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                   {t('eq.carrierReady')}
                 </span>

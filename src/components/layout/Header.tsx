@@ -37,14 +37,14 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
           : 'bg-white/85 backdrop-blur-sm border-b border-slate-100 py-3.5'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between gap-2">
           {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-2 group cursor-pointer focus-visible:outline-sky-600">
+          <Link to="/" className="flex items-center gap-2 group cursor-pointer shrink-0 focus-visible:outline-sky-600">
             <img
               src={`${import.meta.env.BASE_URL}assets/brand/idtn-logo.jpg`}
               alt="PT Infinix Delapan Teknologi Nusantara (IDTN) Logo"
-              className="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-102"
+              className="h-8 sm:h-11 w-auto object-contain transition-transform group-hover:scale-102"
             />
           </Link>
 
@@ -69,13 +69,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
           </nav>
 
           {/* CTA & Language Switcher & Mobile Hamburger */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             {/* Language Switcher (EN | ID) */}
-            <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs font-bold" title="Select Language / Pilih Bahasa">
+            <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-[11px] sm:text-xs font-bold" title="Select Language / Pilih Bahasa">
               <button
                 type="button"
                 onClick={() => setLang('en')}
-                className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all cursor-pointer ${
                   lang === 'en'
                     ? 'bg-white text-[#0284c7] shadow-xs font-bold'
                     : 'text-slate-500 hover:text-slate-900'
@@ -87,7 +87,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
               <button
                 type="button"
                 onClick={() => setLang('id')}
-                className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all cursor-pointer ${
                   lang === 'id'
                     ? 'bg-white text-[#0284c7] shadow-xs font-bold'
                     : 'text-slate-500 hover:text-slate-900'
@@ -107,10 +107,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
 
             <button
               onClick={onOpenMobileMenu}
-              className="lg:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+              className="lg:hidden p-1.5 sm:p-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
               aria-label={t('nav.mobileMenu')}
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           </div>
         </div>

@@ -65,45 +65,45 @@ export const HomePage: React.FC = () => {
       {/* 3. Core Strategic Capabilities & Direct Portal Navigation */}
       <section className="py-12 bg-gradient-to-b from-white via-slate-50/50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
+          <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3 sm:space-y-4">
             <Badge variant="cyan">{t('home.overview.tag')}</Badge>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
               {t('home.overview.title')}
             </h2>
-            <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+            <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed">
               {t('home.overview.desc')}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
             {cards.map((card) => {
               const IconComponent = card.icon;
               return (
                 <Link
                   key={card.to}
                   to={card.to}
-                  className={`group relative p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${card.accent}`}
+                  className={`group relative p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${card.accent}`}
                 >
-                  <div className="flex items-start justify-between mb-6">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${card.iconBg} transition-transform duration-300 group-hover:scale-110`}>
-                      <IconComponent className="w-6 h-6" />
+                  <div className="flex items-start justify-between mb-4 sm:mb-6">
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center ${card.iconBg} transition-transform duration-300 group-hover:scale-110`}>
+                      <IconComponent className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
-                    <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                    <span className="text-[11px] sm:text-xs font-mono font-bold px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                       {card.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3 group-hover:text-sky-600 transition-colors">
+                  <h3 className="text-lg sm:text-2xl font-bold text-slate-900 mb-2 sm:mb-3 group-hover:text-sky-600 transition-colors">
                     {card.title}
                   </h3>
 
-                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-6">
+                  <p className="text-xs sm:text-base text-slate-600 leading-relaxed mb-4 sm:mb-6">
                     {card.desc}
                   </p>
 
-                  <div className="inline-flex items-center gap-2 text-sm font-bold text-sky-600 group-hover:text-sky-700">
+                  <div className="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold text-sky-600 group-hover:text-sky-700">
                     <span>{card.cta}</span>
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                    <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" />
                   </div>
                 </Link>
               );
@@ -116,23 +116,23 @@ export const HomePage: React.FC = () => {
       <FAQSection />
 
       {/* 5. High-Impact Call to Action Banner */}
-      <section className="pb-20">
+      <section className="pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 px-8 py-14 sm:px-14 sm:py-16 text-white shadow-2xl">
+          <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 px-5 py-8 sm:px-14 sm:py-16 text-white shadow-2xl">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(14,165,233,0.25),transparent_50%)] pointer-events-none" />
-            <div className="relative z-10 max-w-3xl space-y-5">
-              <Badge variant="cyan" className="bg-sky-500/20 text-sky-300 border border-sky-400/30">
+            <div className="relative z-10 max-w-3xl space-y-4 sm:space-y-5">
+              <Badge variant="cyan" className="bg-sky-500/20 text-sky-300 border border-sky-400/30 text-xs">
                 {t('home.banner.badge')}
               </Badge>
-              <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
                 {t('home.banner.title')}
               </h2>
-              <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+              <p className="text-xs sm:text-sm lg:text-base text-slate-300 leading-relaxed">
                 {t('home.banner.desc')}
               </p>
-              <div className="pt-3">
-                <Link to="/contact">
-                  <Button size="lg" variant="primary" className="gap-2.5 shadow-lg shadow-sky-500/20">
+              <div className="pt-2 sm:pt-3">
+                <Link to="/contact" className="block sm:inline-block">
+                  <Button size="lg" variant="primary" className="w-full sm:w-auto justify-center gap-2.5 shadow-lg shadow-sky-500/20 text-sm sm:text-base">
                     <span>{t('home.banner.cta')}</span>
                     <ArrowRight className="w-4 h-4" />
                   </Button>

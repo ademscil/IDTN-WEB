@@ -51,41 +51,41 @@ export const AboutUsSection: React.FC = () => {
     : companyData.philosophy.pillars;
 
   return (
-    <section id="about" className="py-20 md:py-28 bg-white border-b border-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
+    <section id="about" className="py-12 sm:py-20 md:py-28 bg-white border-b border-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-20">
         
         {/* Header Block */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
+        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
           <Badge variant="cyan">{t('about.badge')}</Badge>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             {t('about.title')}
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed">
             {t('about.desc')}
           </p>
         </div>
 
         {/* T8-Style Distinctive Metrics Strip (Directly requested by Pak Andik) */}
-        <div className="space-y-10 pt-2">
-          <div className="max-w-4xl mx-auto text-center space-y-3">
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-sky-600 bg-sky-50 px-3.5 py-1.5 rounded-full border border-sky-100">
+        <div className="space-y-6 sm:space-y-10 pt-2">
+          <div className="max-w-4xl mx-auto text-center space-y-2 sm:space-y-3">
+            <span className="text-[11px] sm:text-xs font-mono font-bold uppercase tracking-wider text-sky-600 bg-sky-50 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-sky-100">
               {t('about.metrics.lead')}
             </span>
-            <p className="text-base sm:text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto font-medium">
+            <p className="text-sm sm:text-base lg:text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto font-medium">
               {t('about.metrics.desc')}
             </p>
           </div>
 
           {/* Metric Columns (t8.ru style with clean divider borders and gradient large numbers) */}
-          <div className="border-y border-slate-200/90 py-8 md:py-10 bg-slate-50/50 rounded-2xl">
+          <div className="border-y border-slate-200/90 py-6 sm:py-8 md:py-10 bg-slate-50/50 rounded-2xl">
             <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200">
               {/* Metric 1: Nusantara Geography (Sabang to Merauke 8.514,22 km) */}
-              <div className="py-6 md:py-2 px-4 sm:px-8 text-center md:text-left space-y-2">
-                <div className="flex items-baseline justify-center md:justify-start gap-1.5 font-extrabold tracking-tight text-[#4f3fc2]">
-                  <span className="text-4xl sm:text-5xl lg:text-6xl">{isEn ? '8,514.22' : '8.514,22'}</span>
-                  <span className="text-2xl sm:text-3xl font-semibold text-[#4f3fc2]/85">km</span>
+              <div className="py-5 sm:py-6 md:py-2 px-3 sm:px-8 text-center md:text-left space-y-1.5 sm:space-y-2">
+                <div className="flex items-baseline justify-center md:justify-start gap-1 sm:gap-1.5 font-extrabold tracking-tight text-[#4f3fc2]">
+                  <span className="text-3xl sm:text-5xl lg:text-6xl">{isEn ? '8,514.22' : '8.514,22'}</span>
+                  <span className="text-lg sm:text-2xl lg:text-3xl font-semibold text-[#4f3fc2]/85">km</span>
                 </div>
-                <h4 className="text-base font-bold text-slate-900 pt-1">
+                <h4 className="text-sm sm:text-base font-bold text-slate-900 pt-1">
                   {t('about.metric1.title')}
                 </h4>
                 <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
@@ -94,12 +94,12 @@ export const AboutUsSection: React.FC = () => {
               </div>
 
               {/* Metric 2: 800 Gbps per wavelength */}
-              <div className="py-6 md:py-2 px-4 sm:px-8 text-center md:text-left space-y-2">
-                <div className="flex items-baseline justify-center md:justify-start gap-1.5 font-extrabold tracking-tight text-[#4f3fc2]">
-                  <span className="text-4xl sm:text-5xl lg:text-6xl">800</span>
-                  <span className="text-2xl sm:text-3xl font-semibold text-[#4f3fc2]/85">Gbps</span>
+              <div className="py-5 sm:py-6 md:py-2 px-3 sm:px-8 text-center md:text-left space-y-1.5 sm:space-y-2">
+                <div className="flex items-baseline justify-center md:justify-start gap-1 sm:gap-1.5 font-extrabold tracking-tight text-[#4f3fc2]">
+                  <span className="text-3xl sm:text-5xl lg:text-6xl">800</span>
+                  <span className="text-lg sm:text-2xl lg:text-3xl font-semibold text-[#4f3fc2]/85">Gbps</span>
                 </div>
-                <h4 className="text-base font-bold text-slate-900 pt-1">
+                <h4 className="text-sm sm:text-base font-bold text-slate-900 pt-1">
                   {t('about.metric2.title')}
                 </h4>
                 <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
@@ -107,12 +107,12 @@ export const AboutUsSection: React.FC = () => {
                 </p>
               </div>
 
-              {/* Metric 3: R&D & Pelatihan / Transfer of Technology (replacing 650 spesialis per Pak Andik's guidance) */}
-              <div className="py-6 md:py-2 px-4 sm:px-8 text-center md:text-left space-y-2">
+              {/* Metric 3: R&D & Pelatihan / Transfer of Technology */}
+              <div className="py-5 sm:py-6 md:py-2 px-3 sm:px-8 text-center md:text-left space-y-1.5 sm:space-y-2">
                 <div className="flex items-baseline justify-center md:justify-start gap-1 font-extrabold tracking-tight text-[#be185d]">
-                  <span className="text-3xl sm:text-4xl lg:text-5xl leading-tight">{t('about.metric3.val')}</span>
+                  <span className="text-xl sm:text-3xl lg:text-4xl leading-tight">{t('about.metric3.val')}</span>
                 </div>
-                <h4 className="text-base font-bold text-slate-900 pt-1">
+                <h4 className="text-sm sm:text-base font-bold text-slate-900 pt-1">
                   {t('about.metric3.title')}
                 </h4>
                 <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
@@ -124,46 +124,46 @@ export const AboutUsSection: React.FC = () => {
         </div>
 
         {/* Philosophy & Name Etymology */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
           {/* Philosophy Banner (5 Cols) */}
-          <div className="lg:col-span-5 bg-gradient-to-br from-slate-900 via-slate-850 to-slate-800 text-white rounded-3xl p-8 sm:p-10 flex flex-col justify-between shadow-xl border border-slate-800">
-            <div className="space-y-4">
-              <span className="text-xs font-bold uppercase tracking-widest text-sky-400">
+          <div className="lg:col-span-5 bg-gradient-to-br from-slate-900 via-slate-850 to-slate-800 text-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 flex flex-col justify-between shadow-xl border border-slate-800">
+            <div className="space-y-3 sm:space-y-4">
+              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-sky-400">
                 {t('about.philo.tag')}
               </span>
-              <h3 className="text-2xl sm:text-3xl font-extrabold leading-snug">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold leading-snug">
                 "{t('about.philo.head')}"
               </h3>
-              <p className="text-sm text-slate-300 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                 {t('about.philo.sub')}
               </p>
             </div>
 
-            <div className="pt-8 border-t border-slate-700/80 grid grid-cols-2 gap-4">
+            <div className="pt-6 sm:pt-8 mt-6 sm:mt-8 border-t border-slate-700/80 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {philosophyPillars.map((pillar, idx) => (
                 <div key={idx} className="space-y-1">
                   <p className="text-xs font-bold text-sky-400">{pillar.title}</p>
-                  <p className="text-xs text-slate-400 leading-relaxed">{pillar.desc}</p>
+                  <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed">{pillar.desc}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Name Etymology & Two Pillars (7 Cols) */}
-          <div className="lg:col-span-7 flex flex-col justify-between space-y-8">
+          <div className="lg:col-span-7 flex flex-col justify-between space-y-6 sm:space-y-8">
             {/* Etymology Grid */}
-            <div className="bg-slate-50 border border-slate-200/80 rounded-3xl p-6 sm:p-8 space-y-4">
-              <h4 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 space-y-3 sm:space-y-4">
+              <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500">
                 {t('about.etymology.title')}
               </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {nameEtymology.map((item, idx) => (
-                  <div key={idx} className="bg-white p-4 rounded-xl border border-slate-200/60 shadow-xs">
-                    <p className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                  <div key={idx} className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/60 shadow-xs">
+                    <p className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#9f1b32]"></span>
                       {item.word}
                     </p>
-                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">{item.meaning}</p>
+                    <p className="text-[11px] sm:text-xs text-slate-600 mt-1 leading-relaxed">{item.meaning}</p>
                   </div>
                 ))}
               </div>
@@ -173,26 +173,26 @@ export const AboutUsSection: React.FC = () => {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#9f1b32]"></span>
-                <h3 className="text-base font-extrabold uppercase tracking-wider text-[#9f1b32]">
+                <h3 className="text-sm sm:text-base font-extrabold uppercase tracking-wider text-[#9f1b32]">
                   {t('about.focus.title')}
                 </h3>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {twoPillars.map((pillar, idx) => (
-                  <div key={idx} className="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="w-8 h-8 rounded-lg bg-sky-50 text-sky-700 font-mono font-bold text-sm flex items-center justify-center mb-3">
+                  <div key={idx} className="bg-white p-5 sm:p-6 rounded-2xl border border-sky-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-sky-50 text-sky-700 font-mono font-bold text-xs sm:text-sm flex items-center justify-center mb-2.5 sm:mb-3">
                       0{idx + 1}
                     </div>
-                    <h4 className="text-base font-bold text-slate-900 mb-2">
+                    <h4 className="text-sm sm:text-base font-bold text-slate-900 mb-1.5 sm:mb-2">
                       {pillar.title}
                     </h4>
-                    <p className="text-xs text-slate-600 mb-4 leading-relaxed">
+                    <p className="text-[11px] sm:text-xs text-slate-600 mb-3 sm:mb-4 leading-relaxed">
                       {pillar.desc}
                     </p>
                     <ul className="space-y-1.5">
                       {pillar.points.map((pt, pIdx) => (
-                        <li key={pIdx} className="text-xs text-slate-700 flex items-start gap-2">
+                        <li key={pIdx} className="text-[11px] sm:text-xs text-slate-700 flex items-start gap-2">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
                           <span>{pt}</span>
                         </li>
@@ -206,32 +206,32 @@ export const AboutUsSection: React.FC = () => {
         </div>
 
         {/* Vision & Mission Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           {/* Vision */}
-          <div className="bg-gradient-to-br from-sky-50 via-white to-sky-50/30 border border-sky-200/80 rounded-3xl p-8 space-y-4">
-            <div className="inline-flex p-3 rounded-2xl bg-sky-600 text-white shadow-sm">
-              <Target className="w-6 h-6" />
+          <div className="bg-gradient-to-br from-sky-50 via-white to-sky-50/30 border border-sky-200/80 rounded-2xl sm:rounded-3xl p-5 sm:p-8 space-y-3 sm:space-y-4">
+            <div className="inline-flex p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-sky-600 text-white shadow-sm">
+              <Target className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900">{t('about.vision.title')}</h3>
-            <p className="text-base text-slate-700 leading-relaxed italic">
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900">{t('about.vision.title')}</h3>
+            <p className="text-sm sm:text-base text-slate-700 leading-relaxed italic">
               "{isEn ? 'To become the leading national optical telecommunications developer and provider, delivering ultra-high-speed DWDM connectivity across Nusantara to the global arena.' : companyData.vision}"
             </p>
           </div>
 
           {/* Mission */}
-          <div className="bg-gradient-to-br from-slate-50 via-white to-slate-50/50 border border-slate-200 rounded-3xl p-8 space-y-4">
-            <div className="inline-flex p-3 rounded-2xl bg-slate-900 text-white shadow-sm">
-              <Compass className="w-6 h-6" />
+          <div className="bg-gradient-to-br from-slate-50 via-white to-slate-50/50 border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-8 space-y-3 sm:space-y-4">
+            <div className="inline-flex p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-slate-900 text-white shadow-sm">
+              <Compass className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900">{t('about.mission.title')}</h3>
-            <ul className="space-y-2 text-sm text-slate-700">
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900">{t('about.mission.title')}</h3>
+            <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
               {(isEn ? [
                 'Accelerate the deployment of multi-terabit optical fiber networks in transportation and data center sectors.',
                 'Deliver carrier-grade reliability with 99.999% SLA and high-speed protection switching.',
                 'Foster indigenous technology capability in collaboration with global partners like T8 Systems.',
               ] : companyData.mission).map((m, idx) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0 mt-2"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0 mt-1.5 sm:mt-2"></span>
                   <span>{m}</span>
                 </li>
               ))}

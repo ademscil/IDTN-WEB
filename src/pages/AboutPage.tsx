@@ -9,22 +9,22 @@ export const AboutPage: React.FC = () => {
   const isEn = lang === 'en';
 
   return (
-    <div className="pt-28 pb-16">
+    <div className="pt-20 sm:pt-28 pb-10 sm:pb-16">
       {/* Page Header Banner */}
-      <div className="bg-gradient-to-b from-sky-50 via-white to-white py-14 border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <Badge variant="cyan">{t('page.about.badge')}</Badge>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+      <div className="bg-gradient-to-b from-sky-50 via-white to-white py-8 sm:py-14 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3 sm:space-y-4">
+          <Badge variant="cyan" className="text-xs">{t('page.about.badge')}</Badge>
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight">
             {t('page.about.title')}
           </h1>
-          <p className="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-base lg:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
             {t('page.about.desc')}
           </p>
           <div className="pt-2 flex justify-center">
             <a
               href={`${import.meta.env.BASE_URL}assets/docs/IDTN-Company-Profile-2026.pptx`}
               download="IDTN-Company-Profile-2026.pptx"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs sm:text-sm font-bold shadow-md transition-all hover:-translate-y-0.5 cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:px-5 sm:py-2.5 rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs sm:text-sm font-bold shadow-md transition-all hover:-translate-y-0.5 cursor-pointer"
             >
               <Download className="w-4 h-4 text-sky-400" />
               <span>{isEn ? 'Download Company Profile (PPTX)' : 'Unduh Profil Perusahaan (PPTX)'}</span>

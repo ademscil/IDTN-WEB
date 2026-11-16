@@ -9,26 +9,26 @@ export const ClientsSection: React.FC = () => {
   const isEn = lang === 'en';
 
   return (
-    <section id="clients" className="py-20 md:py-24 bg-slate-50/70 border-b border-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <section id="clients" className="py-12 sm:py-20 md:py-24 bg-slate-50/70 border-b border-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
+        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
           <Badge variant="cyan">{t('clients.badge')}</Badge>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             {t('clients.title')}
           </h2>
-          <p className="text-base sm:text-lg text-slate-600">
+          <p className="text-sm sm:text-base lg:text-lg text-slate-600">
             {t('clients.desc')}
           </p>
         </div>
 
         {/* Partners & Clients Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {clientsData.map((client) => (
             <div
               key={client.id}
-              className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:border-sky-300 hover:shadow-md transition-all text-left flex flex-col justify-between"
+              className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:border-sky-300 hover:shadow-md transition-all text-left flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="p-3 rounded-xl bg-sky-50 text-sky-700 inline-block">
