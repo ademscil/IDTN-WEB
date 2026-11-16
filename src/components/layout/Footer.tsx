@@ -115,22 +115,12 @@ export const Footer: React.FC = () => {
               </li>
               <li className="pt-2 border-t border-slate-800">
                 <a
-                  href={`${import.meta.env.BASE_URL}assets/docs/IDTN-Company-Profile-2026.pdf`}
-                  download="IDTN-Company-Profile-2026.pdf"
+                  href={`${import.meta.env.BASE_URL}assets/docs/IDTN-Company-Profile-2026.pptx`}
+                  download="IDTN-Company-Profile-2026.pptx"
                   className="hover:text-sky-400 transition-colors inline-flex items-center gap-1.5 text-xs text-slate-300 font-semibold"
                 >
                   <Download className="w-3.5 h-3.5 text-sky-400" />
-                  <span>{isEn ? 'Company Profile (PDF)' : 'Profil Perusahaan (PDF)'}</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`${import.meta.env.BASE_URL}assets/docs/IDTN-T8-Volga-I-Technical-Datasheet.pdf`}
-                  download="IDTN-T8-Volga-I-Technical-Datasheet.pdf"
-                  className="hover:text-sky-400 transition-colors inline-flex items-center gap-1.5 text-xs text-slate-300 font-semibold"
-                >
-                  <Download className="w-3.5 h-3.5 text-sky-400" />
-                  <span>{isEn ? 'Volga I Datasheet (PDF)' : 'Datasheet Volga I (PDF)'}</span>
+                  <span>{isEn ? 'Company Profile (PPTX)' : 'Profil Perusahaan (PPTX)'}</span>
                 </a>
               </li>
             </ul>
