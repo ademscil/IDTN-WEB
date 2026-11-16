@@ -109,7 +109,7 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
   };
 
   return (
-    <section id="contact" className={`${showHeader ? 'py-20 md:py-28' : 'py-12 md:py-16'} bg-white`}>
+    <section id="contact" className={`${showHeader ? 'py-20 md:py-28' : 'pt-6 sm:pt-10 pb-12 sm:pb-20'} bg-white`}>
       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${showHeader ? 'space-y-16' : ''}`}>
         
         {/* Section Header (Optional, omitted on ContactPage to prevent duplicated header) */}

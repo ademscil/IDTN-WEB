@@ -5,7 +5,11 @@ import dwdmData from '../../data/dwdm-tech.json';
 import { Badge } from '../common/Badge';
 import { useLanguage } from '../../context';
 
-export const EquipmentSection: React.FC = () => {
+interface EquipmentSectionProps {
+  showHeader?: boolean;
+}
+
+export const EquipmentSection: React.FC<EquipmentSectionProps> = ({ showHeader = true }) => {
   const { lang, t } = useLanguage();
   const [selectedEqId, setSelectedEqId] = useState(dwdmData.equipmentCatalog[0].id);
   const activeEq = dwdmData.equipmentCatalog.find((e) => e.id === selectedEqId) || dwdmData.equipmentCatalog[0];
@@ -146,19 +150,26 @@ export const EquipmentSection: React.FC = () => {
   ];
 
   return (
-    <section id="equipment" className="py-20 md:py-28 bg-slate-50/70 border-b border-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-16">
+    <section
+      id="equipment"
+      className={`bg-slate-50/70 border-b border-slate-100 ${
+        showHeader ? 'py-12 sm:py-20 md:py-28' : 'pt-6 sm:pt-10 pb-12 sm:pb-20'
+      }`}
+    >
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${showHeader ? 'space-y-10 sm:space-y-16' : 'space-y-6 sm:space-y-10'}`}>
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
-          <Badge variant="coral">{t('eq.badge')}</Badge>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            {t('eq.title')}
-          </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-slate-600">
-            {t('eq.desc')}
-          </p>
-        </div>
+        {showHeader && (
+          <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
+            <Badge variant="coral">{t('eq.badge')}</Badge>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              {t('eq.title')}
+            </h2>
+            <p className="text-sm sm:text-base lg:text-lg text-slate-600">
+              {t('eq.desc')}
+            </p>
+          </div>
+        )}
 
         {/* Tab Buttons (Horizontal on Desktop, compact wrapping on Mobile) */}
         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">

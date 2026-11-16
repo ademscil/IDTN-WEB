@@ -4,24 +4,35 @@ import clientsData from '../../data/clients.json';
 import { Badge } from '../common/Badge';
 import { useLanguage } from '../../context';
 
-export const ClientsSection: React.FC = () => {
+interface ClientsSectionProps {
+  showHeader?: boolean;
+}
+
+export const ClientsSection: React.FC<ClientsSectionProps> = ({ showHeader = true }) => {
   const { lang, t } = useLanguage();
   const isEn = lang === 'en';
 
   return (
-    <section id="clients" className="py-12 sm:py-20 md:py-24 bg-slate-50/70 border-b border-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
+    <section
+      id="clients"
+      className={`bg-slate-50/70 border-b border-slate-100 ${
+        showHeader ? 'py-12 sm:py-20 md:py-24' : 'pt-6 sm:pt-10 pb-12 sm:pb-20'
+      }`}
+    >
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${showHeader ? 'space-y-8 sm:space-y-12' : 'space-y-6 sm:space-y-8'}`}>
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
-          <Badge variant="cyan">{t('clients.badge')}</Badge>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            {t('clients.title')}
-          </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-slate-600">
-            {t('clients.desc')}
-          </p>
-        </div>
+        {showHeader && (
+          <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
+            <Badge variant="cyan">{t('clients.badge')}</Badge>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              {t('clients.title')}
+            </h2>
+            <p className="text-sm sm:text-base lg:text-lg text-slate-600">
+              {t('clients.desc')}
+            </p>
+          </div>
+        )}
 
         {/* Partners & Clients Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">

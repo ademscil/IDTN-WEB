@@ -4,7 +4,11 @@ import companyData from '../../data/company.json';
 import { Badge } from '../common/Badge';
 import { useLanguage } from '../../context';
 
-export const AboutUsSection: React.FC = () => {
+interface AboutUsSectionProps {
+  showHeader?: boolean;
+}
+
+export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = true }) => {
   const { lang, t } = useLanguage();
 
   const isEn = lang === 'en';
@@ -51,19 +55,26 @@ export const AboutUsSection: React.FC = () => {
     : companyData.philosophy.pillars;
 
   return (
-    <section id="about" className="py-12 sm:py-20 md:py-28 bg-white border-b border-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-20">
+    <section
+      id="about"
+      className={`bg-white border-b border-slate-100 ${
+        showHeader ? 'py-12 sm:py-20 md:py-28' : 'pt-6 sm:pt-10 pb-12 sm:pb-20'
+      }`}
+    >
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${showHeader ? 'space-y-12 sm:space-y-20' : 'space-y-8 sm:space-y-14'}`}>
         
         {/* Header Block */}
-        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
-          <Badge variant="cyan">{t('about.badge')}</Badge>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            {t('about.title')}
-          </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed">
-            {t('about.desc')}
-          </p>
-        </div>
+        {showHeader && (
+          <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
+            <Badge variant="cyan">{t('about.badge')}</Badge>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              {t('about.title')}
+            </h2>
+            <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed">
+              {t('about.desc')}
+            </p>
+          </div>
+        )}
 
         {/* T8-Style Distinctive Metrics Strip (Directly requested by Pak Andik) */}
         <div className="space-y-6 sm:space-y-10 pt-2">
