@@ -198,7 +198,7 @@ export const EquipmentSection: React.FC<EquipmentSectionProps> = ({ showHeader =
                 <span className="text-[11px] sm:text-xs font-mono font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md border border-sky-100">
                   {isEn && eqEnData[activeEq.id] ? eqEnData[activeEq.id].category : activeEq.category}
                 </span>
-                <span className="text-[11px] sm:text-xs font-mono text-slate-500 font-semibold">
+                <span className="text-[11px] sm:text-xs font-mono text-slate-600 font-semibold">
                   {eqImages[activeEq.id]?.tag}
                 </span>
               </div>
@@ -213,20 +213,20 @@ export const EquipmentSection: React.FC<EquipmentSectionProps> = ({ showHeader =
             {/* Quick Specs */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 py-3 sm:py-4 border-y border-slate-100">
               <div>
-                <p className="text-[11px] sm:text-xs text-slate-400 font-medium">{t('eq.formFactor')}</p>
+                <p className="text-[11px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">{t('eq.formFactor')}</p>
                 <p className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">
                   {isEn && eqEnData[activeEq.id] ? eqEnData[activeEq.id].formFactor : activeEq.formFactor}
                 </p>
               </div>
               <div>
-                <p className="text-[11px] sm:text-xs text-slate-400 font-medium">{t('eq.capacity')}</p>
+                <p className="text-[11px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">{t('eq.capacity')}</p>
                 <p className="text-xs sm:text-sm font-bold text-sky-600 font-mono mt-0.5">{activeEq.capacity}</p>
               </div>
             </div>
 
             {/* Features */}
             <div className="space-y-2 sm:space-y-2.5">
-              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-600">
                 {t('eq.specs.title')}
               </p>
               <ul className="space-y-1.5 sm:space-y-2">
@@ -277,7 +277,7 @@ export const EquipmentSection: React.FC<EquipmentSectionProps> = ({ showHeader =
         {/* T8 Product Cards Row (matching t8.ru/en/ equipment catalog) */}
         <div className="pt-8">
           <div className="text-center mb-8">
-            <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">
+            <span className="text-xs font-mono uppercase tracking-wider text-slate-700 font-bold">
               {isEn ? 'Hardware Showcase Catalog' : 'Katalog Perangkat Hardware T8'}
             </span>
           </div>

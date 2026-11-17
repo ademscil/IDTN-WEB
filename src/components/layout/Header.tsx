@@ -78,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
                 className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all cursor-pointer ${
                   lang === 'en'
                     ? 'bg-white text-[#0284c7] shadow-xs font-bold'
-                    : 'text-slate-500 hover:text-slate-900'
+                    : 'text-slate-700 hover:text-slate-900 font-semibold'
                 }`}
                 aria-label="English"
               >
@@ -90,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
                 className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all cursor-pointer ${
                   lang === 'id'
                     ? 'bg-white text-[#0284c7] shadow-xs font-bold'
-                    : 'text-slate-500 hover:text-slate-900'
+                    : 'text-slate-700 hover:text-slate-900 font-semibold'
                 }`}
                 aria-label="Bahasa Indonesia"
               >

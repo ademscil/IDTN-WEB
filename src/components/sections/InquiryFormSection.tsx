@@ -144,7 +144,7 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400 font-medium">{isEn ? 'Headquarters' : 'Kantor Pusat'}</p>
+                    <p className="text-[11px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">{isEn ? 'Headquarters' : 'Kantor Pusat'}</p>
                     <p className="text-sm font-bold text-slate-900 mt-0.5">
                       {companyData.headquarters.address}
                     </p>
@@ -168,7 +168,7 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400 font-medium">{isEn ? 'Official Email' : 'Email Resmi'}</p>
+                    <p className="text-[11px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">{isEn ? 'Official Email' : 'Email Resmi'}</p>
                     <a
                       href={`mailto:${companyData.contact.officialEmail}`}
                       className="text-sm font-bold text-sky-600 hover:underline mt-0.5 block font-mono"
@@ -183,7 +183,7 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400 font-medium">{isEn ? 'Office Telephone' : 'Telepon Kantor'}</p>
+                    <p className="text-[11px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">{isEn ? 'Office Telephone' : 'Telepon Kantor'}</p>
                     <a
                       href={`tel:${companyData.contact.phoneOffice.replace(/\s+/g, '')}`}
                       className="text-sm font-bold text-slate-900 hover:text-sky-600 mt-0.5 block font-mono"
@@ -198,7 +198,7 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400 font-medium">{isEn ? 'Service Hours' : 'Jam Pelayanan'}</p>
+                    <p className="text-[11px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">{isEn ? 'Service Hours' : 'Jam Pelayanan'}</p>
                     <p className="text-xs font-semibold text-slate-700 mt-0.5">
                       {isEn ? 'Monday - Friday: 08:30 - 17:30 WIB' : companyData.contact.workingHours}
                     </p>

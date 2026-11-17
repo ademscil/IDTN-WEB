@@ -128,7 +128,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
               <span>{t('nav.consultation')}</span>
             </Button>
           </Link>
-          <p className="text-[11px] text-slate-400 text-center mt-3 font-mono">
+          <p className="text-[11px] text-slate-600 text-center mt-3 font-mono font-medium">
             PT Infinix Delapan Teknologi Nusantara
           </p>
         </div>

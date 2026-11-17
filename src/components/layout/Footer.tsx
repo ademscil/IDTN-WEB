@@ -26,11 +26,11 @@ export const Footer: React.FC = () => {
             <p className="text-sm text-slate-300 leading-relaxed">
               {t('footer.desc')}
             </p>
-            <p className="text-xs text-sky-400 font-medium italic">
+            <p className="text-xs text-sky-300 font-medium italic">
               "{companyData.philosophy.headline}"
             </p>
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-slate-800 text-emerald-400 border border-slate-700">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-slate-800 text-emerald-300 border border-emerald-500/30">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>SDPPI & OSS Compliant</span>
               </span>
@@ -38,7 +38,7 @@ export const Footer: React.FC = () => {
                 href="https://www.linkedin.com/company/pt-infinix-delapan-teknologi-nusantara"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-sky-400 border border-slate-700 hover:bg-slate-700 transition-colors"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-sky-300 border border-sky-500/30 hover:bg-slate-700 hover:text-white transition-colors"
                 title="IDTN on LinkedIn"
               >
                 <span>LinkedIn</span>
@@ -52,29 +52,29 @@ export const Footer: React.FC = () => {
             <h4 className="text-sm font-bold tracking-wider text-slate-200 uppercase mb-4">
               {t('footer.products')}
             </h4>
-            <ul className="space-y-2.5 text-sm text-slate-400">
+            <ul className="space-y-2.5 text-sm text-slate-300">
               <li>
-                <Link to="/equipment" className="hover:text-sky-400 transition-colors">
+                <Link to="/equipment" className="hover:text-sky-300 transition-colors">
                   DWDM System Volga I Telecom
                 </Link>
               </li>
               <li>
-                <Link to="/equipment" className="hover:text-sky-400 transition-colors">
+                <Link to="/equipment" className="hover:text-sky-300 transition-colors">
                   DWDM System Volga I DCI
                 </Link>
               </li>
               <li>
-                <Link to="/equipment" className="hover:text-sky-400 transition-colors">
+                <Link to="/equipment" className="hover:text-sky-300 transition-colors">
                   DWDM System DCI V2 (6.4 Tbps)
                 </Link>
               </li>
               <li>
-                <Link to="/equipment" className="hover:text-sky-400 transition-colors">
+                <Link to="/equipment" className="hover:text-sky-300 transition-colors">
                   OTDR Monitoring System Ramenka
                 </Link>
               </li>
               <li>
-                <Link to="/equipment" className="hover:text-sky-400 transition-colors">
+                <Link to="/equipment" className="hover:text-sky-300 transition-colors">
                   NMS Titan & Fractal Management
                 </Link>
               </li>
@@ -86,19 +86,19 @@ export const Footer: React.FC = () => {
             <h4 className="text-sm font-bold tracking-wider text-slate-200 uppercase mb-4">
               {t('footer.company')}
             </h4>
-            <ul className="space-y-2.5 text-sm text-slate-400">
+            <ul className="space-y-2.5 text-sm text-slate-300">
               <li>
-                <Link to="/about" className="hover:text-sky-400 transition-colors">
+                <Link to="/about" className="hover:text-sky-300 transition-colors">
                   {t('nav.about')}
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-sky-400 transition-colors">
+                <Link to="/about" className="hover:text-sky-300 transition-colors">
                   {t('about.focus.title')}
                 </Link>
               </li>
               <li>
-                <Link to="/clients" className="hover:text-sky-400 transition-colors">
+                <Link to="/clients" className="hover:text-sky-300 transition-colors">
                   {t('nav.clients')}
                 </Link>
               </li>
@@ -107,7 +107,7 @@ export const Footer: React.FC = () => {
                   href="https://t8.ru/en/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-sky-400 transition-colors inline-flex items-center gap-1 text-sky-400"
+                  className="hover:text-sky-300 transition-colors inline-flex items-center gap-1 text-sky-300"
                 >
                   <span>T8 Systems (Russia)</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
@@ -117,7 +117,7 @@ export const Footer: React.FC = () => {
                 <a
                   href={`${import.meta.env.BASE_URL}assets/docs/IDTN-Company-Profile-2026.pptx`}
                   download="IDTN-Company-Profile-2026.pptx"
-                  className="hover:text-sky-400 transition-colors inline-flex items-center gap-1.5 text-xs text-slate-300 font-semibold"
+                  className="hover:text-sky-300 transition-colors inline-flex items-center gap-1.5 text-xs text-slate-200 font-semibold"
                 >
                   <Download className="w-3.5 h-3.5 text-sky-400" />
                   <span>{isEn ? 'Company Profile (PPTX)' : 'Profil Perusahaan (PPTX)'}</span>
@@ -176,21 +176,21 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 text-center sm:text-left">
+        <div className="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 text-center sm:text-left">
           <p>
             &copy; {new Date().getFullYear()} {companyData.legalName}. {t('footer.rights')}
           </p>
           <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 sm:gap-6">
             <button
               onClick={() => setIsPrivacyOpen(true)}
-              className="text-slate-400 hover:text-sky-400 transition-colors cursor-pointer underline underline-offset-2"
+              className="text-slate-300 hover:text-sky-300 transition-colors cursor-pointer underline underline-offset-2 font-medium"
             >
               {isEn ? 'Privacy Notice & Data Protection' : 'Kebijakan Privasi & PDP'}
             </button>
-            <span className="w-1 h-1 rounded-full bg-slate-700"></span>
-            <span>{companyData.headquarters.city}, {companyData.headquarters.country}</span>
-            <span className="w-1 h-1 rounded-full bg-slate-700"></span>
-            <span>Partner Resmi T8 Systems</span>
+            <span className="w-1 h-1 rounded-full bg-slate-600"></span>
+            <span className="text-slate-300">{companyData.headquarters.city}, {companyData.headquarters.country}</span>
+            <span className="w-1 h-1 rounded-full bg-slate-600"></span>
+            <span className="text-slate-300 font-medium">Partner Resmi T8 Systems</span>
           </div>
         </div>
       </div>

@@ -33,14 +33,14 @@ export const TrustStripSection: React.FC = () => {
             const Icon = item.icon;
             return (
               <div key={idx} className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-slate-800 text-sky-400 border border-slate-700/60 shrink-0">
+                <div className="p-3 rounded-xl bg-slate-800 text-sky-300 border border-slate-700 shrink-0">
                   <Icon className="w-6 h-6" />
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-white tracking-tight">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <p className="text-xs text-slate-200 mt-0.5 font-normal">
                     {item.subtitle}
                   </p>
                 </div>

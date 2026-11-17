@@ -121,13 +121,13 @@ export const HomePage: React.FC = () => {
           <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 px-5 py-8 sm:px-14 sm:py-16 text-white shadow-2xl">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(14,165,233,0.25),transparent_50%)] pointer-events-none" />
             <div className="relative z-10 max-w-3xl space-y-4 sm:space-y-5">
-              <Badge variant="cyan" className="bg-sky-500/20 text-sky-300 border border-sky-400/30 text-xs">
+              <Badge variant="dark-cyan">
                 {t('home.banner.badge')}
               </Badge>
-              <h2 className="text-xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
                 {t('home.banner.title')}
               </h2>
-              <p className="text-xs sm:text-sm lg:text-base text-slate-300 leading-relaxed">
+              <p className="text-xs sm:text-sm lg:text-base text-slate-200 leading-relaxed font-normal">
                 {t('home.banner.desc')}
               </p>
               <div className="pt-2 sm:pt-3">

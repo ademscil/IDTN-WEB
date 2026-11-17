@@ -60,7 +60,7 @@ export const HeroSection: React.FC = () => {
                 <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100">
                   <div>
                     <h2 className="text-xs sm:text-sm font-bold text-slate-900">{t('hero.graphic.title')}</h2>
-                    <p className="text-[11px] sm:text-xs text-slate-500 font-mono">{t('hero.graphic.subtitle')}</p>
+                    <p className="text-[11px] sm:text-xs text-slate-600 font-mono font-medium">{t('hero.graphic.subtitle')}</p>
                   </div>
                   <span className="flex h-2.5 w-2.5 relative">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>

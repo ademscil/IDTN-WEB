@@ -99,7 +99,7 @@ export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = tru
                 <h4 className="text-sm sm:text-base font-bold text-slate-900 pt-1">
                   {t('about.metric1.title')}
                 </h4>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {t('about.metric1.desc')}
                 </p>
               </div>
@@ -113,7 +113,7 @@ export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = tru
                 <h4 className="text-sm sm:text-base font-bold text-slate-900 pt-1">
                   {t('about.metric2.title')}
                 </h4>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {t('about.metric2.desc')}
                 </p>
               </div>
@@ -126,7 +126,7 @@ export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = tru
                 <h4 className="text-sm sm:text-base font-bold text-slate-900 pt-1">
                   {t('about.metric3.title')}
                 </h4>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {t('about.metric3.desc')}
                 </p>
               </div>
@@ -139,13 +139,13 @@ export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = tru
           {/* Philosophy Banner (5 Cols) */}
           <div className="lg:col-span-5 bg-gradient-to-br from-slate-900 via-slate-850 to-slate-800 text-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 flex flex-col justify-between shadow-xl border border-slate-800">
             <div className="space-y-3 sm:space-y-4">
-              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-sky-400">
+              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-sky-300">
                 {t('about.philo.tag')}
               </span>
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold leading-snug">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold leading-snug text-white">
                 "{t('about.philo.head')}"
               </h3>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
                 {t('about.philo.sub')}
               </p>
             </div>
@@ -153,8 +153,8 @@ export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = tru
             <div className="pt-6 sm:pt-8 mt-6 sm:mt-8 border-t border-slate-700/80 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {philosophyPillars.map((pillar, idx) => (
                 <div key={idx} className="space-y-1">
-                  <p className="text-xs font-bold text-sky-400">{pillar.title}</p>
-                  <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed">{pillar.desc}</p>
+                  <p className="text-xs font-bold text-sky-300">{pillar.title}</p>
+                  <p className="text-[11px] sm:text-xs text-slate-200 leading-relaxed">{pillar.desc}</p>
                 </div>
               ))}
             </div>
@@ -164,7 +164,7 @@ export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = tru
           <div className="lg:col-span-7 flex flex-col justify-between space-y-6 sm:space-y-8">
             {/* Etymology Grid */}
             <div className="bg-slate-50 border border-slate-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 space-y-3 sm:space-y-4">
-              <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500">
+              <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700">
                 {t('about.etymology.title')}
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">

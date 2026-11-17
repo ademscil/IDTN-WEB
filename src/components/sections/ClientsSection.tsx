@@ -51,7 +51,7 @@ export const ClientsSection: React.FC<ClientsSectionProps> = ({ showHeader = tru
                 <h3 className="text-base font-bold text-slate-900">
                   {client.name}
                 </h3>
-                <p className="text-xs font-medium text-slate-500">
+                <p className="text-xs font-semibold text-slate-600">
                   {client.role}
                 </p>
                 <p className="text-xs text-slate-600 leading-relaxed pt-1">
@@ -65,7 +65,7 @@ export const ClientsSection: React.FC<ClientsSectionProps> = ({ showHeader = tru
                 </p>
               </div>
 
-              <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-emerald-600 font-semibold">
+              <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-emerald-700 font-bold">
                 <span>{isEn ? 'Verified Strategic Partner' : 'Mitra Terverifikasi'}</span>
                 <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
               </div>
