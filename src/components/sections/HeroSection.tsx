@@ -4,9 +4,14 @@ import { ArrowRight } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { useLanguage } from '../../context';
+import { useCmsData } from '../../context/CmsDataContext';
 
 export const HeroSection: React.FC = () => {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
+  const { pages } = useCmsData();
+  const isEn = lang === 'en';
+
+  const heroCms = pages.home?.hero?.[isEn ? 'en' : 'id'];
 
   return (
     <section id="hero" className="relative pt-24 pb-14 sm:pt-32 sm:pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-sky-50/60 via-white to-white">
@@ -20,7 +25,7 @@ export const HeroSection: React.FC = () => {
             <div className="inline-flex flex-wrap items-center gap-2">
               <Badge variant="cyan" className="py-1 px-2.5 sm:px-3 text-[11px] sm:text-xs">
                 <span className="w-2 h-2 rounded-full bg-sky-600 animate-pulse"></span>
-                <span>{t('hero.badge.provider')}</span>
+                <span>{heroCms?.badge || t('hero.badge.provider')}</span>
               </Badge>
               <Badge variant="coral" className="py-1 px-2.5 sm:px-3 text-[11px] sm:text-xs">
                 <span>{t('hero.badge.partner')}</span>
@@ -28,22 +33,28 @@ export const HeroSection: React.FC = () => {
             </div>
 
             <h1 className="text-2xl sm:text-4xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight sm:leading-[1.14]">
-              {t('hero.title.lead')} <br className="hidden sm:inline" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0284c7] via-[#0369a1] to-[#9f1b32]">
-                {t('hero.title.highlight')}
-              </span>{' '}
-              {t('hero.title.end')}
+              {heroCms?.headline ? (
+                <span>{heroCms.headline}</span>
+              ) : (
+                <>
+                  {t('hero.title.lead')} <br className="hidden sm:inline" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0284c7] via-[#0369a1] to-[#9f1b32]">
+                    {t('hero.title.highlight')}
+                  </span>{' '}
+                  {t('hero.title.end')}
+                </>
+              )}
             </h1>
 
             <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed max-w-2xl">
-              {t('hero.description')}
+              {heroCms?.subtitle || t('hero.description')}
             </p>
 
             {/* Single High-Priority Action CTA */}
             <div className="pt-2">
               <Link to="/contact" className="block sm:inline-block">
                 <Button size="lg" variant="primary" className="w-full sm:w-auto justify-center gap-2.5 text-sm sm:text-base px-6 py-3 sm:px-8 sm:py-3.5 shadow-lg shadow-sky-600/20 hover:shadow-sky-600/30">
-                  <span>{t('hero.cta.rfp')}</span>
+                  <span>{heroCms?.cta_primary || t('hero.cta.rfp')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>

@@ -7,9 +7,19 @@ import { FAQSection } from '../components/sections/FAQSection';
 import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 import { useLanguage } from '../context';
+import { useCmsData } from '../context/CmsDataContext';
+import { usePageSeo } from '../hooks/usePageSeo';
 
 export const HomePage: React.FC = () => {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
+  const { pages } = useCmsData();
+  const isEn = lang === 'en';
+
+  // Dynamic SEO from CMS
+  usePageSeo('home');
+
+  const homeContent = pages.home;
+  const sectionsData = homeContent?.sections?.[isEn ? 'en' : 'id'] || {};
 
   const cards = [
     {
@@ -112,23 +122,23 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. DWDM Knowledge Base & FAQ (Optimized for Direct Answer Search Engine Snippets) */}
+      {/* 4. DWDM Knowledge Base & FAQ */}
       <FAQSection />
 
-      {/* 5. High-Impact Call to Action Banner */}
+      {/* 5. High-Impact Call to Action Banner (Powered by CMS) */}
       <section className="pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 px-5 py-8 sm:px-14 sm:py-16 text-white shadow-2xl">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(14,165,233,0.25),transparent_50%)] pointer-events-none" />
             <div className="relative z-10 max-w-3xl space-y-4 sm:space-y-5">
               <Badge variant="dark-cyan">
-                {t('home.banner.badge')}
+                {sectionsData.bottom_cta_badge || t('home.banner.badge')}
               </Badge>
               <h2 className="text-xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
-                {t('home.banner.title')}
+                {sectionsData.bottom_cta_title || t('home.banner.title')}
               </h2>
               <p className="text-xs sm:text-sm lg:text-base text-slate-200 leading-relaxed font-normal">
-                {t('home.banner.desc')}
+                {sectionsData.bottom_cta_desc || t('home.banner.desc')}
               </p>
               <div className="pt-2 sm:pt-3">
                 <Link to="/contact" className="block sm:inline-block">

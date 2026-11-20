@@ -3,12 +3,23 @@ import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, ShieldCheck, ArrowUpRight, MessageSquare, Download } from 'lucide-react';
 import companyData from '../../data/company.json';
 import { useLanguage } from '../../context';
+import { useCmsData } from '../../context/CmsDataContext';
 import { Modal } from '../common/Modal';
 
 export const Footer: React.FC = () => {
   const { lang, t } = useLanguage();
+  const { footer } = useCmsData();
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const isEn = lang === 'en';
+
+  const companyDesc = footer?.company_summary?.[isEn ? 'en' : 'id'] || t('footer.desc');
+  const philosophyQuote = footer?.philosophy_quote?.[isEn ? 'en' : 'id'] || companyData.philosophy.headline;
+  const addressText = footer?.address?.[isEn ? 'en' : 'id'] || `${companyData.headquarters.address}, ${companyData.headquarters.city} ${companyData.headquarters.postalCode}, ${companyData.headquarters.country}`;
+  const officialEmail = footer?.contact?.email || companyData.contact.officialEmail;
+  const officialPhone = footer?.contact?.phone || companyData.contact.phoneOffice;
+  const whatsappNumber = footer?.contact?.whatsapp || companyData.contact.whatsappHotline;
+  const sdppiStatus = footer?.contact?.sdppi_status?.[isEn ? 'en' : 'id'] || 'SDPPI & OSS Compliant';
+  const copyrightText = footer?.copyright?.[isEn ? 'en' : 'id'] || `© ${new Date().getFullYear()} ${companyData.legalName}. ${t('footer.rights')}`;
 
   return (
     <footer className="bg-slate-900 text-white border-t border-slate-800 pt-10 sm:pt-16 pb-8 sm:pb-12">
@@ -24,18 +35,18 @@ export const Footer: React.FC = () => {
               />
             </Link>
             <p className="text-sm text-slate-300 leading-relaxed">
-              {t('footer.desc')}
+              {companyDesc}
             </p>
             <p className="text-xs text-sky-300 font-medium italic">
-              "{companyData.philosophy.headline}"
+              "{philosophyQuote}"
             </p>
             <div className="flex flex-wrap items-center gap-2 pt-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-slate-800 text-emerald-300 border border-emerald-500/30">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>SDPPI & OSS Compliant</span>
+                <span>{sdppiStatus}</span>
               </span>
               <a
-                href="https://www.linkedin.com/company/pt-infinix-delapan-teknologi-nusantara"
+                href={footer?.contact?.linkedin_url || "https://www.linkedin.com/company/pt-infinix-delapan-teknologi-nusantara"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-sky-300 border border-sky-500/30 hover:bg-slate-700 hover:text-white transition-colors"
@@ -140,36 +151,36 @@ export const Footer: React.FC = () => {
                 className="text-xs leading-relaxed hover:text-sky-400 transition-colors"
                 title="Buka lokasi di Google Maps"
               >
-                {companyData.headquarters.address}, {companyData.headquarters.city} {companyData.headquarters.postalCode}, {companyData.headquarters.country}
+                {addressText}
               </a>
             </div>
             <div className="flex items-center gap-3 text-sm text-slate-300 pt-1">
               <Mail className="w-4 h-4 text-sky-400 shrink-0" />
               <a
-                href={`mailto:${companyData.contact.officialEmail}`}
+                href={`mailto:${officialEmail}`}
                 className="text-xs hover:text-sky-400 transition-colors font-mono"
               >
-                {companyData.contact.officialEmail}
+                {officialEmail}
               </a>
             </div>
             <div className="flex items-center gap-3 text-sm text-slate-300">
               <Phone className="w-4 h-4 text-sky-400 shrink-0" />
               <a
-                href={`tel:${companyData.contact.phoneOffice.replace(/[^0-9+]/g, '')}`}
+                href={`tel:${officialPhone.replace(/[^0-9+]/g, '')}`}
                 className="text-xs hover:text-sky-400 transition-colors font-mono"
               >
-                {companyData.contact.phoneOffice}
+                {officialPhone}
               </a>
             </div>
             <div className="flex items-center gap-3 text-sm text-slate-300">
               <MessageSquare className="w-4 h-4 text-emerald-400 shrink-0" />
               <a
-                href={`https://wa.me/${companyData.contact.whatsappHotline.replace(/[^0-9]/g, '')}`}
+                href={`https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs hover:text-emerald-400 transition-colors font-mono"
               >
-                {companyData.contact.whatsappHotline} (WhatsApp)
+                {whatsappNumber} (WhatsApp)
               </a>
             </div>
           </div>
@@ -178,7 +189,7 @@ export const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 text-center sm:text-left">
           <p>
-            &copy; {new Date().getFullYear()} {companyData.legalName}. {t('footer.rights')}
+            {copyrightText}
           </p>
           <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 sm:gap-6">
             <button
@@ -191,6 +202,10 @@ export const Footer: React.FC = () => {
             <span className="text-slate-300">{companyData.headquarters.city}, {companyData.headquarters.country}</span>
             <span className="w-1 h-1 rounded-full bg-slate-600"></span>
             <span className="text-slate-300 font-medium">Partner Resmi T8 Systems</span>
+            <span className="w-1 h-1 rounded-full bg-slate-600"></span>
+            <Link to="/admin" className="text-slate-400 hover:text-sky-300 font-semibold transition-colors">
+              Portal Admin
+            </Link>
           </div>
         </div>
       </div>

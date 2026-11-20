@@ -76,20 +76,24 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
     setIsSubmitting(true);
     const generatedId = `IDTN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
-    const endpoint = import.meta.env.VITE_INQUIRY_ENDPOINT;
-    if (endpoint) {
-      try {
-        await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ ...formData, referenceId: generatedId }),
-        });
-      } catch (err) {
-        console.warn('Backend endpoint unavailable, falling back to local ticket:', err);
-      }
-    } else {
-      // Simulate network latency if no endpoint provided
-      await new Promise((res) => setTimeout(res, 800));
+    const backendPayload = {
+      full_name: formData.fullName,
+      company: formData.companyName,
+      work_email: formData.corporateEmail,
+      phone: formData.phoneNumber,
+      solution_interest: formData.solutionTopic,
+      project_summary: formData.message,
+      website_hp: formData._gotcha
+    };
+
+    try {
+      await fetch('/api/public/inquiry.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(backendPayload)
+      });
+    } catch (err) {
+      console.warn('Backend inquiry endpoint error:', err);
     }
 
     setSubmissionPayload({ ...formData });
