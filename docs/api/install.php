@@ -517,7 +517,12 @@ try {
         seo_description_id = VALUES(seo_description_id),
         seo_description_en = VALUES(seo_description_en),
         seo_keywords_id = VALUES(seo_keywords_id),
-        seo_keywords_en = VALUES(seo_keywords_en)");
+        seo_keywords_en = VALUES(seo_keywords_en),
+        hero_data_id = VALUES(hero_data_id),
+        hero_data_en = VALUES(hero_data_en),
+        sections_data_id = VALUES(sections_data_id),
+        sections_data_en = VALUES(sections_data_en),
+        updated_at = NOW()");
 
     foreach ($pagesData as $key => $p) {
         $stmtPage->execute([

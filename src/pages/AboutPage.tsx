@@ -17,12 +17,14 @@ export const AboutPage: React.FC = () => {
   const heroData: Record<string, string> = (pages.about?.hero?.[isEn ? 'en' : 'id'] || {}) as Record<string, string>;
 
   // Dynamic Company Profile Link from CMS
-  const rawProfileUrl = heroData.company_profile_url || `${import.meta.env.BASE_URL}assets/docs/IDTN-Company-Profile-2026.pptx`;
-  const companyProfileUrl = rawProfileUrl.startsWith('http') || rawProfileUrl.startsWith('/')
+  const rawProfileUrl = heroData.company_profile_url || '/assets/docs/IDTN-Company-Profile-2026.pptx';
+  const companyProfileUrl = rawProfileUrl.startsWith('http')
     ? rawProfileUrl
-    : `${import.meta.env.BASE_URL}${rawProfileUrl.replace(/^\.?\//, '')}`;
+    : (rawProfileUrl.startsWith('/assets/') || rawProfileUrl.startsWith('assets/'))
+      ? `${import.meta.env.BASE_URL}${rawProfileUrl.replace(/^\/?assets\//, 'assets/')}`
+      : rawProfileUrl;
   const companyProfileLabel = heroData.company_profile_label || (isEn ? 'Download Company Profile (PPTX)' : 'Unduh Profil Perusahaan (PPTX)');
-  const downloadFileName = companyProfileUrl.split('/').pop() || 'IDTN-Company-Profile-2026.pptx';
+  const downloadFileName = companyProfileUrl.split('/').pop()?.split('?')[0] || 'IDTN-Company-Profile-2026.pptx';
 
   return (
     <div className="pt-20 sm:pt-28 pb-10 sm:pb-16">

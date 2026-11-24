@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useCmsData } from '../../context/CmsDataContext';
+import { defaultPages } from '../../data/defaultCmsData';
 import { CmsClient, StrategicSegment } from '../../types/cms';
 
 export const AdminClientsPage: React.FC = () => {
@@ -125,6 +126,7 @@ export const AdminClientsPage: React.FC = () => {
   }, [token]);
 
   const fetchClientPageData = useCallback(async () => {
+    const defClient = defaultPages.client;
     try {
       const res = await fetch('/api/admin/pages.php?page=client', {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -133,17 +135,21 @@ export const AdminClientsPage: React.FC = () => {
         const json = await res.json();
         if (json.success && json.page) {
           setClientPageSeoData(json.page);
-          const secId = json.page.sections_data_id || {};
-          const secEn = json.page.sections_data_en || {};
+          const secId = (json.page.sections_data_id && !Array.isArray(json.page.sections_data_id)) ? json.page.sections_data_id : {};
+          const secEn = (json.page.sections_data_en && !Array.isArray(json.page.sections_data_en)) ? json.page.sections_data_en : {};
 
-          if (secId.section_title) setStratTitleId(secId.section_title);
-          if (secEn.section_title) setStratTitleEn(secEn.section_title);
+          setStratTitleId(secId.section_title || (defClient.sections.id.section_title as string) || 'Segmen Industri Strategis');
+          setStratTitleEn(secEn.section_title || (defClient.sections.en.section_title as string) || 'Strategic Industry Segments');
 
           if (Array.isArray(secId.strategic_segments) && secId.strategic_segments.length > 0) {
             setStratSegmentsId(secId.strategic_segments);
+          } else if (Array.isArray(defClient.sections.id.strategic_segments)) {
+            setStratSegmentsId(defClient.sections.id.strategic_segments as StrategicSegment[]);
           }
           if (Array.isArray(secEn.strategic_segments) && secEn.strategic_segments.length > 0) {
             setStratSegmentsEn(secEn.strategic_segments);
+          } else if (Array.isArray(defClient.sections.en.strategic_segments)) {
+            setStratSegmentsEn(defClient.sections.en.strategic_segments as StrategicSegment[]);
           }
         }
       }
@@ -219,23 +225,35 @@ export const AdminClientsPage: React.FC = () => {
     setMessage(null);
 
     try {
+      const defClient = defaultPages.client;
+      const clientSecId = (clientPageSeoData.sections_data_id && !Array.isArray(clientPageSeoData.sections_data_id))
+        ? (clientPageSeoData.sections_data_id as Record<string, unknown>)
+        : ((defClient.sections.id || {}) as Record<string, unknown>);
+      const clientSecEn = (clientPageSeoData.sections_data_en && !Array.isArray(clientPageSeoData.sections_data_en))
+        ? (clientPageSeoData.sections_data_en as Record<string, unknown>)
+        : ((defClient.sections.en || {}) as Record<string, unknown>);
+
       const payload = {
         page_key: 'client',
-        seo_title_id: clientPageSeoData.seo_title_id || 'Klien & Mitra Strategis — PT Infinix Delapan Teknologi Nusantara',
-        seo_title_en: clientPageSeoData.seo_title_en || 'Clients & Strategic Partners — PT Infinix Delapan Teknologi Nusantara',
-        seo_description_id: clientPageSeoData.seo_description_id || '',
-        seo_description_en: clientPageSeoData.seo_description_en || '',
-        seo_keywords_id: clientPageSeoData.seo_keywords_id || '',
-        seo_keywords_en: clientPageSeoData.seo_keywords_en || '',
-        hero_data_id: clientPageSeoData.hero_data_id || {},
-        hero_data_en: clientPageSeoData.hero_data_en || {},
+        seo_title_id: clientPageSeoData.seo_title_id || defClient.seo.id.title,
+        seo_title_en: clientPageSeoData.seo_title_en || defClient.seo.en.title,
+        seo_description_id: clientPageSeoData.seo_description_id || defClient.seo.id.description,
+        seo_description_en: clientPageSeoData.seo_description_en || defClient.seo.en.description,
+        seo_keywords_id: clientPageSeoData.seo_keywords_id || defClient.seo.id.keywords,
+        seo_keywords_en: clientPageSeoData.seo_keywords_en || defClient.seo.en.keywords,
+        hero_data_id: (clientPageSeoData.hero_data_id && Object.keys(clientPageSeoData.hero_data_id).length > 0)
+          ? clientPageSeoData.hero_data_id
+          : defClient.hero.id,
+        hero_data_en: (clientPageSeoData.hero_data_en && Object.keys(clientPageSeoData.hero_data_en).length > 0)
+          ? clientPageSeoData.hero_data_en
+          : defClient.hero.en,
         sections_data_id: {
-          ...(clientPageSeoData.sections_data_id || {}),
+          ...clientSecId,
           section_title: stratTitleId,
           strategic_segments: stratSegmentsId
         },
         sections_data_en: {
-          ...(clientPageSeoData.sections_data_en || {}),
+          ...clientSecEn,
           section_title: stratTitleEn,
           strategic_segments: stratSegmentsEn
         }

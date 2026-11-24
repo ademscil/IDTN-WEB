@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useCmsData } from '../../context/CmsDataContext';
+import { defaultPages } from '../../data/defaultCmsData';
 import { PhilosophyPillar, EtymologyCard, BusinessPillar, StrategicSegment, CmsSectionValue } from '../../types/cms';
 
 type PageKey = 'home' | 'about' | 'product' | 'client' | 'contact';
@@ -38,6 +39,7 @@ export const AdminPagesSeoPage: React.FC = () => {
     const fetchPage = async () => {
       setLoading(true);
       setMessage(null);
+      const defaultPage = defaultPages[activePage];
       try {
         const res = await fetch(`/api/admin/pages.php?page=${activePage}`, {
           headers: { 'Authorization': `Bearer ${token}` }
@@ -45,8 +47,41 @@ export const AdminPagesSeoPage: React.FC = () => {
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.page) {
-            setFormData(json.page);
+            const serverPage = json.page;
+            const defSecId = defaultPage?.sections.id || {};
+            const defSecEn = defaultPage?.sections.en || {};
+            const sSecId = (serverPage.sections_data_id && !Array.isArray(serverPage.sections_data_id)) ? serverPage.sections_data_id : {};
+            const sSecEn = (serverPage.sections_data_en && !Array.isArray(serverPage.sections_data_en)) ? serverPage.sections_data_en : {};
+
+            setFormData({
+              seo_title_id: serverPage.seo_title_id || defaultPage?.seo.id.title || '',
+              seo_title_en: serverPage.seo_title_en || defaultPage?.seo.en.title || '',
+              seo_description_id: serverPage.seo_description_id || defaultPage?.seo.id.description || '',
+              seo_description_en: serverPage.seo_description_en || defaultPage?.seo.en.description || '',
+              seo_keywords_id: serverPage.seo_keywords_id || defaultPage?.seo.id.keywords || '',
+              seo_keywords_en: serverPage.seo_keywords_en || defaultPage?.seo.en.keywords || '',
+              hero_data_id: { ...(defaultPage?.hero.id || {}), ...(serverPage.hero_data_id || {}) },
+              hero_data_en: { ...(defaultPage?.hero.en || {}), ...(serverPage.hero_data_en || {}) },
+              sections_data_id: { ...defSecId, ...sSecId },
+              sections_data_en: { ...defSecEn, ...sSecEn }
+            });
+            return;
           }
+        }
+        // Fallback if not found or non-OK response
+        if (defaultPage) {
+          setFormData({
+            seo_title_id: defaultPage.seo.id.title,
+            seo_title_en: defaultPage.seo.en.title,
+            seo_description_id: defaultPage.seo.id.description,
+            seo_description_en: defaultPage.seo.en.description,
+            seo_keywords_id: defaultPage.seo.id.keywords,
+            seo_keywords_en: defaultPage.seo.en.keywords,
+            hero_data_id: { ...defaultPage.hero.id },
+            hero_data_en: { ...defaultPage.hero.en },
+            sections_data_id: { ...(defaultPage.sections.id || {}) },
+            sections_data_en: { ...(defaultPage.sections.en || {}) }
+          });
         }
       } catch {
         setMessage({ type: 'error', text: 'Gagal memuat data dari server.' });

@@ -8,9 +8,19 @@ import { Modal } from '../common/Modal';
 
 export const Footer: React.FC = () => {
   const { lang, t } = useLanguage();
-  const { footer } = useCmsData();
+  const { footer, pages } = useCmsData();
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const isEn = lang === 'en';
+
+  const heroAbout = pages.about?.hero?.[isEn ? 'en' : 'id'] || {};
+  const rawFooterProfileUrl = heroAbout.company_profile_url || '/assets/docs/IDTN-Company-Profile-2026.pptx';
+  const footerProfileUrl = rawFooterProfileUrl.startsWith('http')
+    ? rawFooterProfileUrl
+    : (rawFooterProfileUrl.startsWith('/assets/') || rawFooterProfileUrl.startsWith('assets/'))
+      ? `${import.meta.env.BASE_URL}${rawFooterProfileUrl.replace(/^\/?assets\//, 'assets/')}`
+      : rawFooterProfileUrl;
+  const footerProfileLabel = heroAbout.company_profile_label || (isEn ? 'Company Profile (PPTX)' : 'Profil Perusahaan (PPTX)');
+  const footerDownloadName = footerProfileUrl.split('/').pop()?.split('?')[0] || 'IDTN-Company-Profile-2026.pptx';
 
   const companyDesc = footer?.company_summary?.[isEn ? 'en' : 'id'] || t('footer.desc');
   const philosophyQuote = footer?.philosophy_quote?.[isEn ? 'en' : 'id'] || companyData.philosophy.headline;
@@ -126,12 +136,14 @@ export const Footer: React.FC = () => {
               </li>
               <li className="pt-2 border-t border-slate-800">
                 <a
-                  href={`${import.meta.env.BASE_URL}assets/docs/IDTN-Company-Profile-2026.pptx`}
-                  download="IDTN-Company-Profile-2026.pptx"
-                  className="hover:text-sky-300 transition-colors inline-flex items-center gap-1.5 text-xs text-slate-200 font-semibold"
+                  href={footerProfileUrl}
+                  download={footerDownloadName}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-sky-300 transition-colors inline-flex items-center gap-1.5 text-xs text-slate-200 font-semibold cursor-pointer"
                 >
                   <Download className="w-3.5 h-3.5 text-sky-400" />
-                  <span>{isEn ? 'Company Profile (PPTX)' : 'Profil Perusahaan (PPTX)'}</span>
+                  <span>{footerProfileLabel}</span>
                 </a>
               </li>
             </ul>

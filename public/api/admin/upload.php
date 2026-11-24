@@ -46,7 +46,8 @@ if ($method === 'POST') {
     // Dedicated action to set active company profile
     if ($jsonInput && isset($jsonInput['action']) && $jsonInput['action'] === 'set_company_profile') {
         $fileUrl = trim($jsonInput['file_url'] ?? '');
-        $label = trim($jsonInput['company_profile_label'] ?? '');
+        $labelId = trim($jsonInput['company_profile_label'] ?? '');
+        $labelEn = trim($jsonInput['company_profile_label_en'] ?? $labelId);
         if (!$fileUrl) {
             send_json(['error' => 'URL file tidak boleh kosong.'], 400);
         }
@@ -61,13 +62,20 @@ if ($method === 'POST') {
 
             $heroId['company_profile_url'] = $fileUrl;
             $heroEn['company_profile_url'] = $fileUrl;
-            if ($label) {
-                $heroId['company_profile_label'] = $label;
-                $heroEn['company_profile_label'] = $label;
+            if ($labelId) {
+                $heroId['company_profile_label'] = $labelId;
+            }
+            if ($labelEn) {
+                $heroEn['company_profile_label'] = $labelEn;
             }
 
-            $updateStmt = $db->prepare("UPDATE page_contents SET hero_data_id = ?, hero_data_en = ?, updated_at = NOW() WHERE page_key = 'about'");
-            $updateStmt->execute([json_encode($heroId), json_encode($heroEn)]);
+            if ($rowAbout) {
+                $updateStmt = $db->prepare("UPDATE page_contents SET hero_data_id = ?, hero_data_en = ?, updated_at = NOW() WHERE page_key = 'about'");
+                $updateStmt->execute([json_encode($heroId), json_encode($heroEn)]);
+            } else {
+                $insertStmt = $db->prepare("INSERT INTO page_contents (page_key, seo_title_id, seo_title_en, hero_data_id, hero_data_en) VALUES ('about', 'Tentang Kami — IDTN', 'About Us — IDTN', ?, ?)");
+                $insertStmt->execute([json_encode($heroId), json_encode($heroEn)]);
+            }
 
             send_json([
                 'success' => true,
