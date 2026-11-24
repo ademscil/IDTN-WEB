@@ -14,7 +14,15 @@ export const AboutPage: React.FC = () => {
   // Dynamic SEO from CMS
   usePageSeo('about');
 
-  const heroData = pages.about?.hero?.[isEn ? 'en' : 'id'] || {};
+  const heroData: Record<string, string> = (pages.about?.hero?.[isEn ? 'en' : 'id'] || {}) as Record<string, string>;
+
+  // Dynamic Company Profile Link from CMS
+  const rawProfileUrl = heroData.company_profile_url || `${import.meta.env.BASE_URL}assets/docs/IDTN-Company-Profile-2026.pptx`;
+  const companyProfileUrl = rawProfileUrl.startsWith('http') || rawProfileUrl.startsWith('/')
+    ? rawProfileUrl
+    : `${import.meta.env.BASE_URL}${rawProfileUrl.replace(/^\.?\//, '')}`;
+  const companyProfileLabel = heroData.company_profile_label || (isEn ? 'Download Company Profile (PPTX)' : 'Unduh Profil Perusahaan (PPTX)');
+  const downloadFileName = companyProfileUrl.split('/').pop() || 'IDTN-Company-Profile-2026.pptx';
 
   return (
     <div className="pt-20 sm:pt-28 pb-10 sm:pb-16">
@@ -32,12 +40,14 @@ export const AboutPage: React.FC = () => {
           </p>
           <div className="pt-2 flex justify-center">
             <a
-              href={`${import.meta.env.BASE_URL}assets/docs/IDTN-Company-Profile-2026.pptx`}
-              download="IDTN-Company-Profile-2026.pptx"
+              href={companyProfileUrl}
+              download={downloadFileName}
+              target="_blank"
+              rel="noreferrer"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:px-5 sm:py-2.5 rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs sm:text-sm font-bold shadow-md transition-all hover:-translate-y-0.5 cursor-pointer"
             >
               <Download className="w-4 h-4 text-sky-400" />
-              <span>{isEn ? 'Download Company Profile (PPTX)' : 'Unduh Profil Perusahaan (PPTX)'}</span>
+              <span>{companyProfileLabel}</span>
             </a>
           </div>
         </div>

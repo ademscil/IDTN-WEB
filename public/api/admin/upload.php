@@ -18,10 +18,67 @@ if (!is_dir($uploadDir)) {
 if ($method === 'GET') {
     $stmt = $db->query("SELECT * FROM media_files ORDER BY uploaded_at DESC");
     $files = $stmt->fetchAll();
-    send_json(['success' => true, 'files' => $files]);
+
+    // Fetch active company profile URL from about page
+    $activeCompanyProfileUrl = null;
+    try {
+        $stmtAbout = $db->prepare("SELECT hero_data_id FROM page_contents WHERE page_key = 'about'");
+        $stmtAbout->execute();
+        if ($rowAbout = $stmtAbout->fetch()) {
+            $heroId = json_decode($rowAbout['hero_data_id'] ?? '{}', true);
+            $activeCompanyProfileUrl = $heroId['company_profile_url'] ?? null;
+        }
+    } catch (Exception $e) {
+        // Fallback gracefully
+    }
+
+    send_json([
+        'success' => true,
+        'files' => $files,
+        'active_company_profile_url' => $activeCompanyProfileUrl
+    ]);
 }
 
 if ($method === 'POST') {
+    $rawInput = file_get_contents('php://input');
+    $jsonInput = json_decode($rawInput, true);
+
+    // Dedicated action to set active company profile
+    if ($jsonInput && isset($jsonInput['action']) && $jsonInput['action'] === 'set_company_profile') {
+        $fileUrl = trim($jsonInput['file_url'] ?? '');
+        $label = trim($jsonInput['company_profile_label'] ?? '');
+        if (!$fileUrl) {
+            send_json(['error' => 'URL file tidak boleh kosong.'], 400);
+        }
+
+        try {
+            $stmtAbout = $db->prepare("SELECT hero_data_id, hero_data_en FROM page_contents WHERE page_key = 'about'");
+            $stmtAbout->execute();
+            $rowAbout = $stmtAbout->fetch();
+
+            $heroId = $rowAbout ? json_decode($rowAbout['hero_data_id'] ?? '{}', true) : [];
+            $heroEn = $rowAbout ? json_decode($rowAbout['hero_data_en'] ?? '{}', true) : [];
+
+            $heroId['company_profile_url'] = $fileUrl;
+            $heroEn['company_profile_url'] = $fileUrl;
+            if ($label) {
+                $heroId['company_profile_label'] = $label;
+                $heroEn['company_profile_label'] = $label;
+            }
+
+            $updateStmt = $db->prepare("UPDATE page_contents SET hero_data_id = ?, hero_data_en = ?, updated_at = NOW() WHERE page_key = 'about'");
+            $updateStmt->execute([json_encode($heroId), json_encode($heroEn)]);
+
+            send_json([
+                'success' => true,
+                'message' => 'File berhasil diset sebagai Company Profile aktif di halaman Tentang Kami (/about)!',
+                'active_company_profile_url' => $fileUrl
+            ]);
+        } catch (PDOException $e) {
+            send_json(['error' => 'Gagal memperbarui tautan Company Profile: ' . $e->getMessage()], 500);
+        }
+    }
+
     if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
         send_json(['error' => 'Gagal mengunggah file. Pastikan ukuran file tidak melebihi batas.'], 400);
     }

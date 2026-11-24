@@ -9,6 +9,43 @@ export interface PageSeo {
   keywords: string;
 }
 
+export interface StrategicSegment {
+  id: string;
+  name: string;
+  category: string;
+  role: string;
+  description: string;
+  status_badge?: string;
+  is_partner?: boolean;
+}
+
+export interface PhilosophyPillar {
+  title: string;
+  desc: string;
+}
+
+export interface EtymologyCard {
+  word: string;
+  meaning: string;
+}
+
+export interface BusinessPillar {
+  title: string;
+  desc: string;
+  points: string[];
+}
+
+export type CmsSectionValue =
+  | string
+  | number
+  | boolean
+  | string[]
+  | PhilosophyPillar[]
+  | EtymologyCard[]
+  | BusinessPillar[]
+  | StrategicSegment[]
+  | Record<string, string>;
+
 export interface PageContentData {
   seo: {
     id: PageSeo;
@@ -19,8 +56,8 @@ export interface PageContentData {
     en: Record<string, string>;
   };
   sections: {
-    id: Record<string, string>;
-    en: Record<string, string>;
+    id: Record<string, CmsSectionValue>;
+    en: Record<string, CmsSectionValue>;
   };
   updated_at?: string;
 }

@@ -11,7 +11,7 @@ export const HeroSection: React.FC = () => {
   const { pages } = useCmsData();
   const isEn = lang === 'en';
 
-  const heroCms = pages.home?.hero?.[isEn ? 'en' : 'id'];
+  const heroCms = pages.home?.hero?.[isEn ? 'en' : 'id'] as Record<string, string> | undefined;
 
   return (
     <section id="hero" className="relative pt-24 pb-14 sm:pt-32 sm:pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-sky-50/60 via-white to-white">

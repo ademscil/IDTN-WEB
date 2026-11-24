@@ -13,7 +13,7 @@ export const EquipmentPage: React.FC = () => {
   // Dynamic SEO from CMS
   usePageSeo('product');
 
-  const heroData = pages.product?.hero?.[isEn ? 'en' : 'id'] || {};
+  const heroData: Record<string, string> = (pages.product?.hero?.[isEn ? 'en' : 'id'] || {}) as Record<string, string>;
 
   return (
     <div className="pt-20 sm:pt-28 pb-10 sm:pb-16">

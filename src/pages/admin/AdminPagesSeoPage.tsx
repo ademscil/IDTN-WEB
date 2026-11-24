@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useCmsData } from '../../context/CmsDataContext';
+import { PhilosophyPillar, EtymologyCard, BusinessPillar, StrategicSegment, CmsSectionValue } from '../../types/cms';
 
 type PageKey = 'home' | 'about' | 'product' | 'client' | 'contact';
 type LangKey = 'id' | 'en';
@@ -14,8 +15,8 @@ interface PageFormData {
   seo_keywords_en?: string;
   hero_data_id?: Record<string, string>;
   hero_data_en?: Record<string, string>;
-  sections_data_id?: Record<string, string>;
-  sections_data_en?: Record<string, string>;
+  sections_data_id?: Record<string, CmsSectionValue>;
+  sections_data_en?: Record<string, CmsSectionValue>;
 }
 
 export const AdminPagesSeoPage: React.FC = () => {
@@ -27,7 +28,10 @@ export const AdminPagesSeoPage: React.FC = () => {
   const [formData, setFormData] = useState<PageFormData>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingProfile, setUploadingProfile] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const profileFileInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch page data
   useEffect(() => {
@@ -119,7 +123,7 @@ export const AdminPagesSeoPage: React.FC = () => {
     }));
   };
 
-  const updateSectionField = (key: string, val: string) => {
+  const updateSectionField = (key: string, val: CmsSectionValue) => {
     const secKey = activeLang === 'id' ? 'sections_data_id' : 'sections_data_en';
     setFormData(prev => ({
       ...prev,
@@ -130,8 +134,207 @@ export const AdminPagesSeoPage: React.FC = () => {
     }));
   };
 
-  const currentHero = (activeLang === 'id' ? formData.hero_data_id : formData.hero_data_en) || {};
-  const currentSections = (activeLang === 'id' ? formData.sections_data_id : formData.sections_data_en) || {};
+  // Upload Company Profile direct from About CMS
+  const handleProfileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingProfile(true);
+    setMessage(null);
+
+    const data = new FormData();
+    data.append('file', file);
+
+    try {
+      const res = await fetch('/api/admin/upload.php', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: data
+      });
+
+      const json = await res.json();
+      if (res.ok && json.success && json.file) {
+        const publicUrl = json.file.url;
+        // Update hero_data_id and hero_data_en with this URL
+        setFormData(prev => ({
+          ...prev,
+          hero_data_id: {
+            ...(prev.hero_data_id || {}),
+            company_profile_url: publicUrl,
+            company_profile_label: prev.hero_data_id?.company_profile_label || (file.name.endsWith('.pdf') ? 'Unduh Profil Perusahaan (PDF)' : 'Unduh Profil Perusahaan (PPTX)')
+          },
+          hero_data_en: {
+            ...(prev.hero_data_en || {}),
+            company_profile_url: publicUrl,
+            company_profile_label: prev.hero_data_en?.company_profile_label || (file.name.endsWith('.pdf') ? 'Download Company Profile (PDF)' : 'Download Company Profile (PPTX)')
+          }
+        }));
+        setMessage({
+          type: 'success',
+          text: `File '${file.name}' berhasil diunggah dan ditautkan sebagai Company Profile aktif!`
+        });
+        if (profileFileInputRef.current) profileFileInputRef.current.value = '';
+      } else {
+        setMessage({ type: 'error', text: json.error || 'Gagal mengunggah file Company Profile.' });
+      }
+    } catch {
+      setMessage({ type: 'error', text: 'Terjadi kesalahan jaringan saat mengunggah.' });
+    } finally {
+      setUploadingProfile(false);
+    }
+  };
+
+  const currentHero = ((activeLang === 'id' ? formData.hero_data_id : formData.hero_data_en) || {}) as Record<string, string>;
+  const currentSections = ((activeLang === 'id' ? formData.sections_data_id : formData.sections_data_en) || {}) as Record<string, unknown>;
+
+  const secStr = (key: string, fallback: string = ''): string => {
+    const v = currentSections[key];
+    return typeof v === 'string' ? v : (typeof v === 'number' ? String(v) : fallback);
+  };
+
+  // Helpers for structured arrays in About Us
+  const philosophyPillars: PhilosophyPillar[] = Array.isArray(currentSections.philosophy_pillars) && currentSections.philosophy_pillars.length > 0
+    ? (currentSections.philosophy_pillars as PhilosophyPillar[])
+    : [
+        { title: 'Bridge', desc: activeLang === 'id' ? 'Menjembatani keunggulan teknologi optik global dengan kebutuhan riil infrastruktur Indonesia.' : 'Bridging global optical excellence with practical Indonesian infrastructure needs.' },
+        { title: 'Intermediary', desc: activeLang === 'id' ? 'Menghubungkan prinsipal teknologi, mitra integrator, dan pelanggan secara transparan dan terpercaya.' : 'Connecting technology principals, system integrators, and telco clients transparently.' },
+        { title: 'Pathway', desc: activeLang === 'id' ? 'Membuka akses pita lebar agar data dan informasi strategis dapat mengalir bebas tanpa hambatan kapasitas.' : 'Opening high-bandwidth access so strategic data and information flows without bottlenecks.' },
+        { title: 'Connector', desc: activeLang === 'id' ? 'Menyatukan simpul jaringan dari pusat kota metropolitan hingga wilayah kepulauan terluar menuju panggung global.' : 'Uniting transport nodes from metropolitan centers to outer archipelagic islands to the global stage.' }
+      ];
+
+  const updatePillar = (index: number, field: 'title' | 'desc', val: string) => {
+    const updated = [...philosophyPillars];
+    updated[index] = { ...updated[index], [field]: val };
+    updateSectionField('philosophy_pillars', updated);
+  };
+
+  const etymologyCards: EtymologyCard[] = Array.isArray(currentSections.etymology_cards) && currentSections.etymology_cards.length > 0
+    ? (currentSections.etymology_cards as EtymologyCard[])
+    : [
+        { word: 'Infinix', meaning: activeLang === 'id' ? 'Terinspirasi dari \'infinity\': semangat tanpa batas untuk terus berinovasi dan melayani ekosistem digital nasional.' : 'Inspired by "infinity": boundless spirit to continually innovate and empower the nation\'s digital ecosystem.' },
+        { word: activeLang === 'id' ? 'Delapan' : 'Delapan (Eight)', meaning: activeLang === 'id' ? 'Angka 8 yang merefleksikan simbol tak terhingga (∞), melambangkan kesinambungan dan ketangguhan yang tiada henti.' : 'The number 8 symbolizes infinity (∞), reflecting uninterrupted continuity, resilience, and growth.' },
+        { word: activeLang === 'id' ? 'Teknologi' : 'Teknologi (Technology)', meaning: activeLang === 'id' ? 'Teknologi transmisi telekomunikasi kelas dunia yang dikembangkan dan diadaptasi khusus untuk Indonesia.' : 'World-class optical telecommunications transmission technology adapted specifically for Indonesian topology.' },
+        { word: 'Nusantara', meaning: activeLang === 'id' ? 'Berakar kuat di kepulauan Indonesia, menjadi jangkar kebanggaan yang menghubungkan tanah air ke pasar global.' : 'Deeply anchored in the Indonesian archipelago, serving as a proud anchor connecting our nation to global markets.' }
+      ];
+
+  const updateEtymology = (index: number, field: 'word' | 'meaning', val: string) => {
+    const updated = [...etymologyCards];
+    updated[index] = { ...updated[index], [field]: val };
+    updateSectionField('etymology_cards', updated);
+  };
+
+  const twoPillars: BusinessPillar[] = Array.isArray(currentSections.two_pillars) && currentSections.two_pillars.length > 0
+    ? (currentSections.two_pillars as BusinessPillar[])
+    : [
+        {
+          title: 'DWDM Equipment Developer',
+          desc: activeLang === 'id' ? 'Mengembangkan dan mengadaptasi perangkat DWDM agar memenuhi regulasi nasional, kondisi geografis Indonesia, dan kebutuhan ekspansi operator.' : 'Developing and adapting DWDM equipment to meet national regulations, Indonesian geographic conditions, and operator expansion needs.',
+          points: activeLang === 'id' ? [
+            'Adaptasi perangkat sesuai standar SDPPI Kominfo',
+            'R&D terintegrasi bersama talenta rekayasa Indonesia',
+            'Alih teknologi nyata ke mitra dan operator lokal'
+          ] : [
+            'Equipment adaptation aligned with SDPPI Kominfo standards',
+            'Integrated R&D with top Indonesian engineering talent',
+            'Real technology transfer to local operators & partners'
+          ]
+        },
+        {
+          title: 'DWDM Infrastructure Service Provider',
+          desc: activeLang === 'id' ? 'Merancang, menggelar, menguji, dan memelihara infrastruktur jaringan transmisi optik untuk koridor transportasi dan interkoneksi data center.' : 'Designing, deploying, testing, and maintaining long-haul optical fiber links for transportation corridors and data center interconnects.',
+          points: activeLang === 'id' ? [
+            'Perencanaan & survei link serat optik jarak jauh',
+            'Instalasi, integrasi, dan commissioning end-to-end',
+            'Pemantauan performa dan pemeliharaan preventif 24/7'
+          ] : [
+            'Planning & long-haul optical link route surveys',
+            'Turnkey end-to-end installation, integration & commissioning',
+            '24/7 proactive link performance monitoring & preventive maintenance'
+          ]
+        }
+      ];
+
+  const updateBusinessPillar = (index: number, field: 'title' | 'desc', val: string) => {
+    const updated = [...twoPillars];
+    updated[index] = { ...updated[index], [field]: val };
+    updateSectionField('two_pillars', updated);
+  };
+
+  const updateBusinessPillarPoint = (pillarIndex: number, pointIndex: number, val: string) => {
+    const updated = [...twoPillars];
+    const newPoints = [...(updated[pillarIndex].points || [])];
+    newPoints[pointIndex] = val;
+    updated[pillarIndex] = { ...updated[pillarIndex], points: newPoints };
+    updateSectionField('two_pillars', updated);
+  };
+
+  const missionPoints: string[] = Array.isArray(currentSections.mission_points) && currentSections.mission_points.length > 0
+    ? (currentSections.mission_points as string[])
+    : (activeLang === 'id' ? [
+        'Membangun jalur transmisi data dan informasi berkapasitas tinggi bagi infrastruktur vital nasional (transportasi dan data center).',
+        'Mengembangkan dan mengadaptasi teknologi DWDM bersama talenta terbaik Indonesia demi kemandirian teknologi bangsa.',
+        'Melakukan alih teknologi dan pengetahuan rekayasa telekomunikasi secara berkelanjutan kepada mitra dan generasi penerus.'
+      ] : [
+        'Accelerate the deployment of multi-terabit optical fiber networks in transportation and data center sectors.',
+        'Deliver carrier-grade reliability with 99.999% SLA and high-speed protection switching.',
+        'Foster indigenous technology capability in collaboration with global partners like T8 Systems.'
+      ]);
+
+  const updateMissionPoint = (index: number, val: string) => {
+    const updated = [...missionPoints];
+    updated[index] = val;
+    updateSectionField('mission_points', updated);
+  };
+
+  // Helpers for Strategic Segments when in client page
+  const strategicSegments: StrategicSegment[] = Array.isArray(currentSections.strategic_segments) && currentSections.strategic_segments.length > 0
+    ? (currentSections.strategic_segments as StrategicSegment[])
+    : [
+        {
+          id: 'partner-t8',
+          name: 'T8 LLC',
+          category: 'Global Technology Principal',
+          role: activeLang === 'id' ? 'Prinsipal Manufaktur & Riset Perangkat DWDM' : 'DWDM Equipment R&D & Manufacturing Principal',
+          description: activeLang === 'id' ? 'Pengembang teknologi sistem transmisi optik DWDM Volga dan pemantauan kabel OTDR Ramenka kelas dunia.' : 'Developer of world-class Volga DWDM optical transport platforms and Ramenka fiber line monitoring systems.',
+          status_badge: activeLang === 'id' ? 'Mitra Terverifikasi' : 'Verified Strategic Partner',
+          is_partner: true
+        },
+        {
+          id: 'sector-telco',
+          name: 'National Telecom Operators',
+          category: 'Target Clients',
+          role: activeLang === 'id' ? 'Operator Jaringan Telekomunikasi & Seluler' : 'Telecom Network & Mobile Operators',
+          description: activeLang === 'id' ? 'Penyediaan perangkat DWDM backbone dan peningkatan kapasitas link transmisi antar-kota di Indonesia.' : 'Backbone DWDM systems deployment and inter-city long-haul optical transmission capacity upgrades across Indonesia.',
+          status_badge: activeLang === 'id' ? 'Mitra Terverifikasi' : 'Verified Strategic Partner',
+          is_partner: true
+        },
+        {
+          id: 'sector-dci',
+          name: 'Hyperscale Cloud & Data Centers',
+          category: 'Target Clients',
+          role: activeLang === 'id' ? 'Penyedia Fasilitas Pusat Data & Cloud' : 'Data Center & Cloud Infrastructure Providers',
+          description: activeLang === 'id' ? 'Interkoneksi antar-data center (DCI) berkecepatan tinggi dengan latensi deterministik terendah.' : 'High-density Data Center Interconnect (DCI) optical platforms with lowest deterministic latency.',
+          status_badge: activeLang === 'id' ? 'Mitra Terverifikasi' : 'Verified Strategic Partner',
+          is_partner: true
+        },
+        {
+          id: 'sector-transport',
+          name: 'National Transportation Authorities',
+          category: 'Target Clients',
+          role: activeLang === 'id' ? 'Otoritas Transportasi Udara, Kereta Api & Pelabuhan' : 'Aviation, Railway & Port Transportation Authorities',
+          description: activeLang === 'id' ? 'Infrastruktur komunikasi optik berkeandalan 99.999% untuk mendukung sistem persinyalan dan operasional vital.' : 'Mission-critical 99.999% optical communication infrastructure supporting vital signaling and operations.',
+          status_badge: activeLang === 'id' ? 'Mitra Terverifikasi' : 'Verified Strategic Partner',
+          is_partner: true
+        }
+      ];
+
+  const updateStratSegmentInPage = (index: number, field: keyof StrategicSegment, val: string) => {
+    const updated = [...strategicSegments];
+    updated[index] = { ...updated[index], [field]: val };
+    updateSectionField('strategic_segments', updated);
+  };
 
   return (
     <div className="space-y-6">
@@ -376,7 +579,7 @@ export const AdminPagesSeoPage: React.FC = () => {
                     </label>
                     <input
                       type="text"
-                      value={currentSections.bottom_cta_badge || ''}
+                      value={secStr('bottom_cta_badge')}
                       onChange={(e) => updateSectionField('bottom_cta_badge', e.target.value)}
                       className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                     />
@@ -387,7 +590,7 @@ export const AdminPagesSeoPage: React.FC = () => {
                     </label>
                     <input
                       type="text"
-                      value={currentSections.bottom_cta_title || ''}
+                      value={secStr('bottom_cta_title')}
                       onChange={(e) => updateSectionField('bottom_cta_title', e.target.value)}
                       className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-semibold focus:ring-2 focus:ring-sky-500 focus:outline-none"
                     />
@@ -398,7 +601,7 @@ export const AdminPagesSeoPage: React.FC = () => {
                     </label>
                     <textarea
                       rows={2}
-                      value={currentSections.bottom_cta_desc || ''}
+                      value={secStr('bottom_cta_desc')}
                       onChange={(e) => updateSectionField('bottom_cta_desc', e.target.value)}
                       className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                     />
@@ -408,31 +611,575 @@ export const AdminPagesSeoPage: React.FC = () => {
             )}
 
             {activePage === 'about' && (
-              <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
-                <h3 className="text-sm font-bold text-slate-900">
-                  Bagian Etimologi & Makna Nama IDTN
-                </h3>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
-                    Judul Etimologi
-                  </label>
-                  <input
-                    type="text"
-                    value={currentSections.etymology_title || ''}
-                    onChange={(e) => updateSectionField('etymology_title', e.target.value)}
-                    className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
-                  />
+              <div className="space-y-6">
+                {/* 1. Company Profile Download Configuration */}
+                <div className="bg-gradient-to-r from-sky-50 via-white to-blue-50/50 p-5 rounded-2xl border border-sky-200 space-y-4 shadow-2xs">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="p-1.5 bg-sky-600 text-white rounded-lg text-xs font-bold">📄</span>
+                      <h3 className="text-sm font-bold text-slate-900">
+                        1. Tautan & Berkas Unduh Company Profile ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
+                      </h3>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    File presentasi atau dokumen profil resmi IDTN yang diunduh pengunjung saat mengklik tombol di bawah header halaman <code>/about</code>.
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                        URL File Company Profile (PPTX / PDF)
+                      </label>
+                      <input
+                        type="text"
+                        value={currentHero.company_profile_url || ''}
+                        onChange={(e) => updateHeroField('company_profile_url', e.target.value)}
+                        className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs font-mono text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                        placeholder="/assets/docs/IDTN-Company-Profile-2026.pptx atau /uploads/..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                        Teks Tombol Unduh
+                      </label>
+                      <input
+                        type="text"
+                        value={currentHero.company_profile_label || ''}
+                        onChange={(e) => updateHeroField('company_profile_label', e.target.value)}
+                        className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                        placeholder={activeLang === 'id' ? 'Unduh Profil Perusahaan (PPTX)' : 'Download Company Profile (PPTX)'}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Direct File Uploader for Company Profile */}
+                  <div className="bg-white p-3.5 rounded-xl border border-sky-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div className="text-xs text-slate-600">
+                      <span>Unggah file Company Profile baru langsung dari komputer:</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        ref={profileFileInputRef}
+                        type="file"
+                        accept=".pptx,.pdf"
+                        onChange={handleProfileUpload}
+                        disabled={uploadingProfile}
+                        className="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer"
+                      />
+                      {uploadingProfile && (
+                        <span className="text-xs font-semibold text-sky-600 animate-pulse">Mengunggah...</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Intro Sub-badge & Description Banner */}
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 shadow-2xs">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 bg-slate-800 text-white rounded-lg text-xs font-bold">🏷️</span>
+                    <h3 className="text-sm font-bold text-slate-900">
+                      2. Banner Pengantar Sub-Badge & Lead Deskripsi ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
+                    </h3>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                      Sub-Badge / Pill Title
+                    </label>
+                    <input
+                      type="text"
+                      value={secStr('intro_lead')}
+                      onChange={(e) => updateSectionField('intro_lead', e.target.value)}
+                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      placeholder="FULL-CYCLE DWDM OPTICAL NETWORK INTEGRATION PROVIDER"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                      Deskripsi Pengantar Utama
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={secStr('intro_desc')}
+                      onChange={(e) => updateSectionField('intro_desc', e.target.value)}
+                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 leading-relaxed focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      placeholder="PT Infinix Delapan Teknologi Nusantara (IDTN) adalah pengembang..."
+                    />
+                  </div>
+                </div>
+
+                {/* 3. 3-Column Metric Blocks (8,514.22 km, 800 Gbps, R&D & Training) */}
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 shadow-2xs">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold">📊</span>
+                    <h3 className="text-sm font-bold text-slate-900">
+                      3. Blok 3 Kolom Metrik Strategis ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
+                    </h3>
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    Ubah angka, satuan, judul, dan deskripsi untuk 3 kolom metrik khas IDTN (t8-style).
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                    {/* Metric 1 */}
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2.5">
+                      <span className="text-xs font-bold text-indigo-700 block border-b pb-1">Kolom 1 (Jangkauan Jaringan)</span>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">Angka / Nilai</label>
+                          <input
+                            type="text"
+                            value={secStr('metric1_val', activeLang === 'id' ? '8.514,22' : '8,514.22')}
+                            onChange={(e) => updateSectionField('metric1_val', e.target.value)}
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-bold"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">Satuan</label>
+                          <input
+                            type="text"
+                            value={secStr('metric1_unit', 'km')}
+                            onChange={(e) => updateSectionField('metric1_unit', e.target.value)}
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-semibold"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Judul Metrik</label>
+                        <input
+                          type="text"
+                          value={secStr('metric1_title')}
+                          onChange={(e) => updateSectionField('metric1_title', e.target.value)}
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-semibold"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Deskripsi</label>
+                        <textarea
+                          rows={2}
+                          value={secStr('metric1_desc')}
+                          onChange={(e) => updateSectionField('metric1_desc', e.target.value)}
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs leading-relaxed"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Metric 2 */}
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2.5">
+                      <span className="text-xs font-bold text-indigo-700 block border-b pb-1">Kolom 2 (Kapasitas Optik)</span>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">Angka / Nilai</label>
+                          <input
+                            type="text"
+                            value={secStr('metric2_val', '800')}
+                            onChange={(e) => updateSectionField('metric2_val', e.target.value)}
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-bold"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">Satuan</label>
+                          <input
+                            type="text"
+                            value={secStr('metric2_unit', 'Gbps')}
+                            onChange={(e) => updateSectionField('metric2_unit', e.target.value)}
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-semibold"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Judul Metrik</label>
+                        <input
+                          type="text"
+                          value={secStr('metric2_title')}
+                          onChange={(e) => updateSectionField('metric2_title', e.target.value)}
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-semibold"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Deskripsi</label>
+                        <textarea
+                          rows={2}
+                          value={secStr('metric2_desc')}
+                          onChange={(e) => updateSectionField('metric2_desc', e.target.value)}
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs leading-relaxed"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Metric 3 */}
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2.5">
+                      <span className="text-xs font-bold text-rose-700 block border-b pb-1">Kolom 3 (R&D & Alih Teknologi)</span>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">Teks Nilai</label>
+                          <input
+                            type="text"
+                            value={secStr('metric3_val', activeLang === 'id' ? 'R&D & Pelatihan' : 'R&D & Training')}
+                            onChange={(e) => updateSectionField('metric3_val', e.target.value)}
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-bold text-rose-700"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">Satuan (Opsional)</label>
+                          <input
+                            type="text"
+                            value={secStr('metric3_unit')}
+                            onChange={(e) => updateSectionField('metric3_unit', e.target.value)}
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-semibold"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Judul Metrik</label>
+                        <input
+                          type="text"
+                          value={secStr('metric3_title')}
+                          onChange={(e) => updateSectionField('metric3_title', e.target.value)}
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-semibold"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Deskripsi</label>
+                        <textarea
+                          rows={2}
+                          value={secStr('metric3_desc')}
+                          onChange={(e) => updateSectionField('metric3_desc', e.target.value)}
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs leading-relaxed"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. Corporate Philosophy (Blok Hitam) */}
+                <div className="bg-slate-900 text-white p-5 sm:p-6 rounded-2xl border border-slate-800 space-y-4 shadow-lg">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 bg-sky-500 text-slate-900 rounded-lg text-xs font-bold">✨</span>
+                    <h3 className="text-sm font-bold text-white">
+                      4. Filosofi Perusahaan (Corporate Philosophy - Blok Hitam) ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-semibold uppercase tracking-wider text-sky-300 mb-1">
+                        Tag / Kategori Filosofi
+                      </label>
+                      <input
+                        type="text"
+                        value={secStr('philo_tag')}
+                        onChange={(e) => updateSectionField('philo_tag', e.target.value)}
+                        className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white focus:ring-2 focus:ring-sky-400 focus:outline-none"
+                        placeholder="FILOSOFI PERUSAHAAN"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-[11px] font-semibold uppercase tracking-wider text-sky-300 mb-1">
+                        Headline Quote Filosofi
+                      </label>
+                      <input
+                        type="text"
+                        value={secStr('philo_headline')}
+                        onChange={(e) => updateSectionField('philo_headline', e.target.value)}
+                        className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-white font-semibold focus:ring-2 focus:ring-sky-400 focus:outline-none"
+                        placeholder="Bagaikan sungai yang bermuara ke lautan..."
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                      Subheadline Penjelas
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={secStr('philo_subheadline')}
+                      onChange={(e) => updateSectionField('philo_subheadline', e.target.value)}
+                      className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-slate-200 leading-relaxed focus:ring-2 focus:ring-sky-400 focus:outline-none"
+                      placeholder="Sebagaimana sungai-sungai yang bermuara di lautan..."
+                    />
+                  </div>
+
+                  {/* 4 Philosophy Pillars */}
+                  <div className="pt-2">
+                    <span className="text-xs font-bold text-sky-300 block mb-2">4 Pilar Filosofi (Bridge, Intermediary, Pathway, Connector):</span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {philosophyPillars.map((p, idx) => (
+                        <div key={idx} className="bg-slate-800/90 p-3 rounded-xl border border-slate-700/80 space-y-1.5">
+                          <label className="block text-[10px] font-semibold uppercase text-sky-300">Pilar #{idx + 1} Judul</label>
+                          <input
+                            type="text"
+                            value={p.title}
+                            onChange={(e) => updatePillar(idx, 'title', e.target.value)}
+                            className="w-full px-2.5 py-1 bg-slate-700 border border-slate-600 rounded text-xs text-white font-bold"
+                          />
+                          <label className="block text-[10px] font-semibold uppercase text-slate-400">Deskripsi</label>
+                          <textarea
+                            rows={2}
+                            value={p.desc}
+                            onChange={(e) => updatePillar(idx, 'desc', e.target.value)}
+                            className="w-full px-2.5 py-1 bg-slate-700 border border-slate-600 rounded text-xs text-slate-200"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 5. The Meaning Behind IDTN (4 Etymology Cards) */}
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 shadow-2xs">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold">🔤</span>
+                    <h3 className="text-sm font-bold text-slate-900">
+                      5. Makna di Balik Nama IDTN (4 Kartu Terstruktur) ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
+                    </h3>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                      Judul Bagian Etimologi
+                    </label>
+                    <input
+                      type="text"
+                      value={secStr('etymology_title')}
+                      onChange={(e) => updateSectionField('etymology_title', e.target.value)}
+                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      placeholder="Makna di Balik Nama IDTN / The Meaning Behind IDTN"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    {etymologyCards.map((card, idx) => (
+                      <div key={idx} className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-[#9f1b32]">Kartu #{idx + 1}</span>
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">Kata / Unsur Nama</label>
+                          <input
+                            type="text"
+                            value={card.word}
+                            onChange={(e) => updateEtymology(idx, 'word', e.target.value)}
+                            className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs font-bold text-slate-900"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">Uraian Makna</label>
+                          <textarea
+                            rows={3}
+                            value={card.meaning}
+                            onChange={(e) => updateEtymology(idx, 'meaning', e.target.value)}
+                            className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs text-slate-700 leading-relaxed"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 6. Strategic Business Focus (Two Pillars) */}
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 shadow-2xs">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 bg-[#9f1b32] text-white rounded-lg text-xs font-bold">🏛️</span>
+                    <h3 className="text-sm font-bold text-slate-900">
+                      6. Fokus Bisnis Strategis (Two Business Pillars) ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
+                    </h3>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                      Judul Bagian Fokus Bisnis
+                    </label>
+                    <input
+                      type="text"
+                      value={secStr('focus_title')}
+                      onChange={(e) => updateSectionField('focus_title', e.target.value)}
+                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      placeholder="FOKUS BISNIS STRATEGIS / STRATEGIC BUSINESS FOCUS"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                    {twoPillars.map((p, idx) => (
+                      <div key={idx} className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-2.5">
+                        <span className="text-xs font-mono font-bold text-sky-700 block border-b pb-1">Pilar 0{idx + 1}</span>
+                        <div>
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">Judul Pilar</label>
+                          <input
+                            type="text"
+                            value={p.title}
+                            onChange={(e) => updateBusinessPillar(idx, 'title', e.target.value)}
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-bold text-slate-900"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">Deskripsi</label>
+                          <textarea
+                            rows={2}
+                            value={p.desc}
+                            onChange={(e) => updateBusinessPillar(idx, 'desc', e.target.value)}
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs text-slate-700 leading-relaxed"
+                          />
+                        </div>
+                        <div className="space-y-1.5 pt-1">
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">3 Poin Keunggulan Utama</label>
+                          {(p.points || ['', '', '']).slice(0, 3).map((pt, ptIdx) => (
+                            <input
+                              key={ptIdx}
+                              type="text"
+                              value={pt}
+                              onChange={(e) => updateBusinessPillarPoint(idx, ptIdx, e.target.value)}
+                              className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs text-slate-800"
+                              placeholder={`Poin ${ptIdx + 1}`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 7. IDTN Vision & Mission */}
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 shadow-2xs">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold">🎯</span>
+                    <h3 className="text-sm font-bold text-slate-900">
+                      7. Visi & Misi Strategis IDTN ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Vision */}
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2.5">
+                      <span className="text-xs font-bold text-sky-700 block border-b pb-1">Visi Perusahaan</span>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Judul Kartu Visi</label>
+                        <input
+                          type="text"
+                          value={secStr('vision_title')}
+                          onChange={(e) => updateSectionField('vision_title', e.target.value)}
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-bold text-slate-900"
+                          placeholder="Visi Kami / Our Vision"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Pernyataan Visi</label>
+                        <textarea
+                          rows={4}
+                          value={secStr('vision_statement')}
+                          onChange={(e) => updateSectionField('vision_statement', e.target.value)}
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs text-slate-700 leading-relaxed italic"
+                          placeholder="Menjadi arus utama yang menyatukan Nusantara dengan dunia..."
+                        />
+                      </div>
+                    </div>
+
+                    {/* Mission */}
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2.5">
+                      <span className="text-xs font-bold text-slate-800 block border-b pb-1">Misi Strategis</span>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Judul Kartu Misi</label>
+                        <input
+                          type="text"
+                          value={secStr('mission_title')}
+                          onChange={(e) => updateSectionField('mission_title', e.target.value)}
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-bold text-slate-900"
+                          placeholder="Misi Strategis / Strategic Mission"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">3 Butir Misi Perusahaan</label>
+                        {missionPoints.slice(0, 3).map((m, mIdx) => (
+                          <textarea
+                            key={mIdx}
+                            rows={2}
+                            value={m}
+                            onChange={(e) => updateMissionPoint(mIdx, e.target.value)}
+                            className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs text-slate-800"
+                            placeholder={`Butir Misi ${mIdx + 1}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Strategic Segments in Client Page */}
+            {activePage === 'client' && (
+              <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 shadow-2xs">
+                <div className="flex items-center gap-2">
+                  <span className="p-1.5 bg-sky-600 text-white rounded-lg text-xs font-bold">🏢</span>
+                  <h3 className="text-sm font-bold text-slate-900">
+                    Segmen Industri Strategis ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
+                  </h3>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
-                    Uraian Makna Infinix Delapan Teknologi Nusantara
+                    Judul Bagian Segmen Industri
                   </label>
-                  <textarea
-                    rows={3}
-                    value={currentSections.etymology_desc || ''}
-                    onChange={(e) => updateSectionField('etymology_desc', e.target.value)}
-                    className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                  <input
+                    type="text"
+                    value={secStr('section_title')}
+                    onChange={(e) => updateSectionField('section_title', e.target.value)}
+                    className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                    placeholder="Segmen Industri Strategis / Strategic Industry Segments"
                   />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                  {strategicSegments.map((seg, idx) => (
+                    <div key={seg.id || idx} className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-2">
+                      <div className="flex items-center justify-between border-b pb-1">
+                        <span className="text-xs font-bold text-sky-700">Kartu #{idx + 1} ({seg.id})</span>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Kategori Tag</label>
+                        <input
+                          type="text"
+                          value={seg.category}
+                          onChange={(e) => updateStratSegmentInPage(idx, 'category', e.target.value)}
+                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs text-slate-900"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Nama Entitas</label>
+                        <input
+                          type="text"
+                          value={seg.name}
+                          onChange={(e) => updateStratSegmentInPage(idx, 'name', e.target.value)}
+                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs font-bold text-slate-900"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Peran / Role</label>
+                        <input
+                          type="text"
+                          value={seg.role}
+                          onChange={(e) => updateStratSegmentInPage(idx, 'role', e.target.value)}
+                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs text-slate-900"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Deskripsi</label>
+                        <textarea
+                          rows={3}
+                          value={seg.description}
+                          onChange={(e) => updateStratSegmentInPage(idx, 'description', e.target.value)}
+                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs text-slate-700 leading-relaxed"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold uppercase text-slate-500">Badge Status</label>
+                        <input
+                          type="text"
+                          value={seg.status_badge || ''}
+                          onChange={(e) => updateStratSegmentInPage(idx, 'status_badge', e.target.value)}
+                          className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs text-slate-900"
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -449,7 +1196,7 @@ export const AdminPagesSeoPage: React.FC = () => {
                     </label>
                     <input
                       type="text"
-                      value={currentSections.hours_label || ''}
+                      value={secStr('hours_label')}
                       onChange={(e) => updateSectionField('hours_label', e.target.value)}
                       className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                     />
@@ -460,7 +1207,7 @@ export const AdminPagesSeoPage: React.FC = () => {
                     </label>
                     <input
                       type="text"
-                      value={currentSections.hours_val || ''}
+                      value={secStr('hours_val')}
                       onChange={(e) => updateSectionField('hours_val', e.target.value)}
                       className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                     />

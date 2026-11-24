@@ -225,20 +225,138 @@ try {
             'hero_data_id' => [
                 'tag' => 'Profil Perusahaan',
                 'title' => 'Membangun Jalur Utama Komunikasi Optik Indonesia',
-                'subtitle' => 'IDTN berdiri dengan visi memperkuat kedaulatan konektivitas digital Indonesia melalui sistem DWDM terdepan, handal, dan berkapasitas masif.'
+                'subtitle' => 'IDTN berdiri dengan visi memperkuat kedaulatan konektivitas digital Indonesia melalui sistem DWDM terdepan, handal, dan berkapasitas masif.',
+                'company_profile_url' => '/assets/docs/IDTN-Company-Profile-2026.pptx',
+                'company_profile_label' => 'Unduh Profil Perusahaan (PPTX)'
             ],
             'hero_data_en' => [
                 'tag' => 'Company Profile',
                 'title' => 'Architecting Indonesia’s High-Capacity Optical Backbone',
-                'subtitle' => 'IDTN was founded with the vision to strengthen Indonesia’s digital connectivity through high-density, reliable, and advanced DWDM optical platforms.'
+                'subtitle' => 'IDTN was founded with the vision to strengthen Indonesia’s digital connectivity through high-density, reliable, and advanced DWDM optical platforms.',
+                'company_profile_url' => '/assets/docs/IDTN-Company-Profile-2026.pptx',
+                'company_profile_label' => 'Download Company Profile (PPTX)'
             ],
             'sections_data_id' => [
+                'intro_lead' => 'INTEGRATOR LENGKAP JARINGAN OPTIK DWDM DARI HILIR KE HULU',
+                'intro_desc' => 'PT Infinix Delapan Teknologi Nusantara (IDTN) adalah pengembang dan penyedia infrastruktur DWDM terlengkap di Indonesia yang mengintegrasikan keunggulan teknologi DWDM Volga dan pemantauan kabel optik terdepan Ramenka untuk menghadirkan konektivitas berkapasitas masif yang teruji dan berkeandalan carrier-grade.',
+                'metric1_val' => '8.514,22',
+                'metric1_unit' => 'km',
+                'metric1_title' => 'Jangkauan Tulang Punggung Nusantara',
+                'metric1_desc' => 'Membentang dari Sabang hingga Merauke, menghubungkan seluruh koridor maritim dan daratan Indonesia.',
+                'metric2_val' => '800',
+                'metric2_unit' => 'Gbps',
+                'metric2_title' => 'Kapasitas Transmisi per Gelombang',
+                'metric2_desc' => 'Ditenagai mesin optik Volga untuk kapasitas multi-terabit siap masa depan.',
+                'metric3_val' => 'R&D & Pelatihan',
+                'metric3_unit' => '',
+                'metric3_title' => 'Alih Teknologi & Laboratorium Optik',
+                'metric3_desc' => 'Pusat inovasi dan pengembangan talenta telekomunikasi generasi penerus bangsa Indonesia.',
+                'philo_tag' => 'FILOSOFI PERUSAHAAN',
+                'philo_headline' => 'Bagaikan sungai yang bermuara ke lautan, IDTN menghubungkan data dan informasi ke seluruh dunia.',
+                'philo_subheadline' => 'Sebagaimana sungai-sungai yang bermuara di lautan, IDTN menghubungkan aliran data dan informasi ke seluruh penjuru dunia.',
+                'philosophy_pillars' => [
+                    ['title' => 'Bridge', 'desc' => 'Menjembatani keunggulan teknologi optik global dengan kebutuhan riil infrastruktur Indonesia.'],
+                    ['title' => 'Intermediary', 'desc' => 'Menghubungkan prinsipal teknologi, mitra integrator, dan pelanggan secara transparan dan terpercaya.'],
+                    ['title' => 'Pathway', 'desc' => 'Membuka akses pita lebar agar data dan informasi strategis dapat mengalir bebas tanpa hambatan kapasitas.'],
+                    ['title' => 'Connector', 'desc' => 'Menyatukan simpul jaringan dari pusat kota metropolitan hingga wilayah kepulauan terluar menuju panggung global.']
+                ],
                 'etymology_title' => 'Makna di Balik Nama IDTN',
-                'etymology_desc' => 'Infinix (keberlanjutan tanpa batas), Delapan (simbol kelimpahan dan kesinambungan), Teknologi (keunggulan rekayasa optik), Nusantara (komitmen menyeluruh untuk Indonesia).'
+                'etymology_cards' => [
+                    ['word' => 'Infinix', 'meaning' => 'Terinspirasi dari \'infinity\': semangat tanpa batas untuk terus berinovasi dan melayani ekosistem digital nasional.'],
+                    ['word' => 'Delapan', 'meaning' => 'Angka 8 yang merefleksikan simbol tak terhingga (∞), melambangkan kesinambungan dan ketangguhan yang tiada henti.'],
+                    ['word' => 'Teknologi', 'meaning' => 'Teknologi transmisi telekomunikasi kelas dunia yang dikembangkan dan diadaptasi khusus untuk Indonesia.'],
+                    ['word' => 'Nusantara', 'meaning' => 'Berakar kuat di kepulauan Indonesia, menjadi jangkar kebanggaan yang menghubungkan tanah air ke pasar global.']
+                ],
+                'focus_title' => 'FOKUS BISNIS STRATEGIS',
+                'two_pillars' => [
+                    [
+                        'title' => 'DWDM Equipment Developer',
+                        'desc' => 'Mengembangkan dan mengadaptasi perangkat DWDM agar memenuhi regulasi nasional, kondisi geografis Indonesia, dan kebutuhan ekspansi operator.',
+                        'points' => [
+                            'Adaptasi perangkat sesuai standar SDPPI Kominfo',
+                            'R&D terintegrasi bersama talenta rekayasa Indonesia',
+                            'Alih teknologi nyata ke mitra dan operator lokal'
+                        ]
+                    ],
+                    [
+                        'title' => 'DWDM Infrastructure Service Provider',
+                        'desc' => 'Merancang, menggelar, menguji, dan memelihara infrastruktur jaringan transmisi optik untuk koridor transportasi dan interkoneksi data center.',
+                        'points' => [
+                            'Perencanaan & survei link serat optik jarak jauh',
+                            'Instalasi, integrasi, dan commissioning end-to-end',
+                            'Pemantauan performa dan pemeliharaan preventif 24/7'
+                        ]
+                    ]
+                ],
+                'vision_title' => 'Visi Kami',
+                'vision_statement' => 'Menjadi arus utama yang menyatukan Nusantara dengan dunia, menghubungkan setiap data, informasi, dan peluang demi masa depan digital tanpa batas.',
+                'mission_title' => 'Misi Strategis',
+                'mission_points' => [
+                    'Membangun jalur transmisi data dan informasi berkapasitas tinggi bagi infrastruktur vital nasional (transportasi dan data center).',
+                    'Mengembangkan dan mengadaptasi teknologi DWDM bersama talenta terbaik Indonesia demi kemandirian teknologi bangsa.',
+                    'Melakukan alih teknologi dan pengetahuan rekayasa telekomunikasi secara berkelanjutan kepada mitra dan generasi penerus.'
+                ]
             ],
             'sections_data_en' => [
+                'intro_lead' => 'FULL-CYCLE DWDM OPTICAL NETWORK INTEGRATION PROVIDER',
+                'intro_desc' => 'PT Infinix Delapan Teknologi Nusantara (IDTN) is the most comprehensive DWDM developer and infrastructure service provider in Indonesia, integrating world-class Volga DWDM transmission and Ramenka optical fiber monitoring platforms to deliver carrier-grade, battle-tested multi-terabit connectivity.',
+                'metric1_val' => '8,514.22',
+                'metric1_unit' => 'km',
+                'metric1_title' => 'Sabang-to-Merauke Backbone Reach',
+                'metric1_desc' => 'Spanning across the Indonesian archipelago, interconnecting maritime corridors and major economic islands.',
+                'metric2_val' => '800',
+                'metric2_unit' => 'Gbps',
+                'metric2_title' => 'Per-Wavelength Transmission Capacity',
+                'metric2_desc' => 'Powered by Volga optical engines for future-proof, multi-terabit capacity scalability.',
+                'metric3_val' => 'R&D & Training',
+                'metric3_unit' => '',
+                'metric3_title' => 'Technology Transfer & Optical Lab',
+                'metric3_desc' => 'Hub for indigenous telecommunications knowledge transfer and engineering talent empowerment.',
+                'philo_tag' => 'CORPORATE PHILOSOPHY',
+                'philo_headline' => 'Like rivers that meet in the sea, IDTN connects data and information to the whole world.',
+                'philo_subheadline' => 'Like rivers that meet in the sea, IDTN connects data and information to the whole world.',
+                'philosophy_pillars' => [
+                    ['title' => 'Bridge', 'desc' => 'Bridging global optical excellence with practical Indonesian infrastructure needs.'],
+                    ['title' => 'Intermediary', 'desc' => 'Connecting technology principals, system integrators, and telco clients transparently.'],
+                    ['title' => 'Pathway', 'desc' => 'Opening high-bandwidth access so strategic data and information flows without bottlenecks.'],
+                    ['title' => 'Connector', 'desc' => 'Uniting transport nodes from metropolitan centers to outer archipelagic islands to the global stage.']
+                ],
                 'etymology_title' => 'The Meaning Behind IDTN',
-                'etymology_desc' => 'Infinix (infinite continuity), Delapan/Eight (symbol of abundance and connection), Teknologi (optical engineering excellence), Nusantara (unwavering commitment to Indonesia).'
+                'etymology_cards' => [
+                    ['word' => 'Infinix', 'meaning' => 'Inspired by "infinity": boundless spirit to continually innovate and empower the nation\'s digital ecosystem.'],
+                    ['word' => 'Delapan (Eight)', 'meaning' => 'The number 8 symbolizes infinity (∞), reflecting uninterrupted continuity, resilience, and growth.'],
+                    ['word' => 'Teknologi (Technology)', 'meaning' => 'World-class optical telecommunications transmission technology adapted specifically for Indonesian topology.'],
+                    ['word' => 'Nusantara', 'meaning' => 'Deeply anchored in the Indonesian archipelago, serving as a proud anchor connecting our nation to global markets.']
+                ],
+                'focus_title' => 'STRATEGIC BUSINESS FOCUS',
+                'two_pillars' => [
+                    [
+                        'title' => 'DWDM Equipment Developer',
+                        'desc' => 'Developing and adapting DWDM equipment to meet national regulations, Indonesian geographic conditions, and operator expansion needs.',
+                        'points' => [
+                            'Equipment adaptation aligned with SDPPI Kominfo standards',
+                            'Integrated R&D with top Indonesian engineering talent',
+                            'Real technology transfer to local operators & partners'
+                        ]
+                    ],
+                    [
+                        'title' => 'DWDM Infrastructure Service Provider',
+                        'desc' => 'Designing, deploying, testing, and maintaining long-haul optical fiber links for transportation corridors and data center interconnects.',
+                        'points' => [
+                            'Planning & long-haul optical link route surveys',
+                            'Turnkey end-to-end installation, integration & commissioning',
+                            '24/7 proactive link performance monitoring & preventive maintenance'
+                        ]
+                    ]
+                ],
+                'vision_title' => 'Our Vision',
+                'vision_statement' => 'To become the leading national optical telecommunications developer and provider, delivering ultra-high-speed DWDM connectivity across Nusantara to the global arena.',
+                'mission_title' => 'Strategic Mission',
+                'mission_points' => [
+                    'Accelerate the deployment of multi-terabit optical fiber networks in transportation and data center sectors.',
+                    'Deliver carrier-grade reliability with 99.999% SLA and high-speed protection switching.',
+                    'Foster indigenous technology capability in collaboration with global partners like T8 Systems.'
+                ]
             ]
         ],
         'product' => [
@@ -278,8 +396,88 @@ try {
                 'title' => 'Trusted by Telecommunications & Data Center Leaders',
                 'subtitle' => 'Empowering the national optical backbone alongside Indonesia’s prominent network providers and digital infrastructure leaders.'
             ],
-            'sections_data_id' => [],
-            'sections_data_en' => []
+            'sections_data_id' => [
+                'section_title' => 'Segmen Industri Strategis',
+                'strategic_segments' => [
+                    [
+                        'id' => 'partner-t8',
+                        'name' => 'T8 LLC',
+                        'category' => 'Global Technology Principal',
+                        'role' => 'Prinsipal Manufaktur & Riset Perangkat DWDM',
+                        'description' => 'Pengembang teknologi sistem transmisi optik DWDM Volga dan pemantauan kabel OTDR Ramenka kelas dunia.',
+                        'status_badge' => 'Mitra Terverifikasi',
+                        'is_partner' => true
+                    ],
+                    [
+                        'id' => 'sector-telco',
+                        'name' => 'National Telecom Operators',
+                        'category' => 'Target Clients',
+                        'role' => 'Operator Jaringan Telekomunikasi & Seluler',
+                        'description' => 'Penyediaan perangkat DWDM backbone dan peningkatan kapasitas link transmisi antar-kota di Indonesia.',
+                        'status_badge' => 'Mitra Terverifikasi',
+                        'is_partner' => true
+                    ],
+                    [
+                        'id' => 'sector-dci',
+                        'name' => 'Hyperscale Cloud & Data Centers',
+                        'category' => 'Target Clients',
+                        'role' => 'Penyedia Fasilitas Pusat Data & Cloud',
+                        'description' => 'Interkoneksi antar-data center (DCI) berkecepatan tinggi dengan latensi deterministik terendah.',
+                        'status_badge' => 'Mitra Terverifikasi',
+                        'is_partner' => true
+                    ],
+                    [
+                        'id' => 'sector-transport',
+                        'name' => 'National Transportation Authorities',
+                        'category' => 'Target Clients',
+                        'role' => 'Otoritas Transportasi Udara, Kereta Api & Pelabuhan',
+                        'description' => 'Infrastruktur komunikasi optik berkeandalan 99.999% untuk mendukung sistem persinyalan dan operasional vital.',
+                        'status_badge' => 'Mitra Terverifikasi',
+                        'is_partner' => true
+                    ]
+                ]
+            ],
+            'sections_data_en' => [
+                'section_title' => 'Strategic Industry Segments',
+                'strategic_segments' => [
+                    [
+                        'id' => 'partner-t8',
+                        'name' => 'T8 LLC',
+                        'category' => 'Global Technology Principal',
+                        'role' => 'DWDM Equipment R&D & Manufacturing Principal',
+                        'description' => 'Developer of world-class Volga DWDM optical transport platforms and Ramenka fiber line monitoring systems.',
+                        'status_badge' => 'Verified Strategic Partner',
+                        'is_partner' => true
+                    ],
+                    [
+                        'id' => 'sector-telco',
+                        'name' => 'National Telecom Operators',
+                        'category' => 'Target Clients',
+                        'role' => 'Telecom Network & Mobile Operators',
+                        'description' => 'Backbone DWDM systems deployment and inter-city long-haul optical transmission capacity upgrades across Indonesia.',
+                        'status_badge' => 'Verified Strategic Partner',
+                        'is_partner' => true
+                    ],
+                    [
+                        'id' => 'sector-dci',
+                        'name' => 'Hyperscale Cloud & Data Centers',
+                        'category' => 'Target Clients',
+                        'role' => 'Data Center & Cloud Infrastructure Providers',
+                        'description' => 'High-density Data Center Interconnect (DCI) optical platforms with lowest deterministic latency.',
+                        'status_badge' => 'Verified Strategic Partner',
+                        'is_partner' => true
+                    ],
+                    [
+                        'id' => 'sector-transport',
+                        'name' => 'National Transportation Authorities',
+                        'category' => 'Target Clients',
+                        'role' => 'Aviation, Railway & Port Transportation Authorities',
+                        'description' => 'Mission-critical 99.999% optical communication infrastructure supporting vital signaling and operations.',
+                        'status_badge' => 'Verified Strategic Partner',
+                        'is_partner' => true
+                    ]
+                ]
+            ]
         ],
         'contact' => [
             'seo_title_id' => 'Hubungi Kami — Konsultasi Proyek & Penawaran DWDM IDTN',

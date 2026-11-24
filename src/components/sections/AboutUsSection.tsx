@@ -3,6 +3,8 @@ import { Target, Compass, CheckCircle2 } from 'lucide-react';
 import companyData from '../../data/company.json';
 import { Badge } from '../common/Badge';
 import { useLanguage } from '../../context';
+import { useCmsData } from '../../context/CmsDataContext';
+import { PhilosophyPillar, EtymologyCard, BusinessPillar, CmsSectionValue } from '../../types/cms';
 
 interface AboutUsSectionProps {
   showHeader?: boolean;
@@ -10,49 +12,109 @@ interface AboutUsSectionProps {
 
 export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = true }) => {
   const { lang, t } = useLanguage();
+  const { pages } = useCmsData();
 
   const isEn = lang === 'en';
+  const aboutSec: Record<string, CmsSectionValue> = (pages.about?.sections?.[isEn ? 'en' : 'id'] || {}) as Record<string, CmsSectionValue>;
 
-  const nameEtymology = isEn
-    ? [
-        { word: 'Infinix', meaning: 'Inspired by "infinity": boundless spirit to continually innovate and empower the nation\'s digital ecosystem.' },
-        { word: 'Delapan (Eight)', meaning: 'The number 8 symbolizes infinity (∞), reflecting uninterrupted continuity, resilience, and growth.' },
-        { word: 'Teknologi (Technology)', meaning: 'World-class optical telecommunications transmission technology adapted specifically for Indonesian topology.' },
-        { word: 'Nusantara', meaning: 'Deeply anchored in the Indonesian archipelago, serving as a proud anchor connecting our nation to global markets.' },
-      ]
-    : companyData.nameEtymology;
+  const getSecString = (val: unknown, fallback: string): string => {
+    return typeof val === 'string' ? val : (typeof val === 'number' ? String(val) : fallback);
+  };
 
-  const twoPillars = isEn
-    ? [
-        {
-          title: 'DWDM Equipment Developer',
-          desc: 'Developing and adapting DWDM equipment to meet national regulations, Indonesian geographic conditions, and operator expansion needs.',
-          points: [
-            'Equipment adaptation aligned with SDPPI Kominfo standards',
-            'Integrated R&D with top Indonesian engineering talent',
-            'Real technology transfer to local operators & partners',
-          ],
-        },
-        {
-          title: 'DWDM Infrastructure Service Provider',
-          desc: 'Designing, deploying, testing, and maintaining long-haul optical fiber links for transportation corridors and data center interconnects.',
-          points: [
-            'Planning & long-haul optical link route surveys',
-            'Turnkey end-to-end installation, integration & commissioning',
-            '24/7 proactive link performance monitoring & preventive maintenance',
-          ],
-        },
-      ]
-    : companyData.twoPillars;
+  // 1. Intro Lead & Description Banner
+  const introLead = getSecString(aboutSec.intro_lead, t('about.metrics.lead'));
+  const introDesc = getSecString(aboutSec.intro_desc, t('about.metrics.desc'));
 
-  const philosophyPillars = isEn
-    ? [
-        { title: 'Bridge', desc: 'Bridging global optical excellence with practical Indonesian infrastructure needs.' },
-        { title: 'Intermediary', desc: 'Connecting technology principals, system integrators, and telco clients transparently.' },
-        { title: 'Pathway', desc: 'Opening high-bandwidth access so strategic data and information flows without bottlenecks.' },
-        { title: 'Connector', desc: 'Uniting transport nodes from metropolitan centers to outer archipelagic islands to the global stage.' },
-      ]
-    : companyData.philosophy.pillars;
+  // 2. Metrics Block
+  const metric1Val = getSecString(aboutSec.metric1_val, isEn ? '8,514.22' : '8.514,22');
+  const metric1Unit = getSecString(aboutSec.metric1_unit, 'km');
+  const metric1Title = getSecString(aboutSec.metric1_title, t('about.metric1.title'));
+  const metric1Desc = getSecString(aboutSec.metric1_desc, t('about.metric1.desc'));
+
+  const metric2Val = getSecString(aboutSec.metric2_val, '800');
+  const metric2Unit = getSecString(aboutSec.metric2_unit, 'Gbps');
+  const metric2Title = getSecString(aboutSec.metric2_title, t('about.metric2.title'));
+  const metric2Desc = getSecString(aboutSec.metric2_desc, t('about.metric2.desc'));
+
+  const metric3Val = getSecString(aboutSec.metric3_val, t('about.metric3.val'));
+  const metric3Unit = getSecString(aboutSec.metric3_unit, '');
+  const metric3Title = getSecString(aboutSec.metric3_title, t('about.metric3.title'));
+  const metric3Desc = getSecString(aboutSec.metric3_desc, t('about.metric3.desc'));
+
+  // 3. Corporate Philosophy (Dark Block)
+  const philoTag = getSecString(aboutSec.philo_tag, t('about.philo.tag'));
+  const philoHeadline = getSecString(aboutSec.philo_headline, t('about.philo.head'));
+  const philoSubheadline = getSecString(aboutSec.philo_subheadline, t('about.philo.sub'));
+  const philosophyPillars: PhilosophyPillar[] = Array.isArray(aboutSec.philosophy_pillars) && aboutSec.philosophy_pillars.length > 0
+    ? (aboutSec.philosophy_pillars as PhilosophyPillar[])
+    : (isEn
+        ? [
+            { title: 'Bridge', desc: 'Bridging global optical excellence with practical Indonesian infrastructure needs.' },
+            { title: 'Intermediary', desc: 'Connecting technology principals, system integrators, and telco clients transparently.' },
+            { title: 'Pathway', desc: 'Opening high-bandwidth access so strategic data and information flows without bottlenecks.' },
+            { title: 'Connector', desc: 'Uniting transport nodes from metropolitan centers to outer archipelagic islands to the global stage.' },
+          ]
+        : companyData.philosophy.pillars);
+
+  // 4. Name Etymology (4 Structured Cards)
+  const etymologyTitle = getSecString(aboutSec.etymology_title, t('about.etymology.title'));
+  const nameEtymology: EtymologyCard[] = Array.isArray(aboutSec.etymology_cards) && aboutSec.etymology_cards.length > 0
+    ? (aboutSec.etymology_cards as EtymologyCard[])
+    : (isEn
+        ? [
+            { word: 'Infinix', meaning: 'Inspired by "infinity": boundless spirit to continually innovate and empower the nation\'s digital ecosystem.' },
+            { word: 'Delapan (Eight)', meaning: 'The number 8 symbolizes infinity (∞), reflecting uninterrupted continuity, resilience, and growth.' },
+            { word: 'Teknologi (Technology)', meaning: 'World-class optical telecommunications transmission technology adapted specifically for Indonesian topology.' },
+            { word: 'Nusantara', meaning: 'Deeply anchored in the Indonesian archipelago, serving as a proud anchor connecting our nation to global markets.' },
+          ]
+        : companyData.nameEtymology);
+
+  // 5. Business Focus (Two Pillars)
+  const focusTitle = getSecString(aboutSec.focus_title, t('about.focus.title'));
+  const twoPillars: BusinessPillar[] = Array.isArray(aboutSec.two_pillars) && aboutSec.two_pillars.length > 0
+    ? (aboutSec.two_pillars as BusinessPillar[])
+    : (isEn
+        ? [
+            {
+              title: 'DWDM Equipment Developer',
+              desc: 'Developing and adapting DWDM equipment to meet national regulations, Indonesian geographic conditions, and operator expansion needs.',
+              points: [
+                'Equipment adaptation aligned with SDPPI Kominfo standards',
+                'Integrated R&D with top Indonesian engineering talent',
+                'Real technology transfer to local operators & partners',
+              ],
+            },
+            {
+              title: 'DWDM Infrastructure Service Provider',
+              desc: 'Designing, deploying, testing, and maintaining long-haul optical fiber links for transportation corridors and data center interconnects.',
+              points: [
+                'Planning & long-haul optical link route surveys',
+                'Turnkey end-to-end installation, integration & commissioning',
+                '24/7 proactive link performance monitoring & preventive maintenance',
+              ],
+            },
+          ]
+        : companyData.twoPillars);
+
+  // 6. Vision & Mission
+  const visionTitle = getSecString(aboutSec.vision_title, t('about.vision.title'));
+  const visionStatement = getSecString(
+    aboutSec.vision_statement,
+    isEn
+      ? 'To become the leading national optical telecommunications developer and provider, delivering ultra-high-speed DWDM connectivity across Nusantara to the global arena.'
+      : companyData.vision
+  );
+
+  const missionTitle = getSecString(aboutSec.mission_title, t('about.mission.title'));
+  const missionPoints: string[] = Array.isArray(aboutSec.mission_points) && aboutSec.mission_points.length > 0
+    ? (aboutSec.mission_points as string[])
+    : (isEn
+        ? [
+            'Accelerate the deployment of multi-terabit optical fiber networks in transportation and data center sectors.',
+            'Deliver carrier-grade reliability with 99.999% SLA and high-speed protection switching.',
+            'Foster indigenous technology capability in collaboration with global partners like T8 Systems.',
+          ]
+        : companyData.mission);
 
   return (
     <section
@@ -76,58 +138,59 @@ export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = tru
           </div>
         )}
 
-        {/* T8-Style Distinctive Metrics Strip (Directly requested by Pak Andik) */}
+        {/* Distinctive Metrics Strip */}
         <div className="space-y-6 sm:space-y-10 pt-2">
           <div className="max-w-4xl mx-auto text-center space-y-2 sm:space-y-3">
             <span className="text-[11px] sm:text-xs font-mono font-bold uppercase tracking-wider text-sky-600 bg-sky-50 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-sky-100">
-              {t('about.metrics.lead')}
+              {introLead}
             </span>
             <p className="text-sm sm:text-base lg:text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto font-medium">
-              {t('about.metrics.desc')}
+              {introDesc}
             </p>
           </div>
 
-          {/* Metric Columns (t8.ru style with clean divider borders and gradient large numbers) */}
+          {/* Metric Columns */}
           <div className="border-y border-slate-200/90 py-6 sm:py-8 md:py-10 bg-slate-50/50 rounded-2xl">
             <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200">
-              {/* Metric 1: Nusantara Geography (Sabang to Merauke 8.514,22 km) */}
+              {/* Metric 1 */}
               <div className="py-5 sm:py-6 md:py-2 px-3 sm:px-8 text-center md:text-left space-y-1.5 sm:space-y-2">
                 <div className="flex items-baseline justify-center md:justify-start gap-1 sm:gap-1.5 font-extrabold tracking-tight text-[#4f3fc2]">
-                  <span className="text-3xl sm:text-5xl lg:text-6xl">{isEn ? '8,514.22' : '8.514,22'}</span>
-                  <span className="text-lg sm:text-2xl lg:text-3xl font-semibold text-[#4f3fc2]/85">km</span>
+                  <span className="text-3xl sm:text-5xl lg:text-6xl">{metric1Val}</span>
+                  {metric1Unit && <span className="text-lg sm:text-2xl lg:text-3xl font-semibold text-[#4f3fc2]/85">{metric1Unit}</span>}
                 </div>
                 <h4 className="text-sm sm:text-base font-bold text-slate-900 pt-1">
-                  {t('about.metric1.title')}
+                  {metric1Title}
                 </h4>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {t('about.metric1.desc')}
+                  {metric1Desc}
                 </p>
               </div>
 
-              {/* Metric 2: 800 Gbps per wavelength */}
+              {/* Metric 2 */}
               <div className="py-5 sm:py-6 md:py-2 px-3 sm:px-8 text-center md:text-left space-y-1.5 sm:space-y-2">
                 <div className="flex items-baseline justify-center md:justify-start gap-1 sm:gap-1.5 font-extrabold tracking-tight text-[#4f3fc2]">
-                  <span className="text-3xl sm:text-5xl lg:text-6xl">800</span>
-                  <span className="text-lg sm:text-2xl lg:text-3xl font-semibold text-[#4f3fc2]/85">Gbps</span>
+                  <span className="text-3xl sm:text-5xl lg:text-6xl">{metric2Val}</span>
+                  {metric2Unit && <span className="text-lg sm:text-2xl lg:text-3xl font-semibold text-[#4f3fc2]/85">{metric2Unit}</span>}
                 </div>
                 <h4 className="text-sm sm:text-base font-bold text-slate-900 pt-1">
-                  {t('about.metric2.title')}
+                  {metric2Title}
                 </h4>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {t('about.metric2.desc')}
+                  {metric2Desc}
                 </p>
               </div>
 
-              {/* Metric 3: R&D & Pelatihan / Transfer of Technology */}
+              {/* Metric 3 */}
               <div className="py-5 sm:py-6 md:py-2 px-3 sm:px-8 text-center md:text-left space-y-1.5 sm:space-y-2">
                 <div className="flex items-baseline justify-center md:justify-start gap-1 font-extrabold tracking-tight text-[#be185d]">
-                  <span className="text-xl sm:text-3xl lg:text-4xl leading-tight">{t('about.metric3.val')}</span>
+                  <span className="text-xl sm:text-3xl lg:text-4xl leading-tight">{metric3Val}</span>
+                  {metric3Unit && <span className="text-lg sm:text-2xl lg:text-3xl font-semibold text-[#be185d]/85 ml-1">{metric3Unit}</span>}
                 </div>
                 <h4 className="text-sm sm:text-base font-bold text-slate-900 pt-1">
-                  {t('about.metric3.title')}
+                  {metric3Title}
                 </h4>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {t('about.metric3.desc')}
+                  {metric3Desc}
                 </p>
               </div>
             </div>
@@ -140,13 +203,13 @@ export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = tru
           <div className="lg:col-span-5 bg-gradient-to-br from-slate-900 via-slate-850 to-slate-800 text-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 flex flex-col justify-between shadow-xl border border-slate-800">
             <div className="space-y-3 sm:space-y-4">
               <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-sky-300">
-                {t('about.philo.tag')}
+                {philoTag}
               </span>
               <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold leading-snug text-white">
-                "{t('about.philo.head')}"
+                "{philoHeadline}"
               </h3>
               <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
-                {t('about.philo.sub')}
+                {philoSubheadline}
               </p>
             </div>
 
@@ -165,7 +228,7 @@ export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = tru
             {/* Etymology Grid */}
             <div className="bg-slate-50 border border-slate-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 space-y-3 sm:space-y-4">
               <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700">
-                {t('about.etymology.title')}
+                {etymologyTitle}
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {nameEtymology.map((item, idx) => (
@@ -185,7 +248,7 @@ export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = tru
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#9f1b32]"></span>
                 <h3 className="text-sm sm:text-base font-extrabold uppercase tracking-wider text-[#9f1b32]">
-                  {t('about.focus.title')}
+                  {focusTitle}
                 </h3>
               </div>
 
@@ -223,9 +286,9 @@ export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = tru
             <div className="inline-flex p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-sky-600 text-white shadow-sm">
               <Target className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-slate-900">{t('about.vision.title')}</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900">{visionTitle}</h3>
             <p className="text-sm sm:text-base text-slate-700 leading-relaxed italic">
-              "{isEn ? 'To become the leading national optical telecommunications developer and provider, delivering ultra-high-speed DWDM connectivity across Nusantara to the global arena.' : companyData.vision}"
+              "{visionStatement}"
             </p>
           </div>
 
@@ -234,13 +297,9 @@ export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ showHeader = tru
             <div className="inline-flex p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-slate-900 text-white shadow-sm">
               <Compass className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-slate-900">{t('about.mission.title')}</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900">{missionTitle}</h3>
             <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
-              {(isEn ? [
-                'Accelerate the deployment of multi-terabit optical fiber networks in transportation and data center sectors.',
-                'Deliver carrier-grade reliability with 99.999% SLA and high-speed protection switching.',
-                'Foster indigenous technology capability in collaboration with global partners like T8 Systems.',
-              ] : companyData.mission).map((m, idx) => (
+              {missionPoints.map((m, idx) => (
                 <li key={idx} className="flex items-start gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0 mt-1.5 sm:mt-2"></span>
                   <span>{m}</span>

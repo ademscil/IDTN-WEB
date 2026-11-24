@@ -1,9 +1,9 @@
 import React from 'react';
 import { Handshake, Building2, CheckCircle2 } from 'lucide-react';
-import clientsData from '../../data/clients.json';
 import { Badge } from '../common/Badge';
 import { useLanguage } from '../../context';
 import { useCmsData } from '../../context/CmsDataContext';
+import { StrategicSegment, CmsSectionValue } from '../../types/cms';
 
 interface ClientsSectionProps {
   showHeader?: boolean;
@@ -11,8 +11,90 @@ interface ClientsSectionProps {
 
 export const ClientsSection: React.FC<ClientsSectionProps> = ({ showHeader = true }) => {
   const { lang, t } = useLanguage();
-  const { clients } = useCmsData();
+  const { clients, pages } = useCmsData();
   const isEn = lang === 'en';
+
+  const clientSections: Record<string, CmsSectionValue> = (pages.client?.sections?.[isEn ? 'en' : 'id'] || {}) as Record<string, CmsSectionValue>;
+  const sectionTitle = typeof clientSections.section_title === 'string' ? clientSections.section_title : (isEn ? 'Strategic Industry Segments' : 'Segmen Industri Strategis');
+  const strategicSegments: StrategicSegment[] = Array.isArray(clientSections.strategic_segments) && clientSections.strategic_segments.length > 0
+    ? (clientSections.strategic_segments as StrategicSegment[])
+    : (isEn
+        ? [
+            {
+              id: 'partner-t8',
+              name: 'T8 LLC',
+              category: 'Global Technology Principal',
+              role: 'DWDM Equipment R&D & Manufacturing Principal',
+              description: 'Developer of world-class Volga DWDM optical transport platforms and Ramenka fiber line monitoring systems.',
+              status_badge: 'Verified Strategic Partner',
+              is_partner: true
+            },
+            {
+              id: 'sector-telco',
+              name: 'National Telecom Operators',
+              category: 'Target Clients',
+              role: 'Telecom Network & Mobile Operators',
+              description: 'Backbone DWDM systems deployment and inter-city long-haul optical transmission capacity upgrades across Indonesia.',
+              status_badge: 'Verified Strategic Partner',
+              is_partner: true
+            },
+            {
+              id: 'sector-dci',
+              name: 'Hyperscale Cloud & Data Centers',
+              category: 'Target Clients',
+              role: 'Data Center & Cloud Infrastructure Providers',
+              description: 'High-density Data Center Interconnect (DCI) optical platforms with lowest deterministic latency.',
+              status_badge: 'Verified Strategic Partner',
+              is_partner: true
+            },
+            {
+              id: 'sector-transport',
+              name: 'National Transportation Authorities',
+              category: 'Target Clients',
+              role: 'Aviation, Railway & Port Transportation Authorities',
+              description: 'Mission-critical 99.999% optical communication infrastructure supporting vital signaling and operations.',
+              status_badge: 'Verified Strategic Partner',
+              is_partner: true
+            }
+          ]
+        : [
+            {
+              id: 'partner-t8',
+              name: 'T8 LLC',
+              category: 'Global Technology Principal',
+              role: 'Prinsipal Manufaktur & Riset Perangkat DWDM',
+              description: 'Pengembang teknologi sistem transmisi optik DWDM Volga dan pemantauan kabel OTDR Ramenka kelas dunia.',
+              status_badge: 'Mitra Terverifikasi',
+              is_partner: true
+            },
+            {
+              id: 'sector-telco',
+              name: 'National Telecom Operators',
+              category: 'Target Clients',
+              role: 'Operator Jaringan Telekomunikasi & Seluler',
+              description: 'Penyediaan perangkat DWDM backbone dan peningkatan kapasitas link transmisi antar-kota di Indonesia.',
+              status_badge: 'Mitra Terverifikasi',
+              is_partner: true
+            },
+            {
+              id: 'sector-dci',
+              name: 'Hyperscale Cloud & Data Centers',
+              category: 'Target Clients',
+              role: 'Penyedia Fasilitas Pusat Data & Cloud',
+              description: 'Interkoneksi antar-data center (DCI) berkecepatan tinggi dengan latensi deterministik terendah.',
+              status_badge: 'Mitra Terverifikasi',
+              is_partner: true
+            },
+            {
+              id: 'sector-transport',
+              name: 'National Transportation Authorities',
+              category: 'Target Clients',
+              role: 'Otoritas Transportasi Udara, Kereta Api & Pelabuhan',
+              description: 'Infrastruktur komunikasi optik berkeandalan 99.999% untuk mendukung sistem persinyalan dan operasional vital.',
+              status_badge: 'Mitra Terverifikasi',
+              is_partner: true
+            }
+          ]);
 
   return (
     <section
@@ -36,17 +118,17 @@ export const ClientsSection: React.FC<ClientsSectionProps> = ({ showHeader = tru
           </div>
         )}
 
-        {/* Strategic Sectors & Principal Overview */}
+        {/* Strategic Sectors & Principal Overview (Dynamic from CMS) */}
         <div className="space-y-4">
           <div className="text-left">
             <h3 className="text-sm sm:text-base font-bold text-slate-900 uppercase tracking-wider font-mono">
-              {isEn ? 'Strategic Industry Segments' : 'Segmen Industri Strategis'}
+              {sectionTitle}
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {clientsData.map((client) => (
+            {strategicSegments.map((segment) => (
               <div
-                key={client.id}
+                key={segment.id}
                 className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:border-sky-300 hover:shadow-md transition-all text-left flex flex-col justify-between"
               >
                 <div className="space-y-3">
@@ -54,27 +136,21 @@ export const ClientsSection: React.FC<ClientsSectionProps> = ({ showHeader = tru
                     <Handshake className="w-5 h-5" />
                   </div>
                   <span className="text-[11px] font-bold text-sky-700 uppercase tracking-wider block">
-                    {client.category}
+                    {segment.category}
                   </span>
                   <h4 className="text-base font-bold text-slate-900">
-                    {client.name}
+                    {segment.name}
                   </h4>
                   <p className="text-xs font-semibold text-slate-600">
-                    {client.role}
+                    {segment.role}
                   </p>
                   <p className="text-xs text-slate-600 leading-relaxed pt-1">
-                    {isEn
-                      ? client.description
-                          .replace('Prinsipal resmi teknologi DWDM global asal Rusia yang bermitra strategis dengan IDTN di Indonesia.', 'Official Russian DWDM optical technology principal partnering strategically with IDTN across Indonesia.')
-                          .replace('Sektor transportasi rel kereta api dengan kebutuhan transmisi data persinyalan dan telekomunikasi berkeandalan tinggi.', 'National railway transportation sector with mission-critical signaling and high-reliability operational communications.')
-                          .replace('Pengembang dan pengelola fasilitas data center yang membutuhkan link interkoneksi berkapasitas ultra-besar dan latensi rendah.', 'Hyperscale data center operators requiring ultra-high-bandwidth, low-latency metro interconnects.')
-                          .replace('Penyedia layanan jaringan telekomunikasi seluler dan pita lebar yang memerlukan ekspansi kapasitas transmisi serat optik.', 'National telecommunication service providers expanding long-haul optical fiber transmission capacity.')
-                      : client.description}
+                    {segment.description}
                   </p>
                 </div>
 
                 <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-emerald-700 font-bold">
-                  <span>{isEn ? 'Verified Strategic Partner' : 'Mitra Terverifikasi'}</span>
+                  <span>{segment.status_badge || (isEn ? 'Verified Strategic Partner' : 'Mitra Terverifikasi')}</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                 </div>
               </div>

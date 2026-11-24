@@ -33,6 +33,15 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Modern Web Guidance: Native dialog scroll containment */
+dialog:modal {
+  overscroll-behavior: contain;
+}
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
 /* Scroll reveal classes (inspired by t8.ru) */
 .reveal-on-scroll {
   opacity: 0;

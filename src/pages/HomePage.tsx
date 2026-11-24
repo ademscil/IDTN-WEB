@@ -19,7 +19,7 @@ export const HomePage: React.FC = () => {
   usePageSeo('home');
 
   const homeContent = pages.home;
-  const sectionsData = homeContent?.sections?.[isEn ? 'en' : 'id'] || {};
+  const sectionsData = (homeContent?.sections?.[isEn ? 'en' : 'id'] || {}) as Record<string, string>;
 
   const cards = [
     {

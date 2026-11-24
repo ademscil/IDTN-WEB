@@ -13,7 +13,7 @@ export const ContactPage: React.FC = () => {
   // Dynamic SEO from CMS
   usePageSeo('contact');
 
-  const heroData = pages.contact?.hero?.[isEn ? 'en' : 'id'] || {};
+  const heroData: Record<string, string> = (pages.contact?.hero?.[isEn ? 'en' : 'id'] || {}) as Record<string, string>;
 
   return (
     <div className="pt-20 sm:pt-28 pb-10 sm:pb-16">
