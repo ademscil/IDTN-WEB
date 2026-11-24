@@ -1,6 +1,21 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { CmsInquiry } from '../../types/cms';
+import {
+  AdminPageHeader,
+  AdminButton,
+  AdminActionButton,
+  AdminActionGroup,
+  AdminTable,
+  AdminTableHead,
+  AdminTableBody,
+  AdminTableRow,
+  AdminTableCell,
+  AdminBadge,
+  AdminAlert,
+  AdminConfirmDialog,
+  AdminModal
+} from '../../components/admin/ui';
 
 export const AdminInquiriesPage: React.FC = () => {
   const { token } = useAdminAuth();
@@ -12,7 +27,9 @@ export const AdminInquiriesPage: React.FC = () => {
   const [selectedInquiry, setSelectedInquiry] = useState<CmsInquiry | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  const detailDialogRef = useRef<HTMLDialogElement>(null);
+  // Modern Web Guidance: Standardized delete confirmation modal state
+  const [deleteTargetInquiry, setDeleteTargetInquiry] = useState<CmsInquiry | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchInquiries = useCallback(async (statusFilter?: string) => {
     setLoading(true);
@@ -43,11 +60,9 @@ export const AdminInquiriesPage: React.FC = () => {
 
   const openDetail = (inq: CmsInquiry) => {
     setSelectedInquiry(inq);
-    detailDialogRef.current?.showModal();
   };
 
   const closeDetail = () => {
-    detailDialogRef.current?.close();
     setSelectedInquiry(null);
   };
 
@@ -72,49 +87,61 @@ export const AdminInquiriesPage: React.FC = () => {
     }
   };
 
-  const deleteInquiry = async (id: number) => {
-    if (!confirm('Apakah Anda yakin ingin menghapus pesan ini?')) return;
+  const confirmDeleteInquiry = (inq: CmsInquiry) => {
+    setDeleteTargetInquiry(inq);
+  };
+
+  const executeDeleteInquiry = async () => {
+    if (!deleteTargetInquiry) return;
+    setIsDeleting(true);
     try {
-      const res = await fetch(`/api/admin/inquiries.php?id=${id}`, {
+      const res = await fetch(`/api/admin/inquiries.php?id=${deleteTargetInquiry.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const json = await res.json();
       if (res.ok && json.success) {
         setMessage({ type: 'success', text: 'Pesan berhasil dihapus.' });
-        closeDetail();
+        if (selectedInquiry?.id === deleteTargetInquiry.id) {
+          closeDetail();
+        }
+        setDeleteTargetInquiry(null);
         await fetchInquiries(filterStatus);
+      } else {
+        setMessage({ type: 'error', text: json.error || 'Gagal menghapus pesan.' });
       }
     } catch {
       setMessage({ type: 'error', text: 'Gagal menghapus pesan.' });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
-            Kotak Masuk Pesan Konsultasi (Inquiries)
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Daftar permintaan konsultasi proyek dan formulir kontak yang dikirim oleh pengunjung landing page.
-          </p>
-        </div>
-      </div>
+      {/* Standardized Page Header */}
+      <AdminPageHeader
+        title="Kotak Masuk Pesan Konsultasi (Inquiries)"
+        description="Daftar permintaan konsultasi proyek dan formulir kontak yang dikirim oleh pengunjung landing page."
+        badge={
+          counts.unread > 0 ? (
+            <AdminBadge variant="danger" withDot>
+              {counts.unread} Belum Dibaca
+            </AdminBadge>
+          ) : (
+            <AdminBadge variant="success">Semua Terbaca</AdminBadge>
+          )
+        }
+      />
 
+      {/* Standardized Alert Banner */}
       {message && (
-        <div
-          role="alert"
-          className={`p-4 rounded-xl text-sm flex items-start gap-3 border ${
-            message.type === 'success'
-              ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
-              : 'bg-red-50 border-red-300 text-red-800'
-          }`}
+        <AdminAlert
+          variant={message.type}
+          onDismiss={() => setMessage(null)}
         >
-          <span>{message.type === 'success' ? '✅' : '⚠️'}</span>
-          <span>{message.text}</span>
-        </div>
+          {message.text}
+        </AdminAlert>
       )}
 
       {/* Filter Tabs */}
@@ -122,7 +149,7 @@ export const AdminInquiriesPage: React.FC = () => {
         <button
           type="button"
           onClick={() => setFilterStatus('all')}
-          className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
             filterStatus === 'all'
               ? 'bg-sky-600 text-white shadow-xs'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
@@ -133,9 +160,9 @@ export const AdminInquiriesPage: React.FC = () => {
         <button
           type="button"
           onClick={() => setFilterStatus('unread')}
-          className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
             filterStatus === 'unread'
-              ? 'bg-red-600 text-white shadow-xs'
+              ? 'bg-rose-600 text-white shadow-xs'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
@@ -144,7 +171,7 @@ export const AdminInquiriesPage: React.FC = () => {
         <button
           type="button"
           onClick={() => setFilterStatus('contacted')}
-          className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
             filterStatus === 'contacted'
               ? 'bg-emerald-600 text-white shadow-xs'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
@@ -155,7 +182,7 @@ export const AdminInquiriesPage: React.FC = () => {
         <button
           type="button"
           onClick={() => setFilterStatus('archived')}
-          className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
             filterStatus === 'archived'
               ? 'bg-slate-700 text-white shadow-xs'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
@@ -165,177 +192,201 @@ export const AdminInquiriesPage: React.FC = () => {
         </button>
       </div>
 
-      {/* Table of Inquiries */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        {loading ? (
-          <div className="p-12 text-center text-sm text-slate-400">
-            <div className="w-8 h-8 border-4 border-sky-400 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-            Memuat kotak masuk...
-          </div>
-        ) : inquiries.length === 0 ? (
-          <div className="p-12 text-center text-sm text-slate-500">
-            Tidak ada pesan pada filter ini.
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
-                <tr>
-                  <th scope="col" className="px-5 py-3">Status</th>
-                  <th scope="col" className="px-5 py-3">Nama Pengirim</th>
-                  <th scope="col" className="px-5 py-3">Perusahaan</th>
-                  <th scope="col" className="px-5 py-3">Kontak</th>
-                  <th scope="col" className="px-5 py-3">Minat Solusi</th>
-                  <th scope="col" className="px-5 py-3">Tanggal</th>
-                  <th scope="col" className="px-5 py-3 text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {inquiries.map((inq) => (
-                  <tr
-                    key={inq.id}
-                    className={`hover:bg-slate-50/80 transition-colors ${
-                      inq.status === 'unread' ? 'bg-red-50/20 font-medium' : ''
-                    }`}
-                  >
-                    <td className="px-5 py-3.5">
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
-                        inq.status === 'unread'
-                          ? 'bg-red-50 text-red-700 border border-red-200'
-                          : inq.status === 'contacted'
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          : 'bg-slate-100 text-slate-600'
-                      }`}>
-                        {inq.status === 'unread' ? '● Baru' : inq.status === 'contacted' ? '✓ Dihubungi' : 'Arsip'}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3.5 text-slate-900">{inq.full_name}</td>
-                    <td className="px-5 py-3.5 text-slate-600">{inq.company}</td>
-                    <td className="px-5 py-3.5 text-xs">
-                      <div className="text-slate-900">{inq.work_email}</div>
-                      <div className="text-slate-500 font-mono text-[11px]">{inq.phone}</div>
-                    </td>
-                    <td className="px-5 py-3.5 text-xs text-slate-700">{inq.solution_interest}</td>
-                    <td className="px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap">
-                      {new Date(inq.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                    </td>
-                    <td className="px-5 py-3.5 text-right whitespace-nowrap">
-                      <button
-                        type="button"
-                        onClick={() => openDetail(inq)}
-                        className="px-3 py-1 bg-sky-50 text-sky-700 hover:bg-sky-100 rounded-md text-xs font-semibold transition-colors"
-                      >
-                        Buka Pesan
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      {/* Standardized Table of Inquiries */}
+      <AdminTable
+        isLoading={loading}
+        loadingText="Memuat kotak masuk pesan..."
+        isEmpty={inquiries.length === 0}
+        emptyTitle="Tidak Ada Pesan Masuk"
+        emptyDescription="Tidak ada pesan konsultasi yang sesuai dengan status filter saat ini."
+      >
+        <AdminTableHead>
+          <AdminTableCell isHeader className="w-28">Status</AdminTableCell>
+          <AdminTableCell isHeader>Nama Pengirim</AdminTableCell>
+          <AdminTableCell isHeader>Perusahaan</AdminTableCell>
+          <AdminTableCell isHeader>Kontak</AdminTableCell>
+          <AdminTableCell isHeader>Minat Solusi</AdminTableCell>
+          <AdminTableCell isHeader className="w-36">Tanggal</AdminTableCell>
+          <AdminTableCell isHeader align="right">Aksi</AdminTableCell>
+        </AdminTableHead>
+        <AdminTableBody>
+          {inquiries.map((inq) => (
+            <AdminTableRow
+              key={inq.id}
+              className={inq.status === 'unread' ? 'bg-rose-50/20 font-medium' : undefined}
+            >
+              <AdminTableCell>
+                <AdminBadge
+                  variant={
+                    inq.status === 'unread'
+                      ? 'danger'
+                      : inq.status === 'contacted'
+                      ? 'success'
+                      : 'neutral'
+                  }
+                  withDot={inq.status === 'unread'}
+                >
+                  {inq.status === 'unread' ? 'Baru' : inq.status === 'contacted' ? 'Dihubungi' : 'Arsip'}
+                </AdminBadge>
+              </AdminTableCell>
+              <AdminTableCell>
+                <span className="font-bold text-slate-900">{inq.full_name}</span>
+              </AdminTableCell>
+              <AdminTableCell>
+                <span className="text-xs text-slate-600">{inq.company || '-'}</span>
+              </AdminTableCell>
+              <AdminTableCell>
+                <div className="text-xs font-semibold text-slate-800">{inq.work_email}</div>
+                <div className="text-[11px] text-slate-500 font-mono mt-0.5">{inq.phone}</div>
+              </AdminTableCell>
+              <AdminTableCell>
+                <AdminBadge variant="purple">{inq.solution_interest}</AdminBadge>
+              </AdminTableCell>
+              <AdminTableCell>
+                <span className="text-xs text-slate-500">
+                  {new Date(inq.created_at).toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </span>
+              </AdminTableCell>
+              <AdminTableCell align="right" className="whitespace-nowrap">
+                <AdminActionGroup align="right">
+                  <AdminActionButton
+                    variant="view"
+                    label="Detail"
+                    onClick={() => openDetail(inq)}
+                  />
+                  <AdminActionButton
+                    variant="delete"
+                    label="Hapus"
+                    onClick={() => confirmDeleteInquiry(inq)}
+                  />
+                </AdminActionGroup>
+              </AdminTableCell>
+            </AdminTableRow>
+          ))}
+        </AdminTableBody>
+      </AdminTable>
 
-      {/* Detail Native Dialog Modal */}
-      <dialog
-        ref={detailDialogRef}
-        aria-labelledby="inquiry-detail-title"
-        className="w-full max-w-lg rounded-2xl p-0 bg-white shadow-2xl backdrop:bg-slate-950/70 border border-slate-200"
-        style={{ overscrollBehavior: 'contain' }}
+      {/* Standardized Detail Modal */}
+      <AdminModal
+        isOpen={selectedInquiry !== null}
+        onClose={closeDetail}
+        title={selectedInquiry ? `Pesan dari ${selectedInquiry.full_name}` : 'Detail Pesan Konsultasi'}
+        description={selectedInquiry ? `${selectedInquiry.company || 'Perusahaan tidak dicantumkan'} • ID #${selectedInquiry.id}` : undefined}
+        badge={
+          selectedInquiry && (
+            <AdminBadge
+              variant={
+                selectedInquiry.status === 'unread'
+                  ? 'danger'
+                  : selectedInquiry.status === 'contacted'
+                  ? 'success'
+                  : 'neutral'
+              }
+              withDot={selectedInquiry.status === 'unread'}
+            >
+              {selectedInquiry.status === 'unread' ? 'Baru' : selectedInquiry.status === 'contacted' ? 'Dihubungi' : 'Arsip'}
+            </AdminBadge>
+          )
+        }
+        maxWidth="2xl"
       >
         {selectedInquiry && (
-          <div>
-            <div className="p-6 border-b border-slate-200 flex items-center justify-between">
+          <div className="p-6 space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Pesan Masuk ID #{selectedInquiry.id}</span>
-                <h2 id="inquiry-detail-title" className="text-base font-bold text-slate-900 mt-0.5">
-                  {selectedInquiry.full_name} — {selectedInquiry.company}
-                </h2>
+                <span className="text-slate-400 block font-semibold uppercase text-[10px]">Email Kerja</span>
+                <a href={`mailto:${selectedInquiry.work_email}`} className="text-sky-600 font-semibold hover:underline text-xs mt-0.5 inline-block">
+                  {selectedInquiry.work_email}
+                </a>
               </div>
-              <button
-                type="button"
-                onClick={closeDetail}
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
-              <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3.5 rounded-lg border border-slate-200">
-                <div>
-                  <span className="text-slate-400 block font-semibold uppercase">Email</span>
-                  <a href={`mailto:${selectedInquiry.work_email}`} className="text-sky-600 font-medium hover:underline">
-                    {selectedInquiry.work_email}
-                  </a>
-                </div>
-                <div>
-                  <span className="text-slate-400 block font-semibold uppercase">Telepon / WhatsApp</span>
-                  <a href={`https://wa.me/${selectedInquiry.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="text-emerald-600 font-medium hover:underline">
-                    {selectedInquiry.phone} ↗
-                  </a>
-                </div>
-                <div>
-                  <span className="text-slate-400 block font-semibold uppercase">Minat Solusi</span>
-                  <span className="text-slate-800 font-semibold">{selectedInquiry.solution_interest}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 block font-semibold uppercase">Waktu Kirim</span>
-                  <span className="text-slate-800">{new Date(selectedInquiry.created_at).toLocaleString('id-ID')}</span>
-                </div>
-              </div>
-
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-                  Uraian Kebutuhan Proyek / Pesan:
-                </label>
-                <div className="p-4 bg-slate-100/70 border border-slate-200 rounded-lg text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">
-                  {selectedInquiry.project_summary}
-                </div>
+                <span className="text-slate-400 block font-semibold uppercase text-[10px]">Telepon / WhatsApp</span>
+                <a href={`https://wa.me/${selectedInquiry.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="text-emerald-600 font-semibold hover:underline text-xs mt-0.5 inline-flex items-center gap-1">
+                  {selectedInquiry.phone} ↗
+                </a>
+              </div>
+              <div>
+                <span className="text-slate-400 block font-semibold uppercase text-[10px]">Minat Solusi</span>
+                <span className="text-slate-800 font-bold text-xs mt-0.5 block">{selectedInquiry.solution_interest}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 block font-semibold uppercase text-[10px]">Waktu Kirim</span>
+                <span className="text-slate-700 text-xs mt-0.5 block">{new Date(selectedInquiry.created_at).toLocaleString('id-ID')}</span>
               </div>
             </div>
 
-            <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
-              <button
-                type="button"
-                onClick={() => deleteInquiry(selectedInquiry.id)}
-                className="px-3 py-1.5 text-xs font-semibold text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
+                Uraian Kebutuhan Proyek / Pesan:
+              </label>
+              <div className="p-4 bg-slate-100/70 border border-slate-200 rounded-xl text-sm text-slate-800 whitespace-pre-wrap leading-relaxed font-sans">
+                {selectedInquiry.project_summary}
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
+              <AdminButton
+                variant="danger"
+                size="sm"
+                onClick={() => confirmDeleteInquiry(selectedInquiry)}
               >
                 Hapus Pesan
-              </button>
+              </AdminButton>
 
               <div className="flex items-center gap-2">
                 {selectedInquiry.status !== 'contacted' && (
-                  <button
-                    type="button"
+                  <AdminButton
+                    variant="success"
+                    size="sm"
                     onClick={() => updateStatus(selectedInquiry.id, 'contacted')}
-                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition-colors"
                   >
                     ✓ Tandai Sudah Dihubungi
-                  </button>
+                  </AdminButton>
                 )}
                 {selectedInquiry.status !== 'archived' && (
-                  <button
-                    type="button"
+                  <AdminButton
+                    variant="secondary"
+                    size="sm"
                     onClick={() => updateStatus(selectedInquiry.id, 'archived')}
-                    className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs font-semibold transition-colors"
                   >
                     Arsipkan
-                  </button>
+                  </AdminButton>
                 )}
-                <button
-                  type="button"
+                <AdminButton
+                  variant="outline"
+                  size="sm"
                   onClick={closeDetail}
-                  autoFocus
-                  className="px-3 py-1.5 border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold"
                 >
                   Tutup
-                </button>
+                </AdminButton>
               </div>
             </div>
           </div>
         )}
-      </dialog>
+      </AdminModal>
+
+      {/* Standardized Delete Confirmation Dialog */}
+      <AdminConfirmDialog
+        isOpen={deleteTargetInquiry !== null}
+        title="Konfirmasi Hapus Pesan Konsultasi"
+        message={
+          deleteTargetInquiry
+            ? `Apakah Anda yakin ingin menghapus pesan dari '${deleteTargetInquiry.full_name}' (${deleteTargetInquiry.company})? Tindakan ini permanen.`
+            : 'Apakah Anda yakin ingin menghapus pesan ini?'
+        }
+        confirmLabel="Ya, Hapus Pesan"
+        cancelLabel="Batal"
+        variant="danger"
+        isLoading={isDeleting}
+        onConfirm={executeDeleteInquiry}
+        onCancel={() => setDeleteTargetInquiry(null)}
+      />
     </div>
   );
 };

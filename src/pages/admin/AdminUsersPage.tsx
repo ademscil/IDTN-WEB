@@ -1,6 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { KeyRound, UserPlus } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { AdminUser } from '../../types/cms';
+import {
+  AdminPageHeader,
+  AdminButton,
+  AdminActionButton,
+  AdminActionGroup,
+  AdminTable,
+  AdminTableHead,
+  AdminTableBody,
+  AdminTableRow,
+  AdminTableCell,
+  AdminBadge,
+  AdminAlert,
+  AdminConfirmDialog
+} from '../../components/admin/ui';
 
 export const AdminUsersPage: React.FC = () => {
   const { token, user: currentUser } = useAdminAuth();
@@ -8,6 +23,10 @@ export const AdminUsersPage: React.FC = () => {
   const [admins, setAdmins] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Modern Web Guidance: Standardized delete confirmation modal state
+  const [deleteTargetAdmin, setDeleteTargetAdmin] = useState<AdminUser | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // New admin state
   const [newUsername, setNewUsername] = useState('');
@@ -127,54 +146,63 @@ export const AdminUsersPage: React.FC = () => {
     }
   };
 
-  const handleDeleteAdmin = async (id: number) => {
-    if (!confirm('Apakah Anda yakin ingin menghapus akun admin ini?')) return;
+  const confirmDeleteAdmin = (adm: AdminUser) => {
+    setDeleteTargetAdmin(adm);
+  };
+
+  const executeDeleteAdmin = async () => {
+    if (!deleteTargetAdmin) return;
+    setIsDeleting(true);
     try {
-      const res = await fetch(`/api/auth/admins.php?id=${id}`, {
+      const res = await fetch(`/api/auth/admins.php?id=${deleteTargetAdmin.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const json = await res.json();
       if (res.ok && json.success) {
-        setMessage({ type: 'success', text: 'Admin berhasil dihapus.' });
+        setMessage({ type: 'success', text: `Akun admin '${deleteTargetAdmin.username}' berhasil dihapus.` });
+        setDeleteTargetAdmin(null);
         await fetchAdmins();
       } else {
         setMessage({ type: 'error', text: json.error || 'Gagal menghapus admin.' });
       }
     } catch {
       setMessage({ type: 'error', text: 'Gagal menghubungi server.' });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
-          Manajemen Akun Administrator & Keamanan
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-          Kelola hak akses admin website, ubah password akun Anda, atau tambahkan staf admin baru.
-        </p>
-      </div>
+      {/* Standardized Page Header */}
+      <AdminPageHeader
+        title="Manajemen Akun Administrator & Keamanan"
+        description="Kelola hak akses admin website, ubah password akun Anda, atau daftarkan staf administrator baru."
+        badge={
+          <AdminBadge variant="info" withDot>
+            {admins.length} Akun Aktif
+          </AdminBadge>
+        }
+      />
 
+      {/* Standardized Alert Banner */}
       {message && (
-        <div
-          role="alert"
-          className={`p-4 rounded-xl text-sm flex items-start gap-3 border ${
-            message.type === 'success'
-              ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
-              : 'bg-red-50 border-red-300 text-red-800'
-          }`}
+        <AdminAlert
+          variant={message.type}
+          onDismiss={() => setMessage(null)}
         >
-          <span>{message.type === 'success' ? '✅' : '⚠️'}</span>
-          <span>{message.text}</span>
-        </div>
+          {message.text}
+        </AdminAlert>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Form 1: Ubah Password Akun Sendiri */}
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-xs">
-          <h2 className="text-base font-bold text-slate-900 mb-1">Profil & Password Akun Anda</h2>
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+          <div className="flex items-center gap-2 mb-1">
+            <KeyRound className="w-4 h-4 text-sky-600" />
+            <h2 className="text-base font-bold text-slate-900">Profil & Password Akun Anda</h2>
+          </div>
           <p className="text-xs text-slate-500 mb-5">
             Perbarui nama lengkap atau ganti kata sandi login Anda.
           </p>
@@ -189,7 +217,7 @@ export const AdminUsersPage: React.FC = () => {
                 required
                 value={myFullName}
                 onChange={(e) => setMyFullName(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
               />
             </div>
 
@@ -202,7 +230,7 @@ export const AdminUsersPage: React.FC = () => {
                 required
                 value={myEmail}
                 onChange={(e) => setMyEmail(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
               />
             </div>
 
@@ -215,25 +243,28 @@ export const AdminUsersPage: React.FC = () => {
                 value={myNewPassword}
                 onChange={(e) => setMyNewPassword(e.target.value)}
                 placeholder="Minimal 8 karakter..."
-                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
               />
             </div>
 
             <div className="pt-2">
-              <button
+              <AdminButton
                 type="submit"
-                disabled={updatingProfile}
-                className="px-5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-semibold shadow-xs disabled:opacity-50 transition-colors"
+                variant="primary"
+                isLoading={updatingProfile}
               >
-                {updatingProfile ? 'Memperbarui...' : 'Simpan Perubahan Akun'}
-              </button>
+                Simpan Perubahan Akun
+              </AdminButton>
             </div>
           </form>
         </div>
 
         {/* Form 2: Tambah Admin Baru */}
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-xs">
-          <h2 className="text-base font-bold text-slate-900 mb-1">Tambah Administrator Baru</h2>
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+          <div className="flex items-center gap-2 mb-1">
+            <UserPlus className="w-4 h-4 text-sky-600" />
+            <h2 className="text-base font-bold text-slate-900">Tambah Administrator Baru</h2>
+          </div>
           <p className="text-xs text-slate-500 mb-5">
             Berikan akses login CMS ke anggota tim IDTN lainnya.
           </p>
@@ -250,7 +281,7 @@ export const AdminUsersPage: React.FC = () => {
                   value={newUsername}
                   onChange={(e) => setNewUsername(e.target.value)}
                   placeholder="admin2"
-                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                 />
               </div>
               <div>
@@ -263,7 +294,7 @@ export const AdminUsersPage: React.FC = () => {
                   value={newFullName}
                   onChange={(e) => setNewFullName(e.target.value)}
                   placeholder="Budi Santoso"
-                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                 />
               </div>
             </div>
@@ -278,7 +309,7 @@ export const AdminUsersPage: React.FC = () => {
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
                 placeholder="budi@idtn.co.id"
-                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
               />
             </div>
 
@@ -293,77 +324,98 @@ export const AdminUsersPage: React.FC = () => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Minimal 8 karakter..."
-                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
               />
             </div>
 
             <div className="pt-2">
-              <button
+              <AdminButton
                 type="submit"
-                disabled={addingAdmin}
-                className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold shadow-xs disabled:opacity-50 transition-colors"
+                variant="primary"
+                isLoading={addingAdmin}
               >
-                {addingAdmin ? 'Menambahkan...' : '＋ Tambah Admin'}
-              </button>
+                Tambah Admin Baru
+              </AdminButton>
             </div>
           </form>
         </div>
       </div>
 
-      {/* Admin Users Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="p-4 border-b border-slate-200">
-          <h2 className="text-sm font-bold text-slate-900">Daftar Akun Administrator ({admins.length})</h2>
-        </div>
+      {/* Standardized Admin Users Table */}
+      <AdminTable
+        isLoading={loading}
+        loadingText="Memuat daftar administrator..."
+        isEmpty={admins.length === 0}
+        emptyTitle="Belum Ada Admin Terdaftar"
+        emptyDescription="Daftar administrator masih kosong."
+      >
+        <AdminTableHead>
+          <AdminTableCell isHeader>Username</AdminTableCell>
+          <AdminTableCell isHeader>Nama Lengkap</AdminTableCell>
+          <AdminTableCell isHeader>Email</AdminTableCell>
+          <AdminTableCell isHeader>Login Terakhir</AdminTableCell>
+          <AdminTableCell isHeader align="right">Aksi</AdminTableCell>
+        </AdminTableHead>
+        <AdminTableBody>
+          {admins.map((adm) => (
+            <AdminTableRow key={adm.id}>
+              <AdminTableCell>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold text-sky-700">
+                    {adm.username}
+                  </span>
+                  {adm.id === currentUser?.id && (
+                    <AdminBadge variant="info">
+                      Anda
+                    </AdminBadge>
+                  )}
+                </div>
+              </AdminTableCell>
+              <AdminTableCell>
+                <span className="font-bold text-slate-900">{adm.full_name}</span>
+              </AdminTableCell>
+              <AdminTableCell>
+                <span className="text-xs text-slate-600">{adm.email}</span>
+              </AdminTableCell>
+              <AdminTableCell>
+                <span className="text-xs text-slate-500">
+                  {adm.last_login
+                    ? new Date(adm.last_login).toLocaleString('id-ID')
+                    : 'Belum pernah login'}
+                </span>
+              </AdminTableCell>
+              <AdminTableCell align="right" className="whitespace-nowrap">
+                {adm.id !== currentUser?.id && (
+                  <AdminActionGroup align="right">
+                    <AdminActionButton
+                      variant="delete"
+                      label="Hapus"
+                      onClick={() => confirmDeleteAdmin(adm)}
+                    />
+                  </AdminActionGroup>
+                )}
+              </AdminTableCell>
+            </AdminTableRow>
+          ))}
+        </AdminTableBody>
+      </AdminTable>
 
-        {loading ? (
-          <div className="p-12 text-center text-sm text-slate-400">Memuat daftar admin...</div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
-                <tr>
-                  <th scope="col" className="px-5 py-3">Username</th>
-                  <th scope="col" className="px-5 py-3">Nama Lengkap</th>
-                  <th scope="col" className="px-5 py-3">Email</th>
-                  <th scope="col" className="px-5 py-3">Login Terakhir</th>
-                  <th scope="col" className="px-5 py-3 text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {admins.map((adm) => (
-                  <tr key={adm.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="px-5 py-3.5 font-mono text-xs text-sky-700 font-bold">
-                      {adm.username}
-                      {adm.id === currentUser?.id && (
-                        <span className="ml-2 px-2 py-0.5 rounded text-[10px] bg-sky-100 text-sky-800 font-sans font-semibold">
-                          Anda
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-5 py-3.5 font-medium text-slate-900">{adm.full_name}</td>
-                    <td className="px-5 py-3.5 text-xs text-slate-600">{adm.email}</td>
-                    <td className="px-5 py-3.5 text-xs text-slate-400">
-                      {adm.last_login ? new Date(adm.last_login).toLocaleString('id-ID') : 'Belum pernah login'}
-                    </td>
-                    <td className="px-5 py-3.5 text-right whitespace-nowrap">
-                      {adm.id !== currentUser?.id && (
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteAdmin(adm.id)}
-                          className="px-2.5 py-1 text-xs text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md font-semibold"
-                        >
-                          Hapus
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      {/* Standardized Delete Confirmation Dialog */}
+      <AdminConfirmDialog
+        isOpen={deleteTargetAdmin !== null}
+        title="Konfirmasi Hapus Akun Administrator"
+        message={
+          deleteTargetAdmin
+            ? `Apakah Anda yakin ingin menghapus akun admin '${deleteTargetAdmin.username}' (${deleteTargetAdmin.full_name})? Akun ini tidak akan dapat login lagi ke portal CMS.`
+            : 'Apakah Anda yakin ingin menghapus admin ini?'
+        }
+        confirmLabel="Ya, Hapus Admin"
+        cancelLabel="Batal"
+        variant="danger"
+        isLoading={isDeleting}
+        onConfirm={executeDeleteAdmin}
+        onCancel={() => setDeleteTargetAdmin(null)}
+      />
     </div>
   );
 };

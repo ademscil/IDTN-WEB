@@ -1,7 +1,21 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { UploadCloud } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useCmsData } from '../../context/CmsDataContext';
 import { CmsMediaFile } from '../../types/cms';
+import {
+  AdminPageHeader,
+  AdminActionButton,
+  AdminActionGroup,
+  AdminTable,
+  AdminTableHead,
+  AdminTableBody,
+  AdminTableRow,
+  AdminTableCell,
+  AdminBadge,
+  AdminAlert,
+  AdminConfirmDialog
+} from '../../components/admin/ui';
 
 export const AdminMediaPage: React.FC = () => {
   const { token } = useAdminAuth();
@@ -14,6 +28,10 @@ export const AdminMediaPage: React.FC = () => {
   const [settingProfileId, setSettingProfileId] = useState<number | null>(null);
   const [copiedId, setCopiedId] = useState<number | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Modern Web Guidance: Standardized confirm state for file deletion
+  const [deleteTargetFile, setDeleteTargetFile] = useState<CmsMediaFile | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -123,35 +141,45 @@ export const AdminMediaPage: React.FC = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const deleteFile = async (id: number) => {
-    if (!confirm('Apakah Anda yakin ingin menghapus file ini dari server?')) return;
+  const confirmDeleteFile = (file: CmsMediaFile) => {
+    setDeleteTargetFile(file);
+  };
+
+  const executeDeleteFile = async () => {
+    if (!deleteTargetFile) return;
+    setIsDeleting(true);
     try {
-      const res = await fetch(`/api/admin/upload.php?id=${id}`, {
+      const res = await fetch(`/api/admin/upload.php?id=${deleteTargetFile.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const json = await res.json();
       if (res.ok && json.success) {
-        setMessage({ type: 'success', text: 'File berhasil dihapus.' });
+        setMessage({ type: 'success', text: `File '${deleteTargetFile.original_name}' berhasil dihapus dari server.` });
+        setDeleteTargetFile(null);
         await fetchFiles();
+      } else {
+        setMessage({ type: 'error', text: json.error || 'Gagal menghapus file.' });
       }
     } catch {
       setMessage({ type: 'error', text: 'Gagal menghapus file.' });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
-            Media & Dokumen Manager
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Pusat penyimpanan dan pengelolaan file presentasi Company Profile (PPTX/PDF), datasheet produk, logo klien, dan materi publikasi IDTN.
-          </p>
-        </div>
-      </div>
+      {/* Standardized Page Header */}
+      <AdminPageHeader
+        title="Media & Dokumen Manager"
+        description="Pusat penyimpanan dan pengelolaan file presentasi Company Profile (PPTX/PDF), datasheet produk, logo klien, dan materi publikasi IDTN."
+        badge={
+          <AdminBadge variant="info" withDot>
+            {files.length} File Tersimpan
+          </AdminBadge>
+        }
+      />
 
       {/* Integration Workflow Guidance Card */}
       <div className="bg-gradient-to-r from-sky-50 via-white to-blue-50/40 p-5 rounded-2xl border border-sky-200/80 shadow-xs space-y-3">
@@ -166,7 +194,7 @@ export const AdminMediaPage: React.FC = () => {
               <span>Company Profile Aktif</span>
             </div>
             <p className="text-[11px] text-slate-600 leading-relaxed">
-              Klik tombol <strong>"★ Jadikan Company Profile"</strong> pada file PPTX/PDF. Tautan tombol unduh di halaman <code>/about</code> akan otomatis diperbarui seketika.
+              Klik tombol <strong>"Jadikan Profile"</strong> pada file PPTX/PDF. Tautan tombol unduh di halaman <code>/about</code> akan otomatis diperbarui seketika.
             </p>
           </div>
           <div className="bg-white p-3.5 rounded-xl border border-sky-100 shadow-2xs space-y-1.5">
@@ -175,7 +203,7 @@ export const AdminMediaPage: React.FC = () => {
               <span>Datasheet Produk T8</span>
             </div>
             <p className="text-[11px] text-slate-600 leading-relaxed">
-              Unggah PDF spesifikasi perangkat, klik <strong>"Salin URL"</strong>, lalu tempelkan ke kolom <em>Datasheet URL</em> pada menu <strong>Perangkat & Produk</strong>.
+              Unggah PDF spesifikasi perangkat, klik <strong>"Salin URL"</strong>, lalu tempelkan ke kolom <em>Datasheet URL</em> pada menu <strong>Produk T8 & Specs</strong>.
             </p>
           </div>
           <div className="bg-white p-3.5 rounded-xl border border-sky-100 shadow-2xs space-y-1.5">
@@ -184,7 +212,7 @@ export const AdminMediaPage: React.FC = () => {
               <span>Logo & Ilustrasi Halaman</span>
             </div>
             <p className="text-[11px] text-slate-600 leading-relaxed">
-              Unggah gambar PNG/SVG/WEBP, klik <strong>"Salin URL"</strong>, lalu gunakan di formulir <strong>Klien & Mitra</strong> atau pengaturan banner halaman.
+              Unggah gambar PNG/SVG/WEBP, klik <strong>"Salin URL"</strong>, lalu gunakan di formulir <strong>Mitra & Klien</strong> atau pengaturan banner halaman.
             </p>
           </div>
         </div>
@@ -215,23 +243,22 @@ export const AdminMediaPage: React.FC = () => {
         </div>
       </div>
 
+      {/* Standardized Alert Banner */}
       {message && (
-        <div
-          role="alert"
-          className={`p-4 rounded-xl text-sm flex items-start gap-3 border ${
-            message.type === 'success'
-              ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
-              : 'bg-red-50 border-red-300 text-red-800'
-          }`}
+        <AdminAlert
+          variant={message.type}
+          onDismiss={() => setMessage(null)}
         >
-          <span>{message.type === 'success' ? '✅' : '⚠️'}</span>
-          <span>{message.text}</span>
-        </div>
+          {message.text}
+        </AdminAlert>
       )}
 
       {/* Upload Zone */}
       <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-xs">
-        <h2 className="text-sm font-bold text-slate-900 mb-2">Unggah File Baru</h2>
+        <div className="flex items-center gap-2 mb-1">
+          <UploadCloud className="w-4 h-4 text-sky-600" />
+          <h2 className="text-sm font-bold text-slate-900">Unggah File Baru</h2>
+        </div>
         <p className="text-xs text-slate-500 mb-4">
           Format yang didukung: <strong>PDF, PPTX, PNG, JPG, WEBP, SVG</strong> (Maksimum 25MB per file).
         </p>
@@ -254,116 +281,108 @@ export const AdminMediaPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Files List */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="p-4 border-b border-slate-200 flex items-center justify-between">
-          <h2 className="text-sm font-bold text-slate-900">Daftar File Media & Dokumen ({files.length})</h2>
-        </div>
+      {/* Standardized Files List Table */}
+      <AdminTable
+        isLoading={loading}
+        loadingText="Memuat data file media..."
+        isEmpty={files.length === 0}
+        emptyTitle="Belum Ada File Diunggah"
+        emptyDescription="Belum ada file presentasi atau dokumen yang diunggah ke server. Silakan unggah file pertama Anda pada kotak di atas."
+      >
+        <AdminTableHead>
+          <AdminTableCell isHeader className="w-20">Tipe</AdminTableCell>
+          <AdminTableCell isHeader>Nama & Alur File</AdminTableCell>
+          <AdminTableCell isHeader className="w-28">Ukuran</AdminTableCell>
+          <AdminTableCell isHeader className="w-36">Tanggal Unggah</AdminTableCell>
+          <AdminTableCell isHeader align="right">Aksi & Integrasi</AdminTableCell>
+        </AdminTableHead>
+        <AdminTableBody>
+          {files.map((file) => {
+            const isActiveProfile = activeProfileUrl === file.file_path;
+            const isDocument = ['pdf', 'pptx'].includes(file.file_type.toLowerCase());
+            return (
+              <AdminTableRow key={file.id} className={isActiveProfile ? 'bg-sky-50/40' : undefined}>
+                <AdminTableCell>
+                  <AdminBadge variant={isDocument ? 'warning' : 'neutral'}>
+                    {file.file_type.toUpperCase()}
+                  </AdminBadge>
+                </AdminTableCell>
+                <AdminTableCell>
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-slate-900 truncate max-w-xs">{file.original_name}</span>
+                    {isActiveProfile && (
+                      <AdminBadge variant="success" withDot>
+                        Company Profile Aktif
+                      </AdminBadge>
+                    )}
+                  </div>
+                  <div className="text-[11px] text-slate-400 font-mono mt-0.5">{file.file_path}</div>
+                </AdminTableCell>
+                <AdminTableCell>
+                  <span className="text-xs font-mono text-slate-600">
+                    {(file.file_size / 1024 / 1024).toFixed(2)} MB
+                  </span>
+                </AdminTableCell>
+                <AdminTableCell>
+                  <span className="text-xs text-slate-500">
+                    {new Date(file.uploaded_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  </span>
+                </AdminTableCell>
+                <AdminTableCell align="right" className="whitespace-nowrap">
+                  <AdminActionGroup align="right">
+                    {isDocument && (
+                      <AdminActionButton
+                        variant="star"
+                        label={settingProfileId === file.id ? 'Menyimpan...' : isActiveProfile ? 'Profil Aktif' : 'Jadikan Profile'}
+                        disabled={isActiveProfile || settingProfileId === file.id}
+                        onClick={() => setAsCompanyProfile(file)}
+                        className={isActiveProfile ? 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700' : ''}
+                      />
+                    )}
+                    <AdminActionButton
+                      variant="copy"
+                      label={copiedId === file.id ? 'Tersalin!' : 'Salin URL'}
+                      onClick={() => copyToClipboard(file.file_path, file.id)}
+                      className={copiedId === file.id ? 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700' : ''}
+                    />
+                    <a
+                      href={file.file_path}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg border bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 transition-colors shadow-2xs"
+                      title="Buka file di tab baru"
+                    >
+                      Buka
+                    </a>
+                    <AdminActionButton
+                      variant="delete"
+                      label="Hapus"
+                      onClick={() => confirmDeleteFile(file)}
+                    />
+                  </AdminActionGroup>
+                </AdminTableCell>
+              </AdminTableRow>
+            );
+          })}
+        </AdminTableBody>
+      </AdminTable>
 
-        {loading ? (
-          <div className="p-12 text-center text-sm text-slate-400">
-            <div className="w-8 h-8 border-4 border-sky-400 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-            Memuat daftar file...
-          </div>
-        ) : files.length === 0 ? (
-          <div className="p-12 text-center text-sm text-slate-500">
-            Belum ada file yang diunggah ke server. Silakan unggah file presentasi atau dokumen di atas.
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
-                <tr>
-                  <th scope="col" className="px-5 py-3">Tipe</th>
-                  <th scope="col" className="px-5 py-3">Nama & Alur File</th>
-                  <th scope="col" className="px-5 py-3">Ukuran</th>
-                  <th scope="col" className="px-5 py-3">Tanggal Unggah</th>
-                  <th scope="col" className="px-5 py-3 text-right">Aksi & Integrasi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {files.map((file) => {
-                  const isActiveProfile = activeProfileUrl === file.file_path;
-                  const isDocument = ['pdf', 'pptx'].includes(file.file_type.toLowerCase());
-                  return (
-                    <tr key={file.id} className={`hover:bg-slate-50/80 transition-colors ${isActiveProfile ? 'bg-sky-50/40' : ''}`}>
-                      <td className="px-5 py-3.5 align-middle">
-                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                          isDocument ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'
-                        }`}>
-                          {file.file_type}
-                        </span>
-                      </td>
-                      <td className="px-5 py-3.5 align-middle">
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-slate-900 truncate max-w-xs">{file.original_name}</span>
-                          {isActiveProfile && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                              <span>★</span>
-                              <span>Company Profile Aktif</span>
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-[11px] text-slate-400 font-mono mt-0.5">{file.file_path}</div>
-                      </td>
-                      <td className="px-5 py-3.5 text-xs text-slate-500 align-middle">
-                        {(file.file_size / 1024 / 1024).toFixed(2)} MB
-                      </td>
-                      <td className="px-5 py-3.5 text-xs text-slate-500 whitespace-nowrap align-middle">
-                        {new Date(file.uploaded_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                      </td>
-                      <td className="px-5 py-3.5 text-right whitespace-nowrap space-x-2 align-middle">
-                        {isDocument && (
-                          <button
-                            type="button"
-                            disabled={isActiveProfile || settingProfileId === file.id}
-                            onClick={() => setAsCompanyProfile(file)}
-                            className={`px-3 py-1 rounded-md text-xs font-semibold transition-colors ${
-                              isActiveProfile
-                                ? 'bg-emerald-600 text-white cursor-default'
-                                : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100'
-                            }`}
-                            title="Tetapkan file ini sebagai tombol unduh Company Profile pada halaman /about"
-                          >
-                            {settingProfileId === file.id ? 'Menyimpan...' : isActiveProfile ? '✓ Aktif sbg Profile' : '★ Jadikan Company Profile'}
-                          </button>
-                        )}
-                        <button
-                          type="button"
-                          onClick={() => copyToClipboard(file.file_path, file.id)}
-                          className={`px-3 py-1 rounded-md text-xs font-semibold transition-colors ${
-                            copiedId === file.id
-                              ? 'bg-emerald-600 text-white'
-                              : 'bg-sky-50 text-sky-700 hover:bg-sky-100'
-                          }`}
-                        >
-                          {copiedId === file.id ? '✓ Disalin!' : 'Salin URL'}
-                        </button>
-                        <a
-                          href={file.file_path}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="px-2.5 py-1 text-xs text-slate-600 hover:text-slate-900 rounded-md border border-slate-200"
-                        >
-                          Buka
-                        </a>
-                        <button
-                          type="button"
-                          onClick={() => deleteFile(file.id)}
-                          className="px-2 py-1 text-xs text-red-600 hover:text-red-800"
-                          title="Hapus file"
-                        >
-                          Hapus
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      {/* Standardized Delete Confirmation Dialog */}
+      <AdminConfirmDialog
+        isOpen={deleteTargetFile !== null}
+        title="Konfirmasi Hapus File Media"
+        message={
+          deleteTargetFile
+            ? `Apakah Anda yakin ingin menghapus file '${deleteTargetFile.original_name}' dari server? Tindakan ini permanen dan file tidak dapat dipulihkan.`
+            : 'Apakah Anda yakin ingin menghapus file ini?'
+        }
+        confirmLabel="Ya, Hapus File"
+        cancelLabel="Batal"
+        variant="danger"
+        isLoading={isDeleting}
+        onConfirm={executeDeleteFile}
+        onCancel={() => setDeleteTargetFile(null)}
+      />
     </div>
   );
 };

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useLocation, Navigate, Outlet } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
+import { AdminConfirmDialog } from './ui';
 
 export const AdminLayout: React.FC = () => {
   const { user, isAuthenticated, isLoading, logout } = useAdminAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   if (isLoading) {
     return (
@@ -141,13 +144,11 @@ export const AdminLayout: React.FC = () => {
             </div>
             <button
               type="button"
-              onClick={logout}
+              onClick={() => setShowLogoutConfirm(true)}
               title="Keluar / Logout"
-              className="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors"
+              className="p-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -198,14 +199,33 @@ export const AdminLayout: React.FC = () => {
             <span className="text-xs text-slate-400">{user?.email}</span>
             <button
               type="button"
-              onClick={logout}
-              className="text-xs text-red-400 font-semibold px-2 py-1 rounded hover:bg-slate-800"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setShowLogoutConfirm(true);
+              }}
+              className="text-xs text-rose-400 hover:text-rose-300 font-semibold px-2.5 py-1.5 rounded-lg hover:bg-slate-800 flex items-center gap-1.5 cursor-pointer"
             >
-              Keluar
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Keluar</span>
             </button>
           </div>
         </div>
       )}
+
+      {/* Logout Confirmation Modal */}
+      <AdminConfirmDialog
+        isOpen={showLogoutConfirm}
+        title="Konfirmasi Keluar / Logout"
+        message="Apakah Anda yakin ingin keluar dari Portal Administrator IDTN? Sesi login aktif Anda akan diakhiri."
+        confirmLabel="Ya, Keluar Akun"
+        cancelLabel="Batal"
+        variant="logout"
+        onConfirm={() => {
+          setShowLogoutConfirm(false);
+          logout();
+        }}
+        onCancel={() => setShowLogoutConfirm(false)}
+      />
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto">

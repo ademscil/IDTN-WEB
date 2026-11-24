@@ -3,6 +3,14 @@ import { Link } from 'react-router-dom';
 import { useCmsData } from '../../context/CmsDataContext';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { CmsInquiry } from '../../types/cms';
+import {
+  AdminTable,
+  AdminTableHead,
+  AdminTableBody,
+  AdminTableRow,
+  AdminTableCell,
+  AdminBadge
+} from '../../components/admin/ui';
 
 export const AdminDashboardPage: React.FC = () => {
   const { products, clients } = useCmsData();
@@ -138,55 +146,67 @@ export const AdminDashboardPage: React.FC = () => {
           </Link>
         </div>
 
-        {loading ? (
-          <div className="p-8 text-center text-sm text-slate-400">Memuat data pesan...</div>
-        ) : recentInquiries.length === 0 ? (
-          <div className="p-8 text-center text-sm text-slate-500">
-            Belum ada pesan kontak yang masuk.
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
-                <tr>
-                  <th scope="col" className="px-5 py-3">Nama</th>
-                  <th scope="col" className="px-5 py-3">Perusahaan</th>
-                  <th scope="col" className="px-5 py-3">Email & Telepon</th>
-                  <th scope="col" className="px-5 py-3">Solusi Minat</th>
-                  <th scope="col" className="px-5 py-3">Status</th>
-                  <th scope="col" className="px-5 py-3 text-right">Tanggal</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {recentInquiries.map((inq) => (
-                  <tr key={inq.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="px-5 py-3.5 font-medium text-slate-900">{inq.full_name}</td>
-                    <td className="px-5 py-3.5 text-slate-600">{inq.company}</td>
-                    <td className="px-5 py-3.5">
-                      <div className="text-xs text-slate-900">{inq.work_email}</div>
-                      <div className="text-[11px] text-slate-500">{inq.phone}</div>
-                    </td>
-                    <td className="px-5 py-3.5 text-xs text-slate-700">{inq.solution_interest}</td>
-                    <td className="px-5 py-3.5">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold ${
-                        inq.status === 'unread'
-                          ? 'bg-red-50 text-red-700 border border-red-200'
-                          : inq.status === 'contacted'
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          : 'bg-slate-100 text-slate-600'
-                      }`}>
-                        {inq.status === 'unread' ? 'Baru' : inq.status === 'contacted' ? 'Dihubungi' : 'Arsip'}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3.5 text-right text-xs text-slate-500 whitespace-nowrap">
-                      {new Date(inq.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <AdminTable
+          isLoading={loading}
+          loadingText="Memuat data pesan konsultasi..."
+          isEmpty={recentInquiries.length === 0}
+          emptyTitle="Belum Ada Pesan Masuk"
+          emptyDescription="Belum ada pesan kontak dari formulir konsultasi."
+        >
+          <AdminTableHead>
+            <AdminTableCell isHeader>Nama Pengirim</AdminTableCell>
+            <AdminTableCell isHeader>Perusahaan</AdminTableCell>
+            <AdminTableCell isHeader>Email & Telepon</AdminTableCell>
+            <AdminTableCell isHeader>Solusi Minat</AdminTableCell>
+            <AdminTableCell isHeader>Status</AdminTableCell>
+            <AdminTableCell isHeader align="right">Tanggal</AdminTableCell>
+          </AdminTableHead>
+          <AdminTableBody>
+            {recentInquiries.map((inq) => (
+              <AdminTableRow
+                key={inq.id}
+                className={inq.status === 'unread' ? 'bg-rose-50/20 font-medium' : undefined}
+              >
+                <AdminTableCell>
+                  <span className="font-bold text-slate-900">{inq.full_name}</span>
+                </AdminTableCell>
+                <AdminTableCell>
+                  <span className="text-xs text-slate-600">{inq.company || '-'}</span>
+                </AdminTableCell>
+                <AdminTableCell>
+                  <div className="text-xs font-semibold text-slate-900">{inq.work_email}</div>
+                  <div className="text-[11px] text-slate-500 font-mono mt-0.5">{inq.phone}</div>
+                </AdminTableCell>
+                <AdminTableCell>
+                  <AdminBadge variant="purple">{inq.solution_interest}</AdminBadge>
+                </AdminTableCell>
+                <AdminTableCell>
+                  <AdminBadge
+                    variant={
+                      inq.status === 'unread'
+                        ? 'danger'
+                        : inq.status === 'contacted'
+                        ? 'success'
+                        : 'neutral'
+                    }
+                    withDot={inq.status === 'unread'}
+                  >
+                    {inq.status === 'unread' ? 'Baru' : inq.status === 'contacted' ? 'Dihubungi' : 'Arsip'}
+                  </AdminBadge>
+                </AdminTableCell>
+                <AdminTableCell align="right">
+                  <span className="text-xs text-slate-500 whitespace-nowrap">
+                    {new Date(inq.created_at).toLocaleDateString('id-ID', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric'
+                    })}
+                  </span>
+                </AdminTableCell>
+              </AdminTableRow>
+            ))}
+          </AdminTableBody>
+        </AdminTable>
       </div>
     </div>
   );

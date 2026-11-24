@@ -1,8 +1,24 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Plus } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useCmsData } from '../../context/CmsDataContext';
 import { defaultPages } from '../../data/defaultCmsData';
 import { CmsClient, StrategicSegment } from '../../types/cms';
+import {
+  AdminPageHeader,
+  AdminButton,
+  AdminActionButton,
+  AdminActionGroup,
+  AdminTable,
+  AdminTableHead,
+  AdminTableBody,
+  AdminTableRow,
+  AdminTableCell,
+  AdminBadge,
+  AdminAlert,
+  AdminConfirmDialog,
+  AdminModal
+} from '../../components/admin/ui';
 
 export const AdminClientsPage: React.FC = () => {
   const { token } = useAdminAuth();
@@ -102,9 +118,9 @@ export const AdminClientsPage: React.FC = () => {
   const [clientPageSeoData, setClientPageSeoData] = useState<Record<string, unknown>>({});
   const [savingStrat, setSavingStrat] = useState(false);
 
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const deleteDialogRef = useRef<HTMLDialogElement>(null);
+  // Modern Web Guidance: Standardized modal & confirm state
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchClients = useCallback(async () => {
     setLoading(true);
@@ -177,11 +193,9 @@ export const AdminClientsPage: React.FC = () => {
         is_active: true
       });
     }
-    dialogRef.current?.showModal();
   };
 
   const closeModal = () => {
-    dialogRef.current?.close();
     setActiveModal(null);
   };
 
@@ -297,11 +311,11 @@ export const AdminClientsPage: React.FC = () => {
 
   const confirmDelete = (id: number) => {
     setDeleteTargetId(id);
-    deleteDialogRef.current?.showModal();
   };
 
   const executeDelete = async () => {
     if (!deleteTargetId) return;
+    setIsDeleting(true);
     try {
       const res = await fetch(`/api/admin/clients.php?id=${deleteTargetId}`, {
         method: 'DELETE',
@@ -310,7 +324,6 @@ export const AdminClientsPage: React.FC = () => {
       const json = await res.json();
       if (res.ok && json.success) {
         setMessage({ type: 'success', text: 'Mitra berhasil dihapus.' });
-        deleteDialogRef.current?.close();
         setDeleteTargetId(null);
         await fetchClients();
         await reloadContent();
@@ -319,6 +332,8 @@ export const AdminClientsPage: React.FC = () => {
       }
     } catch {
       setMessage({ type: 'error', text: 'Gagal menghubungi server.' });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -326,38 +341,36 @@ export const AdminClientsPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
-            Manajemen Klien & Mitra (Clients & Partners CMS)
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Kelola 4 kartu Segmen Industri Strategis (T8 LLC, Operator Telekomunikasi, Data Center, Otoritas Transportasi) serta daftar logo mitra enterprise IDTN.
-          </p>
-        </div>
-        {activeTab === 'portfolio' && (
-          <button
-            type="button"
-            onClick={() => openModal('create')}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors shrink-0"
-          >
-            <span>＋ Tambah Mitra Baru</span>
-          </button>
-        )}
-      </div>
+      {/* Standardized Page Header */}
+      <AdminPageHeader
+        title="Manajemen Klien & Mitra (Clients & Partners CMS)"
+        description="Kelola 4 kartu Segmen Industri Strategis (T8 LLC, Operator Telekomunikasi, Data Center, Otoritas Transportasi) serta daftar logo portofolio mitra enterprise IDTN."
+        badge={
+          <AdminBadge variant="info" withDot>
+            {clients.length} Mitra Terdaftar
+          </AdminBadge>
+        }
+        action={
+          activeTab === 'portfolio' ? (
+            <AdminButton
+              variant="primary"
+              icon={<Plus className="w-4 h-4" />}
+              onClick={() => openModal('create')}
+            >
+              Tambah Mitra Baru
+            </AdminButton>
+          ) : undefined
+        }
+      />
 
+      {/* Standardized Alert Banner */}
       {message && (
-        <div
-          role="alert"
-          className={`p-4 rounded-xl text-sm flex items-start gap-3 border ${
-            message.type === 'success'
-              ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
-              : 'bg-red-50 border-red-300 text-red-800'
-          }`}
+        <AdminAlert
+          variant={message.type}
+          onDismiss={() => setMessage(null)}
         >
-          <span>{message.type === 'success' ? '✅' : '⚠️'}</span>
-          <span>{message.text}</span>
-        </div>
+          {message.text}
+        </AdminAlert>
       )}
 
       {/* Modern Web Guidance: Accessible Tablist */}
@@ -567,99 +580,88 @@ export const AdminClientsPage: React.FC = () => {
 
         {/* TAB 2: Enterprise Client & Partner Portfolio Roster */}
         {activeTab === 'portfolio' && (
-          <div>
-            {loading ? (
-              <div className="p-12 text-center text-sm text-slate-400">
-                <div className="w-8 h-8 border-4 border-sky-400 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                Memuat mitra...
-              </div>
-            ) : clients.length === 0 ? (
-              <div className="p-12 text-center text-sm text-slate-500">
-                Belum ada mitra/klien yang ditambahkan.
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead className="bg-slate-50 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
-                    <tr>
-                      <th scope="col" className="px-5 py-3">Urutan</th>
-                      <th scope="col" className="px-5 py-3">Logo</th>
-                      <th scope="col" className="px-5 py-3">Nama Mitra / Klien</th>
-                      <th scope="col" className="px-5 py-3">Kategori</th>
-                      <th scope="col" className="px-5 py-3">Verified Partner</th>
-                      <th scope="col" className="px-5 py-3 text-right">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {clients.map((cli) => (
-                      <tr key={cli.id} className="hover:bg-slate-50/80 transition-colors">
-                        <td className="px-5 py-3.5 text-xs text-slate-400 font-bold">#{cli.sort_order}</td>
-                        <td className="px-5 py-3.5">
-                          <div className="w-10 h-8 rounded bg-slate-100 border border-slate-200 flex items-center justify-center p-1 overflow-hidden">
-                            {cli.logo_url ? (
-                              <img src={cli.logo_url} alt={cli.name} className="max-h-full max-w-full object-contain" />
-                            ) : (
-                              <span className="text-[10px] text-slate-400">No logo</span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-5 py-3.5 font-semibold text-slate-900">{cli.name}</td>
-                        <td className="px-5 py-3.5 text-xs text-slate-600">{cli.category}</td>
-                        <td className="px-5 py-3.5">
-                          <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                            cli.is_partner
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                              : 'bg-slate-100 text-slate-600'
-                          }`}>
-                            {cli.is_partner ? '✓ Verified' : 'Standard'}
-                          </span>
-                        </td>
-                        <td className="px-5 py-3.5 text-right whitespace-nowrap">
-                          <button
-                            type="button"
-                            onClick={() => openModal('edit', cli)}
-                            className="px-2.5 py-1 text-xs font-semibold text-sky-600 hover:text-sky-800 hover:bg-sky-50 rounded-md transition-colors mr-1"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => confirmDelete(cli.id)}
-                            className="px-2.5 py-1 text-xs font-semibold text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
-                          >
-                            Hapus
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+          <div className="p-0">
+            <AdminTable
+              isLoading={loading}
+              loadingText="Memuat data mitra & klien enterprise..."
+              isEmpty={clients.length === 0}
+              emptyTitle="Belum Ada Mitra Terdaftar"
+              emptyDescription="Daftar mitra dan klien masih kosong. Klik tombol 'Tambah Mitra Baru' untuk menambahkan mitra pertama."
+              emptyActionLabel="Tambah Mitra Baru"
+              onEmptyAction={() => openModal('create')}
+            >
+              <AdminTableHead>
+                <AdminTableCell isHeader className="w-16">Urutan</AdminTableCell>
+                <AdminTableCell isHeader className="w-24">Logo</AdminTableCell>
+                <AdminTableCell isHeader>Nama Mitra / Klien</AdminTableCell>
+                <AdminTableCell isHeader>Kategori Industri</AdminTableCell>
+                <AdminTableCell isHeader>Status Verifikasi</AdminTableCell>
+                <AdminTableCell isHeader align="right">Aksi</AdminTableCell>
+              </AdminTableHead>
+              <AdminTableBody>
+                {clients.map((cli) => (
+                  <AdminTableRow key={cli.id}>
+                    <AdminTableCell>
+                      <span className="font-mono font-bold text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded-md">
+                        #{cli.sort_order}
+                      </span>
+                    </AdminTableCell>
+                    <AdminTableCell>
+                      <div className="w-12 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center p-1 overflow-hidden shadow-2xs">
+                        {cli.logo_url ? (
+                          <img src={cli.logo_url} alt={cli.name} className="max-h-full max-w-full object-contain" />
+                        ) : (
+                          <span className="text-[10px] text-slate-400">No logo</span>
+                        )}
+                      </div>
+                    </AdminTableCell>
+                    <AdminTableCell>
+                      <span className="font-bold text-slate-900">{cli.name}</span>
+                    </AdminTableCell>
+                    <AdminTableCell>
+                      <AdminBadge variant="neutral">{cli.category}</AdminBadge>
+                    </AdminTableCell>
+                    <AdminTableCell>
+                      {cli.is_partner ? (
+                        <AdminBadge variant="success" withDot>
+                          Verified Partner
+                        </AdminBadge>
+                      ) : (
+                        <AdminBadge variant="neutral">
+                          Standard
+                        </AdminBadge>
+                      )}
+                    </AdminTableCell>
+                    <AdminTableCell align="right" className="whitespace-nowrap">
+                      <AdminActionGroup align="right">
+                        <AdminActionButton
+                          variant="edit"
+                          label="Edit"
+                          onClick={() => openModal('edit', cli)}
+                        />
+                        <AdminActionButton
+                          variant="delete"
+                          label="Hapus"
+                          onClick={() => confirmDelete(cli.id)}
+                        />
+                      </AdminActionGroup>
+                    </AdminTableCell>
+                  </AdminTableRow>
+                ))}
+              </AdminTableBody>
+            </AdminTable>
           </div>
         )}
       </div>
 
-      {/* Modal Native Dialog for Client */}
-      <dialog
-        ref={dialogRef}
-        aria-labelledby="client-dialog-title"
-        className="w-full max-w-md rounded-2xl p-0 bg-white shadow-2xl backdrop:bg-slate-950/70 border border-slate-200"
-        style={{ overscrollBehavior: 'contain' }}
+      {/* Standardized AdminModal for Client */}
+      <AdminModal
+        isOpen={activeModal !== null}
+        onClose={closeModal}
+        title={activeModal === 'create' ? 'Tambah Mitra / Klien Baru' : 'Edit Mitra'}
+        description="Kelola profil partner, nama korporasi, logo resmi, dan status verifikasi."
+        maxWidth="lg"
       >
-        <div className="p-6 border-b border-slate-200 flex items-center justify-between">
-          <h2 id="client-dialog-title" className="text-base font-bold text-slate-900">
-            {activeModal === 'create' ? 'Tambah Mitra / Klien Baru' : 'Edit Mitra'}
-          </h2>
-          <button
-            type="button"
-            onClick={closeModal}
-            className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
-          >
-            ✕
-          </button>
-        </div>
-
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
@@ -731,56 +733,35 @@ export const AdminClientsPage: React.FC = () => {
           </div>
 
           <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
-            <button
-              type="button"
+            <AdminButton
+              variant="secondary"
               onClick={closeModal}
-              autoFocus
-              className="px-4 py-2 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
             >
               Batal
-            </button>
-            <button
+            </AdminButton>
+            <AdminButton
               type="submit"
-              disabled={saving}
-              className="px-5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-semibold shadow-xs disabled:opacity-50 transition-colors"
+              variant="primary"
+              isLoading={saving}
             >
-              {saving ? 'Menyimpan...' : 'Simpan Mitra'}
-            </button>
+              Simpan Mitra
+            </AdminButton>
           </div>
         </form>
-      </dialog>
+      </AdminModal>
 
-      {/* Delete Confirmation Dialog */}
-      <dialog
-        ref={deleteDialogRef}
-        aria-labelledby="delete-client-dialog-title"
-        className="w-full max-w-sm rounded-2xl p-6 bg-white shadow-2xl backdrop:bg-slate-950/70 border border-slate-200"
-        style={{ overscrollBehavior: 'contain' }}
-      >
-        <h3 id="delete-client-dialog-title" className="text-base font-bold text-slate-900">
-          Konfirmasi Hapus Mitra
-        </h3>
-        <p className="text-xs text-slate-600 mt-2">
-          Apakah Anda yakin ingin menghapus logo mitra ini?
-        </p>
-        <div className="mt-5 flex items-center justify-end gap-2">
-          <button
-            type="button"
-            onClick={() => deleteDialogRef.current?.close()}
-            autoFocus
-            className="px-3.5 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50"
-          >
-            Batal
-          </button>
-          <button
-            type="button"
-            onClick={executeDelete}
-            className="px-3.5 py-1.5 bg-red-600 hover:bg-red-500 text-white rounded-lg text-xs font-semibold"
-          >
-            Ya, Hapus
-          </button>
-        </div>
-      </dialog>
+      {/* Standardized Delete Confirmation Dialog */}
+      <AdminConfirmDialog
+        isOpen={deleteTargetId !== null}
+        title="Konfirmasi Hapus Mitra"
+        message="Apakah Anda yakin ingin menghapus data dan logo mitra ini? Tindakan ini tidak dapat dibatalkan."
+        confirmLabel="Ya, Hapus Mitra"
+        cancelLabel="Batal"
+        variant="danger"
+        isLoading={isDeleting}
+        onConfirm={executeDelete}
+        onCancel={() => setDeleteTargetId(null)}
+      />
     </div>
   );
 };
