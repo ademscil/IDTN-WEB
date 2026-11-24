@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { ArrowUp, ArrowDown, Plus, HelpCircle, Activity, LayoutGrid, Megaphone } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useCmsData } from '../../context/CmsDataContext';
 import { defaultPages } from '../../data/defaultCmsData';
-import { PhilosophyPillar, EtymologyCard, BusinessPillar, StrategicSegment, CmsSectionValue } from '../../types/cms';
+import { PhilosophyPillar, EtymologyCard, BusinessPillar, StrategicSegment, FaqItem, TrustMetric, CmsSectionValue } from '../../types/cms';
+import {
+  AdminButton,
+  AdminActionButton,
+  AdminConfirmDialog
+} from '../../components/admin/ui';
 
 type PageKey = 'home' | 'about' | 'product' | 'client' | 'contact';
 type LangKey = 'id' | 'en';
@@ -33,6 +39,10 @@ export const AdminPagesSeoPage: React.FC = () => {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const profileFileInputRef = useRef<HTMLInputElement>(null);
+
+  // Modern Web Guidance: Standardized confirm state for FAQ deletion
+  const [deleteFaqTarget, setDeleteFaqTarget] = useState<{ index: number; question: string } | null>(null);
+  const [isDeletingFaq, setIsDeletingFaq] = useState(false);
 
   // Fetch page data
   useEffect(() => {
@@ -371,6 +381,83 @@ export const AdminPagesSeoPage: React.FC = () => {
     updateSectionField('strategic_segments', updated);
   };
 
+  // Helpers for Home Page Trust Metrics & FAQs
+  const trustMetrics: TrustMetric[] = Array.isArray(currentSections.trust_metrics) && currentSections.trust_metrics.length > 0
+    ? (currentSections.trust_metrics as TrustMetric[])
+    : (defaultPages.home?.sections?.[activeLang]?.trust_metrics as TrustMetric[] || [
+        {
+          title: '38.4 Tbps Throughput',
+          subtitle: activeLang === 'id' ? 'Kapasitas maksimal C+L band per serat optik' : 'Maximum C+L band capacity per optical fiber pair'
+        },
+        {
+          title: activeLang === 'id' ? '> 1.500 km Jangkauan' : '> 1,500 km Reach',
+          subtitle: activeLang === 'id' ? 'Transmisi optik jarak jauh tanpa regenerasi elektrik' : 'Ultra-long haul transmission without electrical regeneration'
+        },
+        {
+          title: activeLang === 'id' ? '99.999% Keandalan (SLA)' : '99.999% Reliability (SLA)',
+          subtitle: activeLang === 'id' ? 'Carrier-grade reliability dengan switching sub-50ms' : 'Carrier-grade reliability with sub-50ms optical protection switching'
+        },
+        {
+          title: activeLang === 'id' ? 'Resmi & Bersertifikasi' : 'Certified & Compliant',
+          subtitle: activeLang === 'id' ? 'Standar SDPPI Kominfo, ISO 9001 & ISO 27001' : 'SDPPI Kominfo certified, ISO 9001 & ISO 27001 compliant'
+        }
+      ]);
+
+  const updateTrustMetric = (index: number, field: 'title' | 'subtitle', val: string) => {
+    const updated = [...trustMetrics];
+    updated[index] = { ...updated[index], [field]: val };
+    updateSectionField('trust_metrics', updated);
+  };
+
+  const faqs: FaqItem[] = Array.isArray(currentSections.faqs) && currentSections.faqs.length > 0
+    ? (currentSections.faqs as FaqItem[])
+    : (defaultPages.home?.sections?.[activeLang]?.faqs as FaqItem[] || []);
+
+  const updateFaqItem = (index: number, field: 'q' | 'a', val: string) => {
+    const updated = [...faqs];
+    updated[index] = { ...updated[index], [field]: val };
+    updateSectionField('faqs', updated);
+  };
+
+  const handleAddFaq = () => {
+    const newFaq: FaqItem = {
+      id: `faq-${Date.now()}`,
+      q: activeLang === 'id' ? 'Pertanyaan teknis baru seputar solusi DWDM' : 'New technical question about DWDM solutions',
+      a: activeLang === 'id' ? 'Tuliskan jawaban teknis lengkap dan informatif di sini...' : 'Write the comprehensive technical explanation here...'
+    };
+    updateSectionField('faqs', [...faqs, newFaq]);
+  };
+
+  const confirmDeleteFaq = (index: number) => {
+    const target = faqs[index];
+    if (!target) return;
+    setDeleteFaqTarget({
+      index,
+      question: target.q || `FAQ #${index + 1}`
+    });
+  };
+
+  const executeDeleteFaq = () => {
+    if (!deleteFaqTarget) return;
+    setIsDeletingFaq(true);
+    try {
+      const updated = faqs.filter((_, idx) => idx !== deleteFaqTarget.index);
+      updateSectionField('faqs', updated);
+      setDeleteFaqTarget(null);
+    } finally {
+      setIsDeletingFaq(false);
+    }
+  };
+
+  const moveFaq = (fromIndex: number, direction: 'up' | 'down') => {
+    const toIndex = direction === 'up' ? fromIndex - 1 : fromIndex + 1;
+    if (toIndex < 0 || toIndex >= faqs.length) return;
+    const updated = [...faqs];
+    const [moved] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, moved);
+    updateSectionField('faqs', updated);
+  };
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -603,43 +690,295 @@ export const AdminPagesSeoPage: React.FC = () => {
 
             {/* Section 3: Page Specific Sections */}
             {activePage === 'home' && (
-              <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
-                <h3 className="text-sm font-bold text-slate-900">
-                  Banner CTA Bagian Bawah (Bottom CTA Banner)
-                </h3>
-                <div className="grid grid-cols-1 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
-                      Badge Banner Bawah
-                    </label>
-                    <input
-                      type="text"
-                      value={secStr('bottom_cta_badge')}
-                      onChange={(e) => updateSectionField('bottom_cta_badge', e.target.value)}
-                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
-                    />
+              <div className="space-y-6">
+                {/* 1. Trust Strip Bar Metrics */}
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 shadow-2xs">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 bg-slate-900 text-sky-400 rounded-lg text-xs font-bold">
+                      <Activity className="w-4 h-4" />
+                    </span>
+                    <h3 className="text-sm font-bold text-slate-900">
+                      1. Bar Metrik Kepercayaan (Trust Strip Bar) ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
+                    </h3>
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    4 metrik performa utama berlatar gelap yang tampil persis di bawah Hero Section halaman utama.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-1">
+                    {trustMetrics.map((tm, idx) => (
+                      <div key={idx} className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs space-y-2">
+                        <span className="text-[11px] font-mono font-bold text-sky-700 block border-b pb-1">Metrik #{idx + 1}</span>
+                        <div>
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">Judul Metrik</label>
+                          <input
+                            type="text"
+                            value={tm.title}
+                            onChange={(e) => updateTrustMetric(idx, 'title', e.target.value)}
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs font-bold text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                            placeholder="Contoh: 38.4 Tbps Throughput"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold uppercase text-slate-500">Subjudul / Deskripsi</label>
+                          <textarea
+                            rows={2}
+                            value={tm.subtitle}
+                            onChange={(e) => updateTrustMetric(idx, 'subtitle', e.target.value)}
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs text-slate-700 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                            placeholder="Deskripsi singkat metrik..."
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 2. Overview Section Header */}
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 shadow-2xs">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 bg-sky-600 text-white rounded-lg text-xs font-bold">
+                      <LayoutGrid className="w-4 h-4" />
+                    </span>
+                    <h3 className="text-sm font-bold text-slate-900">
+                      2. Ringkasan Kapabilitas & Navigasi Portal (Overview Header) ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                        Badge Kategori
+                      </label>
+                      <input
+                        type="text"
+                        value={secStr('overview_tag')}
+                        onChange={(e) => updateSectionField('overview_tag', e.target.value)}
+                        className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                        placeholder="Infrastruktur Transmisi Optik"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                        Judul Bagian Overview
+                      </label>
+                      <input
+                        type="text"
+                        value={secStr('overview_title')}
+                        onChange={(e) => updateSectionField('overview_title', e.target.value)}
+                        className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                        placeholder="Fondasi Jaringan Berkecepatan Tinggi untuk Masa Depan Digital"
+                      />
+                    </div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
-                      Judul Banner Bawah
-                    </label>
-                    <input
-                      type="text"
-                      value={secStr('bottom_cta_title')}
-                      onChange={(e) => updateSectionField('bottom_cta_title', e.target.value)}
-                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-semibold focus:ring-2 focus:ring-sky-500 focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
-                      Deskripsi Banner Bawah
+                      Deskripsi Pengantar
                     </label>
                     <textarea
                       rows={2}
-                      value={secStr('bottom_cta_desc')}
-                      onChange={(e) => updateSectionField('bottom_cta_desc', e.target.value)}
-                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      value={secStr('overview_desc')}
+                      onChange={(e) => updateSectionField('overview_desc', e.target.value)}
+                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 leading-relaxed focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      placeholder="Dari tautan transportasi nasional hingga interkoneksi pusat data..."
                     />
+                  </div>
+                </div>
+
+                {/* 3. DWDM Knowledge Base & FAQ */}
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 shadow-2xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="p-1.5 bg-sky-600 text-white rounded-lg text-xs font-bold">
+                        <HelpCircle className="w-4 h-4" />
+                      </span>
+                      <h3 className="text-sm font-bold text-slate-900">
+                        3. Tanya Jawab Teknis DWDM (FAQ Section) ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
+                      </h3>
+                    </div>
+                    <AdminButton
+                      type="button"
+                      variant="primary"
+                      size="sm"
+                      icon={<Plus className="w-4 h-4" />}
+                      onClick={handleAddFaq}
+                    >
+                      Tambah Pertanyaan FAQ
+                    </AdminButton>
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    Kelola judul, deskripsi pengantar, serta daftar accordion tanya jawab teknis DWDM yang tampil di halaman depan.
+                  </p>
+
+                  <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                          Badge Bagian FAQ
+                        </label>
+                        <input
+                          type="text"
+                          value={secStr('faq_badge')}
+                          onChange={(e) => updateSectionField('faq_badge', e.target.value)}
+                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                          placeholder="Pusat Informasi & FAQ DWDM"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                          Judul Utama FAQ
+                        </label>
+                        <input
+                          type="text"
+                          value={secStr('faq_title')}
+                          onChange={(e) => updateSectionField('faq_title', e.target.value)}
+                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                          placeholder="Pertanyaan Umum Seputar Solusi DWDM Indonesia"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                        Deskripsi Penjelas FAQ
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={secStr('faq_desc')}
+                        onChange={(e) => updateSectionField('faq_desc', e.target.value)}
+                        className="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-700 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                        placeholder="Jawaban teknis resmi seputar teknologi Dense Wavelength Division Multiplexing..."
+                      />
+                    </div>
+                  </div>
+
+                  {/* FAQ Items List */}
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                        Daftar Pertanyaan & Jawaban ({faqs.length} item aktif):
+                      </span>
+                    </div>
+
+                    {faqs.length === 0 ? (
+                      <div className="text-center py-8 bg-white rounded-xl border border-dashed border-slate-300 text-xs text-slate-500">
+                        Belum ada pertanyaan FAQ. Klik tombol &quot;Tambah Pertanyaan FAQ&quot; di atas untuk menambahkan.
+                      </div>
+                    ) : (
+                      faqs.map((faq, idx) => (
+                        <div key={faq.id || idx} className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-2.5 transition-all hover:border-slate-300">
+                          <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-[11px] font-mono font-bold">
+                                #{idx + 1}
+                              </span>
+                              <span className="text-xs font-bold text-slate-700 truncate max-w-xs sm:max-w-md">
+                                {faq.q ? faq.q.slice(0, 50) + (faq.q.length > 50 ? '...' : '') : 'Pertanyaan Tanpa Judul'}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <button
+                                type="button"
+                                disabled={idx === 0}
+                                onClick={() => moveFaq(idx, 'up')}
+                                className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                                title="Pindah ke Atas"
+                              >
+                                <ArrowUp className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                type="button"
+                                disabled={idx === faqs.length - 1}
+                                onClick={() => moveFaq(idx, 'down')}
+                                className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                                title="Pindah ke Bawah"
+                              >
+                                <ArrowDown className="w-3.5 h-3.5" />
+                              </button>
+                              <div className="h-4 w-px bg-slate-200 mx-1" />
+                              <AdminActionButton
+                                variant="delete"
+                                onClick={() => confirmDeleteFaq(idx)}
+                                title="Hapus Pertanyaan FAQ"
+                              >
+                                Hapus
+                              </AdminActionButton>
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-semibold uppercase text-slate-500 mb-1">
+                              Pertanyaan (Question)
+                            </label>
+                            <input
+                              type="text"
+                              value={faq.q}
+                              onChange={(e) => updateFaqItem(idx, 'q', e.target.value)}
+                              className="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                              placeholder="Tuliskan pertanyaan di sini..."
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-semibold uppercase text-slate-500 mb-1">
+                              Jawaban (Answer)
+                            </label>
+                            <textarea
+                              rows={3}
+                              value={faq.a}
+                              onChange={(e) => updateFaqItem(idx, 'a', e.target.value)}
+                              className="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-800 leading-relaxed focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                              placeholder="Tuliskan jawaban teknis lengkap di sini..."
+                            />
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                {/* 4. Bottom CTA Banner */}
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 shadow-2xs">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 bg-slate-800 text-sky-400 rounded-lg text-xs font-bold">
+                      <Megaphone className="w-4 h-4" />
+                    </span>
+                    <h3 className="text-sm font-bold text-slate-900">
+                      4. Banner CTA Bagian Bawah (Bottom CTA Banner) ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-1 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                        Badge Banner Bawah
+                      </label>
+                      <input
+                        type="text"
+                        value={secStr('bottom_cta_badge')}
+                        onChange={(e) => updateSectionField('bottom_cta_badge', e.target.value)}
+                        className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                        Judul Banner Bawah
+                      </label>
+                      <input
+                        type="text"
+                        value={secStr('bottom_cta_title')}
+                        onChange={(e) => updateSectionField('bottom_cta_title', e.target.value)}
+                        className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-semibold focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                        Deskripsi Banner Bawah
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={secStr('bottom_cta_desc')}
+                        onChange={(e) => updateSectionField('bottom_cta_desc', e.target.value)}
+                        className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1273,6 +1612,19 @@ export const AdminPagesSeoPage: React.FC = () => {
           </form>
         )}
       </div>
+
+      {/* Confirmation Modal for FAQ Deletion */}
+      <AdminConfirmDialog
+        isOpen={!!deleteFaqTarget}
+        onCancel={() => setDeleteFaqTarget(null)}
+        onConfirm={executeDeleteFaq}
+        title="Konfirmasi Hapus Pertanyaan FAQ"
+        message={`Apakah Anda yakin ingin menghapus pertanyaan FAQ ini: "${deleteFaqTarget?.question}"? Pertanyaan ini akan dihapus dari daftar FAQ halaman depan.`}
+        confirmLabel="Ya, Hapus FAQ"
+        cancelLabel="Batal"
+        variant="danger"
+        isLoading={isDeletingFaq}
+      />
     </div>
   );
 };

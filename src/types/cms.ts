@@ -35,6 +35,17 @@ export interface BusinessPillar {
   points: string[];
 }
 
+export interface FaqItem {
+  id: string;
+  q: string;
+  a: string;
+}
+
+export interface TrustMetric {
+  title: string;
+  subtitle: string;
+}
+
 export type CmsSectionValue =
   | string
   | number
@@ -44,6 +55,8 @@ export type CmsSectionValue =
   | EtymologyCard[]
   | BusinessPillar[]
   | StrategicSegment[]
+  | FaqItem[]
+  | TrustMetric[]
   | Record<string, string>;
 
 export interface PageContentData {

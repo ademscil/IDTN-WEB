@@ -45,11 +45,113 @@ export const defaultPages: Record<string, PageContentData> = {
     },
     sections: {
       id: {
+        faq_badge: 'Pusat Informasi & FAQ DWDM',
+        faq_title: 'Pertanyaan Umum Seputar Solusi DWDM Indonesia',
+        faq_desc: 'Jawaban teknis resmi seputar teknologi Dense Wavelength Division Multiplexing, platform T8 Volga I, dan layanan infrastruktur optik PT IDTN.',
+        faqs: [
+          {
+            id: 'faq-1',
+            q: 'Apa itu DWDM (Dense Wavelength Division Multiplexing) dan bagaimana cara kerjanya?',
+            a: 'Dense Wavelength Division Multiplexing (DWDM) adalah teknologi transmisi serat optik tercanggih yang mentransmisikan puluhan panjang gelombang cahaya (kanal optik) berkecepatan tinggi secara bersamaan melalui satu helai kabel serat optik tunggal. Beroperasi pada spektrum C+L Band (jendela 1550 nm), DWDM mampu melipatgandakan kapasitas throughput jaringan eksisting hingga 96 kali lipat tanpa perlu menggelar kabel fisik baru.'
+          },
+          {
+            id: 'faq-2',
+            q: 'Berapa kecepatan dan kapasitas maksimum platform DWDM T8 Volga I PT IDTN?',
+            a: 'PT IDTN menghadirkan platform DWDM kelas carrier T8 Volga I yang mendukung kecepatan transmisi hingga 800 Gbps per panjang gelombang (lambda) dan kapasitas agregat total mencapai 38.4 Tbps per pasang serat optik pada spektrum C+L Band. Untuk kebutuhan Data Center Interconnect (DCI), unit modular kompak Volga I DCI V2 menyediakan throughput 6.4 Tbps per 2U sasis dengan proteksi enkripsi fisik Layer 1 AES-256.'
+          },
+          {
+            id: 'faq-3',
+            q: 'Bagaimana jangkauan implementasi proyek jaringan optik IDTN di Indonesia?',
+            a: 'PT IDTN memiliki rekam jejak geografi proyek unik yang membentang 8.514,22 km melintasi kepulauan Indonesia dari Sabang sampai Merauke. Solusi turnkey kami mencakup koridor transmisi darat jalur kereta api nasional, rute backbone jarak jauh antar-kota, metropolitan loop operator telekomunikasi, hingga pendaratan kabel optik bawah laut.'
+          },
+          {
+            id: 'faq-4',
+            q: 'Bagaimana sistem IDTN menjamin keandalan jaringan bila terjadi putus kabel optik?',
+            a: 'Sistem DWDM IDTN mengintegrasikan proteksi jalur optik 1+1 (Optical Line Protection / OLP) dengan kemampuan perpindahan jalur darurat otomatis dalam waktu kurang dari 50 milidetik (sub-50ms) guna menjamin SLA keandalan 99.999% (Five Nines). Dilengkapi sistem pemantauan otomatis 24 jam OTDR Ramenka yang menguji integritas kabel secara in-service pada 1625nm dan mendeteksi lokasi putus fisik dengan akurasi presisi hingga 1 meter.'
+          },
+          {
+            id: 'faq-5',
+            q: 'Bagaimana cara mengajukan konsultasi desain link atau penawaran RFP pengadaan DWDM?',
+            a: 'Anda dapat mengajukan kebutuhan jaringan melalui formulir RFP online di https://idtn.co.id/contact, menghubungi tim rekayasa kami melalui email info@idtn.co.id, atau berkonsultasi langsung ke kantor pusat Fatmawati City Center Jakarta Selatan via WhatsApp resmi +62 811 8888 8888. Tim insinyur IDTN siap membantu perhitungan link budget, simulasi OSNR, dan penyusunan proposal pengadaan resmi.'
+          }
+        ],
+        trust_metrics: [
+          {
+            title: '38.4 Tbps Throughput',
+            subtitle: 'Kapasitas maksimal C+L band per serat optik'
+          },
+          {
+            title: '> 1.500 km Jangkauan',
+            subtitle: 'Transmisi optik jarak jauh tanpa regenerasi elektrik'
+          },
+          {
+            title: '99.999% Keandalan (SLA)',
+            subtitle: 'Carrier-grade reliability dengan switching sub-50ms'
+          },
+          {
+            title: 'Resmi & Bersertifikasi',
+            subtitle: 'Standar SDPPI Kominfo, ISO 9001 & ISO 27001'
+          }
+        ],
+        overview_tag: 'Infrastruktur Transmisi Optik',
+        overview_title: 'Fondasi Jaringan Berkecepatan Tinggi untuk Masa Depan Digital',
+        overview_desc: 'Dari tautan transportasi nasional hingga interkoneksi pusat data, platform DWDM kami menghadirkan kapasitas multi-terabit dengan keandalan tanpa kompromi.',
         bottom_cta_badge: 'Siap Mengembangkan Infrastruktur Optik Anda?',
         bottom_cta_title: 'Bangun Jaringan DWDM Berkeandalan Tinggi Bersama IDTN',
         bottom_cta_desc: 'Tim rekayasa optik kami siap membantu perancangan link, perencanaan kapasitas multi-terabit, dan implementasi turnkey di seluruh Indonesia.'
       },
       en: {
+        faq_badge: 'DWDM Knowledge Base & FAQ',
+        faq_title: 'Frequently Asked Questions about DWDM Solutions',
+        faq_desc: 'Authoritative technical answers to key questions about Dense Wavelength Division Multiplexing, T8 Volga I platform, and IDTN services.',
+        faqs: [
+          {
+            id: 'faq-1',
+            q: 'What is DWDM (Dense Wavelength Division Multiplexing) and how does it work?',
+            a: 'Dense Wavelength Division Multiplexing (DWDM) is an advanced optical transport technology that transmits multiple high-speed light wavelengths (channels) simultaneously over a single strand of optical fiber. By operating in the 1550 nm C+L spectral bands, DWDM multiplies existing fiber optic bandwidth by up to 96 times without requiring costly civil works to lay new physical cables.'
+          },
+          {
+            id: 'faq-2',
+            q: 'What are the transmission speeds and maximum capacity of IDTN T8 Volga I?',
+            a: 'PT IDTN deploys the carrier-grade T8 Volga I platform, which delivers up to 800 Gbps per wavelength and an aggregate capacity of up to 38.4 Tbps per fiber pair across C+L optical bands. For Data Center Interconnect (DCI), the Volga I DCI V2 platform provides 6.4 Tbps bidirectional throughput per compact 2U chassis with wire-speed Layer 1 AES-256 encryption.'
+          },
+          {
+            id: 'faq-3',
+            q: 'What is IDTN\'s geographic project reach across the Indonesian archipelago?',
+            a: 'IDTN has an established unique deployment footprint spanning 8,514.22 km across Indonesia from Sabang in Aceh to Merauke in Papua. Our turnkey solutions cover inter-island subsea cable landings, long-haul terrestrial railway corridors, metropolitan telco rings, and regional hyperscale data center interconnections.'
+          },
+          {
+            id: 'faq-4',
+            q: 'How does IDTN protect network uptime against fiber cuts and degradation?',
+            a: 'IDTN systems incorporate 1+1 Optical Line Protection (OLP) with ultra-fast automatic failover in under 50 milliseconds (sub-50ms switching) to guarantee 99.999% carrier-grade SLA. Additionally, our OTDR Ramenka monitoring system automatically diagnoses fiber integrity 24/7 in-service at 1625nm, pinpointing optical micro-bends and physical cut locations with +/- 1 meter accuracy.'
+          },
+          {
+            id: 'faq-5',
+            q: 'How can operators and enterprises request a link design or DWDM RFP quotation?',
+            a: 'You can submit your network requirements through our official RFP portal at https://idtn.co.id/contact, email our engineering team at info@idtn.co.id, or reach our Jakarta headquarters at Fatmawati City Center via WhatsApp at +62 811 8888 8888. Our optical transport specialists provide link budget calculation, OSNR analysis, and turnkey deployment proposals.'
+          }
+        ],
+        trust_metrics: [
+          {
+            title: '38.4 Tbps Throughput',
+            subtitle: 'Maximum C+L band capacity per optical fiber pair'
+          },
+          {
+            title: '> 1,500 km Reach',
+            subtitle: 'Ultra-long haul transmission without electrical regeneration'
+          },
+          {
+            title: '99.999% Reliability (SLA)',
+            subtitle: 'Carrier-grade reliability with sub-50ms optical protection switching'
+          },
+          {
+            title: 'Certified & Compliant',
+            subtitle: 'SDPPI Kominfo certified, ISO 9001 & ISO 27001 compliant'
+          }
+        ],
+        overview_tag: 'Optical Transport Infrastructure',
+        overview_title: 'High-Speed Network Foundation for the Digital Future',
+        overview_desc: 'From national transportation corridors to hyperscale data center interconnects, our DWDM platform delivers multi-terabit capacity with uncompromising reliability.',
         bottom_cta_badge: 'Ready to Scale Your Optical Infrastructure?',
         bottom_cta_title: 'Deploy High-Reliability DWDM Networks with IDTN',
         bottom_cta_desc: 'Our optical engineering team is prepared to assist with link design, multi-terabit capacity planning, and turnkey deployment across Indonesia.'

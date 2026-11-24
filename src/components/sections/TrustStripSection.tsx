@@ -1,29 +1,48 @@
 import React from 'react';
 import { Activity, Shield, Award, Cpu } from 'lucide-react';
+import { useLanguage } from '../../context';
+import { useCmsData } from '../../context/CmsDataContext';
+import { TrustMetric } from '../../types/cms';
 
 export const TrustStripSection: React.FC = () => {
-  const metrics = [
+  const { lang } = useLanguage();
+  const { pages } = useCmsData();
+  const isEn = lang === 'en';
+
+  const homeSec = (pages.home?.sections?.[isEn ? 'en' : 'id'] || {}) as Record<string, unknown>;
+
+  const defaultMetrics = [
     {
       icon: Cpu,
       title: '38.4 Tbps Throughput',
-      subtitle: 'Kapasitas maksimal C+L band per serat optik',
+      subtitle: isEn ? 'Maximum C+L band capacity per optical fiber pair' : 'Kapasitas maksimal C+L band per serat optik',
     },
     {
       icon: Activity,
-      title: '> 1.500 km Jangkauan',
-      subtitle: 'Transmisi optik jarak jauh tanpa regenerasi elektrik',
+      title: isEn ? '> 1,500 km Reach' : '> 1.500 km Jangkauan',
+      subtitle: isEn ? 'Ultra-long haul transmission without electrical regeneration' : 'Transmisi optik jarak jauh tanpa regenerasi elektrik',
     },
     {
       icon: Shield,
-      title: '99.999% Keandalan (SLA)',
-      subtitle: 'Carrier-grade reliability dengan switching sub-50ms',
+      title: isEn ? '99.999% Reliability (SLA)' : '99.999% Keandalan (SLA)',
+      subtitle: isEn ? 'Carrier-grade reliability with sub-50ms optical protection switching' : 'Carrier-grade reliability dengan switching sub-50ms',
     },
     {
       icon: Award,
-      title: 'Resmi & Bersertifikasi',
-      subtitle: 'Standar SDPPI Kominfo, ISO 9001 & ISO 27001',
+      title: isEn ? 'Certified & Compliant' : 'Resmi & Bersertifikasi',
+      subtitle: isEn ? 'SDPPI Kominfo certified, ISO 9001 & ISO 27001 compliant' : 'Standar SDPPI Kominfo, ISO 9001 & ISO 27001',
     },
   ];
+
+  const icons = [Cpu, Activity, Shield, Award];
+
+  const metrics = (Array.isArray(homeSec.trust_metrics) && homeSec.trust_metrics.length > 0)
+    ? (homeSec.trust_metrics as TrustMetric[]).map((tm, idx) => ({
+        icon: icons[idx % icons.length] || Cpu,
+        title: tm.title,
+        subtitle: tm.subtitle
+      }))
+    : defaultMetrics;
 
   return (
     <section className="bg-slate-900 text-white py-10 border-y border-slate-800">

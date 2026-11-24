@@ -2,14 +2,27 @@ import React, { useState } from 'react';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { useLanguage } from '../../context';
+import { useCmsData } from '../../context/CmsDataContext';
+import { FaqItem } from '../../types/cms';
 
 export const FAQSection: React.FC = () => {
   const { lang } = useLanguage();
+  const { pages } = useCmsData();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const isEn = lang === 'en';
+  const homeSec = (pages.home?.sections?.[isEn ? 'en' : 'id'] || {}) as Record<string, unknown>;
 
-  const faqs = [
+  const badgeText = (typeof homeSec.faq_badge === 'string' && homeSec.faq_badge)
+    || (isEn ? 'DWDM Knowledge Base & FAQ' : 'Pusat Informasi & FAQ DWDM');
+  const titleText = (typeof homeSec.faq_title === 'string' && homeSec.faq_title)
+    || (isEn ? 'Frequently Asked Questions about DWDM Solutions' : 'Pertanyaan Umum Seputar Solusi DWDM Indonesia');
+  const descText = (typeof homeSec.faq_desc === 'string' && homeSec.faq_desc)
+    || (isEn
+        ? 'Authoritative technical answers to key questions about Dense Wavelength Division Multiplexing, T8 Volga I platform, and IDTN services.'
+        : 'Jawaban teknis resmi seputar teknologi Dense Wavelength Division Multiplexing, platform T8 Volga I, dan layanan infrastruktur optik PT IDTN.');
+
+  const fallbackFaqs = [
     {
       q: isEn
         ? 'What is DWDM (Dense Wavelength Division Multiplexing) and how does it work?'
@@ -52,21 +65,23 @@ export const FAQSection: React.FC = () => {
     },
   ];
 
+  const faqs: Array<{ q: string; a: string }> = (Array.isArray(homeSec.faqs) && homeSec.faqs.length > 0)
+    ? (homeSec.faqs as FaqItem[]).map((f) => ({ q: f.q, a: f.a }))
+    : fallbackFaqs;
+
   return (
     <section id="faq" className="py-12 sm:py-20 md:py-24 bg-slate-50/70 border-t border-slate-100">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
         <div className="text-center space-y-3 sm:space-y-4">
           <Badge variant="cyan" className="gap-1.5">
             <HelpCircle className="w-3.5 h-3.5 text-sky-600" />
-            <span>{isEn ? 'DWDM Knowledge Base & FAQ' : 'Pusat Informasi & FAQ DWDM'}</span>
+            <span>{badgeText}</span>
           </Badge>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
-            {isEn ? 'Frequently Asked Questions about DWDM Solutions' : 'Pertanyaan Umum Seputar Solusi DWDM Indonesia'}
+            {titleText}
           </h2>
           <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-2xl mx-auto">
-            {isEn
-              ? 'Authoritative technical answers to key questions about Dense Wavelength Division Multiplexing, T8 Volga I platform, and IDTN services.'
-              : 'Jawaban teknis resmi seputar teknologi Dense Wavelength Division Multiplexing, platform T8 Volga I, dan layanan infrastruktur optik PT IDTN.'}
+            {descText}
           </p>
         </div>
 
