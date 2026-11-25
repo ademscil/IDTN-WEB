@@ -46,6 +46,14 @@ export interface TrustMetric {
   subtitle: string;
 }
 
+export interface OverviewCard {
+  key: string;
+  badge: string;
+  title: string;
+  desc: string;
+  cta: string;
+}
+
 export type CmsSectionValue =
   | string
   | number
@@ -57,6 +65,7 @@ export type CmsSectionValue =
   | StrategicSegment[]
   | FaqItem[]
   | TrustMetric[]
+  | OverviewCard[]
   | Record<string, string>;
 
 export interface PageContentData {

@@ -6,6 +6,7 @@ import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { Modal } from '../common/Modal';
 import { useLanguage } from '../../context';
+import { useCmsData } from '../../context/CmsDataContext';
 
 interface InquiryFormSectionProps {
   showHeader?: boolean;
@@ -13,7 +14,23 @@ interface InquiryFormSectionProps {
 
 export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHeader = false }) => {
   const { lang, t } = useLanguage();
+  const { pages, footer } = useCmsData();
   const isEn = lang === 'en';
+
+  const contactSections = (pages.contact?.sections?.[isEn ? 'en' : 'id'] || {}) as Record<string, string>;
+  const officialAddress = footer?.address?.[isEn ? 'en' : 'id'] || `${companyData.headquarters.address}, ${companyData.headquarters.city}, ${companyData.headquarters.province} ${companyData.headquarters.postalCode}`;
+  const officialEmail = footer?.contact?.email || companyData.contact.officialEmail;
+  const officialPhone = footer?.contact?.phone || companyData.contact.phoneOffice;
+  const hoursLabel = contactSections.hours_label || (isEn ? 'Service Hours' : 'Jam Pelayanan');
+  const hoursVal = contactSections.hours_val || (isEn ? 'Monday - Friday: 08:30 - 17:30 WIB' : companyData.contact.workingHours);
+  const officeTitle = contactSections.office_title || (isEn ? 'Direct Contact & Office' : 'Informasi Kantor & Kontak');
+  const officeDesc = contactSections.office_desc || (isEn
+    ? 'Reach out directly to IDTN engineering representatives for technical coordination, RFPs, and consultation.'
+    : 'Kunjungi kantor operasional kami atau hubungi tim representatif resmi IDTN untuk koordinasi teknis dan pertemuan bisnis langsung.');
+  const slaTitle = contactSections.sla_title || (isEn ? 'Technical SLA Guarantee' : 'Jaminan Respons Teknis');
+  const slaDesc = contactSections.sla_desc || (isEn
+    ? 'All RFP submissions receive initial engineering feedback and preliminary link architecture feasibility assessments within 24 business hours.'
+    : 'Setiap pengajuan RFP ditindaklanjuti oleh insinyur optik senior dengan asesmen kelayakan arsitektur awal dalam waktu 1x24 jam kerja.');
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -134,12 +151,10 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
           <div className="lg:col-span-5 space-y-6 sm:space-y-8 bg-slate-50/80 p-5 sm:p-8 lg:p-10 rounded-2xl sm:rounded-3xl border border-slate-200/80">
             <div className="space-y-3 sm:space-y-4">
               <h3 className="text-lg sm:text-xl font-bold text-slate-900">
-                {isEn ? 'Direct Contact & Office' : 'Informasi Kantor & Kontak'}
+                {officeTitle}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                {isEn
-                  ? 'Reach out directly to IDTN engineering representatives for technical coordination, RFPs, and consultation.'
-                  : 'Kunjungi kantor operasional kami atau hubungi tim representatif resmi IDTN untuk koordinasi teknis dan pertemuan bisnis langsung.'}
+                {officeDesc}
               </p>
 
               <div className="space-y-3 sm:space-y-4 pt-2">
@@ -149,14 +164,11 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
                   </div>
                   <div>
                     <p className="text-[11px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">{isEn ? 'Headquarters' : 'Kantor Pusat'}</p>
-                    <p className="text-sm font-bold text-slate-900 mt-0.5">
-                      {companyData.headquarters.address}
-                    </p>
-                    <p className="text-xs text-slate-600">
-                      {companyData.headquarters.city}, {companyData.headquarters.province} {companyData.headquarters.postalCode}
+                    <p className="text-sm font-bold text-slate-900 mt-0.5 leading-relaxed">
+                      {officialAddress}
                     </p>
                     <a
-                      href="https://maps.google.com/?q=Fatmawati+City+Center+Ruko+Soho+Botany+Garden+Crystal+Jakarta+Selatan"
+                      href={`https://maps.google.com/?q=${encodeURIComponent(officialAddress)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-xs font-semibold text-sky-600 hover:text-sky-700 hover:underline mt-1.5"
@@ -174,10 +186,10 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
                   <div>
                     <p className="text-[11px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">{isEn ? 'Official Email' : 'Email Resmi'}</p>
                     <a
-                      href={`mailto:${companyData.contact.officialEmail}`}
+                      href={`mailto:${officialEmail}`}
                       className="text-sm font-bold text-sky-600 hover:underline mt-0.5 block font-mono"
                     >
-                      {companyData.contact.officialEmail}
+                      {officialEmail}
                     </a>
                   </div>
                 </div>
@@ -189,10 +201,10 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
                   <div>
                     <p className="text-[11px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">{isEn ? 'Office Telephone' : 'Telepon Kantor'}</p>
                     <a
-                      href={`tel:${companyData.contact.phoneOffice.replace(/\s+/g, '')}`}
+                      href={`tel:${officialPhone.replace(/\s+/g, '')}`}
                       className="text-sm font-bold text-slate-900 hover:text-sky-600 mt-0.5 block font-mono"
                     >
-                      {companyData.contact.phoneOffice}
+                      {officialPhone}
                     </a>
                   </div>
                 </div>
@@ -202,9 +214,9 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-[11px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">{isEn ? 'Service Hours' : 'Jam Pelayanan'}</p>
+                    <p className="text-[11px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">{hoursLabel}</p>
                     <p className="text-xs font-semibold text-slate-700 mt-0.5">
-                      {isEn ? 'Monday - Friday: 08:30 - 17:30 WIB' : companyData.contact.workingHours}
+                      {hoursVal}
                     </p>
                   </div>
                 </div>
@@ -215,12 +227,10 @@ export const InquiryFormSection: React.FC<InquiryFormSectionProps> = ({ showHead
             <div className="p-5 rounded-2xl bg-white border border-sky-100 shadow-xs space-y-2">
               <div className="flex items-center gap-2 text-sky-700 font-bold text-xs uppercase tracking-wider">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>{isEn ? 'Technical SLA Guarantee' : 'Jaminan Respons Teknis'}</span>
+                <span>{slaTitle}</span>
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
-                {isEn
-                  ? 'All RFP submissions receive initial engineering feedback and preliminary link architecture feasibility assessments within 24 business hours.'
-                  : 'Setiap pengajuan RFP ditindaklanjuti oleh insinyur optik senior dengan asesmen kelayakan arsitektur awal dalam waktu 1x24 jam kerja.'}
+                {slaDesc}
               </p>
             </div>
           </div>

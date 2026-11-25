@@ -18,10 +18,13 @@ export const defaultPages: Record<string, PageContentData> = {
     hero: {
       id: {
         badge: 'Penyedia Infrastruktur Telekomunikasi Optik Resmi',
+        badge_partner: 'Mitra Resmi T8 Systems',
         headline: 'Infrastruktur Transmisi Optik DWDM Berkapasitas Tinggi',
         subtitle: 'Menghubungkan operator, ISP, dan data center di seluruh Indonesia dengan platform transmisi DWDM berkecepatan multi-terabit dan keandalan tingkat operator (99.999% SLA).',
         cta_primary: 'Konsultasi Proyek',
         cta_secondary: 'Lihat Katalog Produk',
+        graphic_title: 'Platform DWDM Volga I',
+        graphic_subtitle: '96-Channel Coherent • 38.4 Tbps',
         metric_1_val: '800G',
         metric_1_lbl: 'Per Channel Optical Engine',
         metric_2_val: '48+',
@@ -31,10 +34,13 @@ export const defaultPages: Record<string, PageContentData> = {
       },
       en: {
         badge: 'Official Optical Telecommunication Infrastructure Provider',
+        badge_partner: 'Official T8 Systems Partner',
         headline: 'High-Capacity DWDM Optical Transmission Infrastructure',
         subtitle: 'Empowering telecom operators, ISPs, and data centers across Indonesia with multi-terabit DWDM transmission platforms and carrier-grade reliability (99.999% SLA).',
         cta_primary: 'Request Project Consultation',
         cta_secondary: 'Explore Product Catalog',
+        graphic_title: 'Volga I DWDM Platform',
+        graphic_subtitle: '96-Channel Coherent • 38.4 Tbps',
         metric_1_val: '800G',
         metric_1_lbl: 'Per Channel Optical Engine',
         metric_2_val: '48+',
@@ -96,9 +102,40 @@ export const defaultPages: Record<string, PageContentData> = {
         overview_tag: 'Infrastruktur Transmisi Optik',
         overview_title: 'Fondasi Jaringan Berkecepatan Tinggi untuk Masa Depan Digital',
         overview_desc: 'Dari tautan transportasi nasional hingga interkoneksi pusat data, platform DWDM kami menghadirkan kapasitas multi-terabit dengan keandalan tanpa kompromi.',
+        overview_cards: [
+          {
+            key: 'about',
+            badge: 'Profil Perusahaan',
+            title: 'Tentang PT IDTN',
+            desc: 'Kenali visi strategis, filosofi korporasi, dan komitmen alih teknologi optik di seluruh kepulauan Indonesia.',
+            cta: 'Pelajari Profil Kami'
+          },
+          {
+            key: 'equipment',
+            badge: 'Katalog Perangkat',
+            title: 'Perangkat & Sistem DWDM',
+            desc: 'Eksplorasi platform T8 Volga I Telecom, unit DCI V2 berkecepatan tinggi, OTDR Ramenka, dan NMS Titan.',
+            cta: 'Lihat Spesifikasi'
+          },
+          {
+            key: 'clients',
+            badge: 'Mitra & Sektor',
+            title: 'Klien & Mitra Strategis',
+            desc: 'Bermitra dengan operator telekomunikasi nasional, hyperscale data center, dan otoritas transportasi vital.',
+            cta: 'Lihat Ekosistem Kami'
+          },
+          {
+            key: 'contact',
+            badge: 'Konsultasi Proyek',
+            title: 'Hubungi Tim Rekayasa',
+            desc: 'Ajukan kebutuhan desain link optik, simulasi OSNR, dan proposal RFP pengadaan infrastruktur DWDM.',
+            cta: 'Ajukan RFP Proyek'
+          }
+        ],
         bottom_cta_badge: 'Siap Mengembangkan Infrastruktur Optik Anda?',
         bottom_cta_title: 'Bangun Jaringan DWDM Berkeandalan Tinggi Bersama IDTN',
-        bottom_cta_desc: 'Tim rekayasa optik kami siap membantu perancangan link, perencanaan kapasitas multi-terabit, dan implementasi turnkey di seluruh Indonesia.'
+        bottom_cta_desc: 'Tim rekayasa optik kami siap membantu perancangan link, perencanaan kapasitas multi-terabit, dan implementasi turnkey di seluruh Indonesia.',
+        bottom_cta_btn: 'Konsultasikan Proyek Anda'
       },
       en: {
         faq_badge: 'DWDM Knowledge Base & FAQ',
@@ -152,9 +189,40 @@ export const defaultPages: Record<string, PageContentData> = {
         overview_tag: 'Optical Transport Infrastructure',
         overview_title: 'High-Speed Network Foundation for the Digital Future',
         overview_desc: 'From national transportation corridors to hyperscale data center interconnects, our DWDM platform delivers multi-terabit capacity with uncompromising reliability.',
+        overview_cards: [
+          {
+            key: 'about',
+            badge: 'Company Profile',
+            title: 'About PT IDTN',
+            desc: 'Discover our strategic vision, corporate philosophy, and commitment to optical technology transfer across Indonesia.',
+            cta: 'Explore Company Profile'
+          },
+          {
+            key: 'equipment',
+            badge: 'Hardware Catalog',
+            title: 'DWDM Products & Systems',
+            desc: 'Explore T8 Volga I Telecom platforms, high-density DCI V2 units, Ramenka OTDR, and Titan NMS.',
+            cta: 'View Specifications'
+          },
+          {
+            key: 'clients',
+            badge: 'Partners & Sectors',
+            title: 'Clients & Strategic Partners',
+            desc: 'Partnering with national telecom operators, hyperscale data centers, and mission-critical transport authorities.',
+            cta: 'Explore Ecosystem'
+          },
+          {
+            key: 'contact',
+            badge: 'Project Consultation',
+            title: 'Contact Engineering Team',
+            desc: 'Submit your optical link design requirements, OSNR simulations, and DWDM procurement RFP proposals.',
+            cta: 'Submit Project RFP'
+          }
+        ],
         bottom_cta_badge: 'Ready to Scale Your Optical Infrastructure?',
         bottom_cta_title: 'Deploy High-Reliability DWDM Networks with IDTN',
-        bottom_cta_desc: 'Our optical engineering team is prepared to assist with link design, multi-terabit capacity planning, and turnkey deployment across Indonesia.'
+        bottom_cta_desc: 'Our optical engineering team is prepared to assist with link design, multi-terabit capacity planning, and turnkey deployment across Indonesia.',
+        bottom_cta_btn: 'Consult Your Project'
       }
     }
   },
@@ -480,11 +548,19 @@ export const defaultPages: Record<string, PageContentData> = {
     sections: {
       id: {
         hours_label: 'Jam Layanan Operasional',
-        hours_val: 'Senin – Jumat: 08:30 – 17:30 WIB'
+        hours_val: 'Senin – Jumat: 08:30 – 17:30 WIB',
+        office_title: 'Informasi Kantor & Kontak',
+        office_desc: 'Kunjungi kantor operasional kami atau hubungi tim representatif resmi IDTN untuk koordinasi teknis dan pertemuan bisnis langsung.',
+        sla_title: 'Jaminan Respons Teknis',
+        sla_desc: 'Setiap pengajuan RFP ditindaklanjuti oleh insinyur optik senior dengan asesmen kelayakan arsitektur awal dalam waktu 1x24 jam kerja.'
       },
       en: {
         hours_label: 'Operating Hours',
-        hours_val: 'Monday – Friday: 08:30 – 17:30 WIB'
+        hours_val: 'Monday – Friday: 08:30 – 17:30 WIB',
+        office_title: 'Direct Contact & Office',
+        office_desc: 'Reach out directly to IDTN engineering representatives for technical coordination, RFPs, and consultation.',
+        sla_title: 'Technical SLA Guarantee',
+        sla_desc: 'All RFP submissions receive initial engineering feedback and preliminary link architecture feasibility assessments within 24 business hours.'
       }
     }
   }

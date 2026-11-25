@@ -9,6 +9,7 @@ import { Button } from '../components/common/Button';
 import { useLanguage } from '../context';
 import { useCmsData } from '../context/CmsDataContext';
 import { usePageSeo } from '../hooks/usePageSeo';
+import { OverviewCard } from '../types/cms';
 
 export const HomePage: React.FC = () => {
   const { lang, t } = useLanguage();
@@ -19,45 +20,45 @@ export const HomePage: React.FC = () => {
   usePageSeo('home');
 
   const homeContent = pages.home;
-  const sectionsData = (homeContent?.sections?.[isEn ? 'en' : 'id'] || {}) as Record<string, string>;
+  const sectionsRaw = (homeContent?.sections?.[isEn ? 'en' : 'id'] || {}) as Record<string, unknown>;
+  const sectionsData = sectionsRaw as Record<string, string>;
+
+  const cmsCards = Array.isArray(sectionsRaw.overview_cards) ? (sectionsRaw.overview_cards as OverviewCard[]) : [];
+  const getCard = (key: string, defaultBadge: string, defaultTitle: string, defaultDesc: string, defaultCta: string) => {
+    const found = cmsCards.find((c) => c.key === key);
+    return {
+      badge: found?.badge || defaultBadge,
+      title: found?.title || defaultTitle,
+      desc: found?.desc || defaultDesc,
+      cta: found?.cta || defaultCta,
+    };
+  };
 
   const cards = [
     {
       to: '/about',
-      badge: t('home.card.about.tag'),
-      title: t('home.card.about.title'),
-      desc: t('home.card.about.desc'),
-      cta: t('home.card.about.cta'),
+      ...getCard('about', t('home.card.about.tag'), t('home.card.about.title'), t('home.card.about.desc'), t('home.card.about.cta')),
       icon: Building2,
       accent: 'hover:border-sky-500 hover:shadow-sky-500/10',
       iconBg: 'bg-sky-50 text-sky-600',
     },
     {
       to: '/equipment',
-      badge: t('home.card.equipment.tag'),
-      title: t('home.card.equipment.title'),
-      desc: t('home.card.equipment.desc'),
-      cta: t('home.card.equipment.cta'),
+      ...getCard('equipment', t('home.card.equipment.tag'), t('home.card.equipment.title'), t('home.card.equipment.desc'), t('home.card.equipment.cta')),
       icon: Cpu,
       accent: 'hover:border-rose-500 hover:shadow-rose-500/10',
       iconBg: 'bg-rose-50 text-rose-600',
     },
     {
       to: '/clients',
-      badge: t('home.card.clients.tag'),
-      title: t('home.card.clients.title'),
-      desc: t('home.card.clients.desc'),
-      cta: t('home.card.clients.cta'),
+      ...getCard('clients', t('home.card.clients.tag'), t('home.card.clients.title'), t('home.card.clients.desc'), t('home.card.clients.cta')),
       icon: Network,
       accent: 'hover:border-emerald-500 hover:shadow-emerald-500/10',
       iconBg: 'bg-emerald-50 text-emerald-600',
     },
     {
       to: '/contact',
-      badge: t('home.card.contact.tag'),
-      title: t('home.card.contact.title'),
-      desc: t('home.card.contact.desc'),
-      cta: t('home.card.contact.cta'),
+      ...getCard('contact', t('home.card.contact.tag'), t('home.card.contact.title'), t('home.card.contact.desc'), t('home.card.contact.cta')),
       icon: PhoneCall,
       accent: 'hover:border-amber-500 hover:shadow-amber-500/10',
       iconBg: 'bg-amber-50 text-amber-600',
@@ -143,7 +144,7 @@ export const HomePage: React.FC = () => {
               <div className="pt-2 sm:pt-3">
                 <Link to="/contact" className="block sm:inline-block">
                   <Button size="lg" variant="primary" className="w-full sm:w-auto justify-center gap-2.5 shadow-lg shadow-sky-500/20 text-sm sm:text-base">
-                    <span>{t('home.banner.cta')}</span>
+                    <span>{sectionsData.bottom_cta_btn || t('home.banner.cta')}</span>
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>

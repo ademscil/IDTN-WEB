@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Save } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useCmsData } from '../../context/CmsDataContext';
+import { AdminPageHeader, AdminAlert, AdminButton } from '../../components/admin/ui';
 
 type LangKey = 'id' | 'en';
 
@@ -89,27 +91,17 @@ export const AdminFooterPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
-          Pengaturan Footer (Dual Language)
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-          Kelola ringkasan profil perusahaan di footer, kutipan filosofi IDTN, teks hak cipta, kepatuhan SDPPI & OSS, serta detail kontak resmi.
-        </p>
-      </div>
+      <AdminPageHeader
+        title="Pengaturan Footer (Dual Language)"
+        description="Kelola ringkasan profil perusahaan di footer, kutipan filosofi IDTN, teks hak cipta, kepatuhan SDPPI & OSS, serta detail kontak resmi."
+      />
 
       {message && (
-        <div
-          role="alert"
-          className={`p-4 rounded-xl text-sm flex items-start gap-3 border ${
-            message.type === 'success'
-              ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
-              : 'bg-red-50 border-red-300 text-red-800'
-          }`}
-        >
-          <span>{message.type === 'success' ? '✅' : '⚠️'}</span>
-          <span>{message.text}</span>
-        </div>
+        <AdminAlert
+          type={message.type}
+          message={message.text}
+          onDismiss={() => setMessage(null)}
+        />
       )}
 
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
@@ -289,20 +281,15 @@ export const AdminFooterPage: React.FC = () => {
 
             {/* Save Button */}
             <div className="pt-4 border-t border-slate-200 flex items-center justify-end">
-              <button
+              <AdminButton
                 type="submit"
-                disabled={saving}
-                className="inline-flex items-center gap-2 px-6 py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-sm font-semibold shadow-xs disabled:opacity-50 transition-colors"
+                variant="primary"
+                size="md"
+                isLoading={saving}
+                icon={<Save className="w-4 h-4" />}
               >
-                {saving ? (
-                  <>
-                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    <span>Menyimpan...</span>
-                  </>
-                ) : (
-                  '💾 Simpan Pengaturan Footer'
-                )}
-              </button>
+                {saving ? 'Menyimpan...' : 'Simpan Pengaturan Footer'}
+              </AdminButton>
             </div>
           </form>
         )}

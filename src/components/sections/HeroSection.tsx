@@ -28,7 +28,7 @@ export const HeroSection: React.FC = () => {
                 <span>{heroCms?.badge || t('hero.badge.provider')}</span>
               </Badge>
               <Badge variant="coral" className="py-1 px-2.5 sm:px-3 text-[11px] sm:text-xs">
-                <span>{t('hero.badge.partner')}</span>
+                <span>{heroCms?.badge_partner || t('hero.badge.partner')}</span>
               </Badge>
             </div>
 
@@ -70,8 +70,8 @@ export const HeroSection: React.FC = () => {
               <div className="relative bg-white/85 backdrop-blur-sm border border-slate-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-xl shadow-slate-900/5 overflow-hidden">
                 <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100">
                   <div>
-                    <h2 className="text-xs sm:text-sm font-bold text-slate-900">{t('hero.graphic.title')}</h2>
-                    <p className="text-[11px] sm:text-xs text-slate-600 font-mono font-medium">{t('hero.graphic.subtitle')}</p>
+                    <h2 className="text-xs sm:text-sm font-bold text-slate-900">{heroCms?.graphic_title || t('hero.graphic.title')}</h2>
+                    <p className="text-[11px] sm:text-xs text-slate-600 font-mono font-medium">{heroCms?.graphic_subtitle || t('hero.graphic.subtitle')}</p>
                   </div>
                   <span className="flex h-2.5 w-2.5 relative">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>

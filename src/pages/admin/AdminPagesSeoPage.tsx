@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowUp, ArrowDown, Plus, HelpCircle, Activity, LayoutGrid, Megaphone } from 'lucide-react';
+import { ArrowUp, ArrowDown, Plus, HelpCircle, Activity, LayoutGrid, Megaphone, Save } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useCmsData } from '../../context/CmsDataContext';
 import { defaultPages } from '../../data/defaultCmsData';
-import { PhilosophyPillar, EtymologyCard, BusinessPillar, StrategicSegment, FaqItem, TrustMetric, CmsSectionValue } from '../../types/cms';
+import { PhilosophyPillar, EtymologyCard, BusinessPillar, StrategicSegment, FaqItem, TrustMetric, OverviewCard, CmsSectionValue } from '../../types/cms';
 import {
+  AdminPageHeader,
+  AdminAlert,
   AdminButton,
   AdminActionButton,
   AdminConfirmDialog
@@ -458,32 +460,29 @@ export const AdminPagesSeoPage: React.FC = () => {
     updateSectionField('faqs', updated);
   };
 
+  const overviewCards: OverviewCard[] = Array.isArray(currentSections.overview_cards) && currentSections.overview_cards.length > 0
+    ? (currentSections.overview_cards as OverviewCard[])
+    : (defaultPages.home?.sections?.[activeLang]?.overview_cards as OverviewCard[] || []);
+
+  const updateOverviewCard = (index: number, field: keyof OverviewCard, val: string) => {
+    const updated = [...overviewCards];
+    updated[index] = { ...updated[index], [field]: val };
+    updateSectionField('overview_cards', updated);
+  };
+
   return (
     <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
-            Manajemen Halaman & SEO (Dual Language)
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Kelola judul, teks utama, tombol, serta Meta Title & Keywords SEO untuk setiap halaman dalam Bahasa Indonesia dan English.
-          </p>
-        </div>
-      </div>
+      <AdminPageHeader
+        title="Manajemen Halaman & SEO (Dual Language)"
+        description="Kelola judul, teks utama, tombol, serta Meta Title & Keywords SEO untuk setiap halaman dalam Bahasa Indonesia dan English."
+      />
 
       {message && (
-        <div
-          role="alert"
-          className={`p-4 rounded-xl text-sm flex items-start gap-3 border ${
-            message.type === 'success'
-              ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
-              : 'bg-red-50 border-red-300 text-red-800'
-          }`}
-        >
-          <span>{message.type === 'success' ? '✅' : '⚠️'}</span>
-          <span>{message.text}</span>
-        </div>
+        <AdminAlert
+          type={message.type}
+          message={message.text}
+          onDismiss={() => setMessage(null)}
+        />
       )}
 
       {/* Modern Web Guidance: Accessible Page Selector Tabs with Underline */}
@@ -662,6 +661,18 @@ export const AdminPagesSeoPage: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                   <div>
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                      Badge Mitra Kedua (Partner Badge)
+                    </label>
+                    <input
+                      type="text"
+                      value={currentHero.badge_partner || ''}
+                      onChange={(e) => updateHeroField('badge_partner', e.target.value)}
+                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      placeholder="Mitra Resmi T8 Systems"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
                       Teks Tombol CTA Utama
                     </label>
                     <input
@@ -674,14 +685,26 @@ export const AdminPagesSeoPage: React.FC = () => {
                   </div>
                   <div>
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
-                      Teks Tombol CTA Kedua
+                      Judul Kartu Visual Produk (Kanan Hero)
                     </label>
                     <input
                       type="text"
-                      value={currentHero.cta_secondary || ''}
-                      onChange={(e) => updateHeroField('cta_secondary', e.target.value)}
+                      value={currentHero.graphic_title || ''}
+                      onChange={(e) => updateHeroField('graphic_title', e.target.value)}
                       className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
-                      placeholder="Lihat Katalog Produk"
+                      placeholder="Platform DWDM Volga I"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                      Subjudul Kartu Visual Produk (Kanan Hero)
+                    </label>
+                    <input
+                      type="text"
+                      value={currentHero.graphic_subtitle || ''}
+                      onChange={(e) => updateHeroField('graphic_subtitle', e.target.value)}
+                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      placeholder="96-Channel Coherent • 38.4 Tbps"
                     />
                   </div>
                 </div>
@@ -781,6 +804,60 @@ export const AdminPagesSeoPage: React.FC = () => {
                       className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 leading-relaxed focus:ring-2 focus:ring-sky-500 focus:outline-none"
                       placeholder="Dari tautan transportasi nasional hingga interkoneksi pusat data..."
                     />
+                  </div>
+
+                  {/* 4 Portal Navigation Cards */}
+                  <div className="pt-2 space-y-2.5">
+                    <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+                      4 Kartu Navigasi Portal Utama (About, Equipment, Clients, Contact):
+                    </span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                      {overviewCards.map((card, idx) => (
+                        <div key={card.key || idx} className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs space-y-2">
+                          <span className="text-[11px] font-mono font-bold text-sky-700 block border-b pb-1">
+                            Kartu #{idx + 1} ({card.key})
+                          </span>
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="block text-[10px] font-semibold uppercase text-slate-500">Badge</label>
+                              <input
+                                type="text"
+                                value={card.badge}
+                                onChange={(e) => updateOverviewCard(idx, 'badge', e.target.value)}
+                                className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs text-slate-900"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[10px] font-semibold uppercase text-slate-500">Teks CTA</label>
+                              <input
+                                type="text"
+                                value={card.cta}
+                                onChange={(e) => updateOverviewCard(idx, 'cta', e.target.value)}
+                                className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs font-semibold text-sky-700"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-semibold uppercase text-slate-500">Judul Kartu</label>
+                            <input
+                              type="text"
+                              value={card.title}
+                              onChange={(e) => updateOverviewCard(idx, 'title', e.target.value)}
+                              className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs font-bold text-slate-900"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-semibold uppercase text-slate-500">Deskripsi Singkat</label>
+                            <textarea
+                              rows={2}
+                              value={card.desc}
+                              onChange={(e) => updateOverviewCard(idx, 'desc', e.target.value)}
+                              className="w-full px-2.5 py-1 bg-slate-50 border border-slate-300 rounded text-xs text-slate-700"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -977,6 +1054,18 @@ export const AdminPagesSeoPage: React.FC = () => {
                         value={secStr('bottom_cta_desc')}
                         onChange={(e) => updateSectionField('bottom_cta_desc', e.target.value)}
                         className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                        Teks Tombol CTA Banner Bawah
+                      </label>
+                      <input
+                        type="text"
+                        value={secStr('bottom_cta_btn')}
+                        onChange={(e) => updateSectionField('bottom_cta_btn', e.target.value)}
+                        className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-semibold focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                        placeholder="Konsultasikan Proyek Anda"
                       />
                     </div>
                   </div>
@@ -1559,11 +1648,55 @@ export const AdminPagesSeoPage: React.FC = () => {
             )}
 
             {activePage === 'contact' && (
-              <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
+              <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 shadow-2xs">
                 <h3 className="text-sm font-bold text-slate-900">
-                  Label Jam Layanan Operasional Kantor
+                  Informasi Kantor, Jam Layanan & Jaminan SLA ({activeLang === 'id' ? 'Bahasa Indonesia' : 'English'})
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                      Judul Blok Informasi Kantor
+                    </label>
+                    <input
+                      type="text"
+                      value={secStr('office_title')}
+                      onChange={(e) => updateSectionField('office_title', e.target.value)}
+                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                      Judul Kartu Jaminan SLA
+                    </label>
+                    <input
+                      type="text"
+                      value={secStr('sla_title')}
+                      onChange={(e) => updateSectionField('sla_title', e.target.value)}
+                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                      Deskripsi Blok Kantor
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={secStr('office_desc')}
+                      onChange={(e) => updateSectionField('office_desc', e.target.value)}
+                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                      Deskripsi Jaminan Respons Teknis (SLA)
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={secStr('sla_desc')}
+                      onChange={(e) => updateSectionField('sla_desc', e.target.value)}
+                      className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                    />
+                  </div>
                   <div>
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
                       Label Jam Operasional
@@ -1592,22 +1725,15 @@ export const AdminPagesSeoPage: React.FC = () => {
 
             {/* Submit Button */}
             <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
-              <button
+              <AdminButton
                 type="submit"
-                disabled={saving}
-                className="inline-flex items-center gap-2 px-6 py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-sm font-semibold shadow-xs disabled:opacity-50 transition-colors"
+                variant="primary"
+                size="md"
+                isLoading={saving}
+                icon={<Save className="w-4 h-4" />}
               >
-                {saving ? (
-                  <>
-                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    <span>Menyimpan...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>💾 Simpan Pengaturan {pageNames[activePage]}</span>
-                  </>
-                )}
-              </button>
+                {saving ? 'Menyimpan...' : `Simpan Pengaturan ${pageNames[activePage]}`}
+              </AdminButton>
             </div>
           </form>
         )}
